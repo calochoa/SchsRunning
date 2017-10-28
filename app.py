@@ -16,9 +16,9 @@ app.config['MYSQL_DATABASE_HOST'] = 'us-cdbr-iron-east-05.cleardb.net'
 mysql.init_app(app)
 
 @app.route('/')
-def index():
-	return "Yo, it's working!"
-	
+def main():
+    return render_template('index.html')	
+
 
 @app.route('/getTopResults',methods=['GET'])
 def getTopResults():
