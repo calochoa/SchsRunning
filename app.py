@@ -97,6 +97,36 @@ def formatDistance(distance):
 def results():
     return render_template('results.html')	
 
+
+@app.route('/top25CsGirls')
+def top25CsGirls():
+    return render_template('results.html', cId = 1, gId = 3, limit = 25)
+
+
+@app.route('/top25CsBoys')
+def top25CsBoys():
+    return render_template('results.html', cId = 1, gId = 2, limit = 25)
+
+
+@app.route('/top25TpGirls')
+def top25TpGirls():
+    return render_template('results.html', cId = 2, gId = 3, limit = 25)
+
+
+@app.route('/top25TpBoys')
+def top25TpBoys():
+    return render_template('results.html', cId = 2, gId = 2, limit = 25)
+
+
+@app.route('/top25CpGirls')
+def top25CpGirls():
+    return render_template('results.html', cId = 6, gId = 3, limit = 25)
+
+
+@app.route('/top25CpBoys')
+def top25CpBoys():
+    return render_template('results.html', cId = 6, gId = 2, limit = 25)
+
 	
 if __name__ == "__main__":
 	app.run()

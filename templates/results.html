@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -9,10 +8,13 @@
     <script src="../static/js/jquery-1.11.2.js"></script>
     <script>
     var urlParams = new URLSearchParams(window.location.search);
-    var courseId = urlParams.get('cId');
-    var genderId = urlParams.get('gId');
-    var limit = urlParams.get('limit');
-    
+    var cId = {{cId}};
+    var gId = {{gId}};
+    var li = {{limit}};
+    var courseId = cId ? cId : cIdurlParams.get('cId');
+    var genderId = gId ? gId : urlParams.get('gId');
+    var limit = li ? li : urlParams.get('limit');    
+        
 	$(function(){
 		$.ajax({
 			url: '/getTopResults',
@@ -72,18 +74,14 @@
 		});
 	});
     </script>
-    
-   
   </head>
-
   <body>
 
     <div class="container">
       <div class="header">
         <nav>
           <ul class="nav nav-pills pull-right">
-	    <li role="presentation"><a href="/showAddWish">Add Wish</a></li>
-            <li role="presentation" class="active"><a href="/logout">Logout</a></li>
+            <li role="presentation"><a href="/">Home</a></li>
           </ul>
         </nav>
         <h3 class="text-muted"></h3>
@@ -93,12 +91,9 @@
 
       </div>
 
-      
-
       <footer class="footer">
         <p>&copy; Cal Workouts 2017</p>
       </footer>
-
     </div>
   </body>
 </html>
