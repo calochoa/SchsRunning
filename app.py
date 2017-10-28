@@ -23,7 +23,7 @@ def main():
 @app.route('/getTopResults',methods=['GET'])
 def getTopResults():
     try:
-        courseId = request.args.get("courseId", default = 1, type = int)
+        courseId = request.args.get('courseId', default = 1, type = int)
         genderId = request.args.get('genderId', default = 2, type = int)
         limit = request.args.get('limit', default = 25, type = int)
 
@@ -34,7 +34,7 @@ def getTopResults():
 
         top_results_dict = []
         for row in data:
-            top_result_dict = {
+            result_dict = {
                 'Rank': row[0],
                 'FirstName': row[1],
                 'LastName': row[2],
@@ -43,7 +43,7 @@ def getTopResults():
                 'Year': row[5],
                 'Grade': row[6]
             }
-            top_results_dict.append(top_result_dict)
+            top_results_dict.append(result_dict)
 
         return json.dumps(top_results_dict)
     except Exception as e:
@@ -51,7 +51,9 @@ def getTopResults():
 
 
 def formatTime(time):
-    timeStr = str(time)[2:9]
+    timeStr = str(time)[:9]
+    if timeStr.startswith('0:'):
+        timeStr = timeStr[2:]
     if timeStr.startswith('0'):
         timeStr = timeStr[1:]
     return timeStr
@@ -60,7 +62,7 @@ def formatTime(time):
 @app.route('/getCourseInfo',methods=['GET'])
 def getCourseInfo():
     try:
-        courseId = request.args.get("courseId", default = 1, type = int)
+        courseId = request.args.get('courseId', default = 1, type = int)
 
         conn = mysql.connect()
         cursor = conn.cursor()
@@ -95,7 +97,7 @@ def formatDistance(distance):
 
 @app.route('/results')
 def results():
-    return render_template('results.html')	
+    return render_template('results.html')
 
 
 @app.route('/top25CsGirls')
@@ -126,6 +128,63 @@ def top25CpGirls():
 @app.route('/top25CpBoys')
 def top25CpBoys():
     return render_template('results.html', cId = 6, gId = 2, limit = 25)
+
+
+@app.route('/getTopTeamCourseResults',methods=['GET'])
+def getTopTeamCourseResults():
+    try:
+        courseId = request.args.get('courseId', default = 1, type = int)
+        genderId = request.args.get('genderId', default = 2, type = int)
+        limit = request.args.get('limit', default = 15, type = int)
+
+        conn = mysql.connect()
+        cursor = conn.cursor()
+        cursor.callproc('GetTopTeamCourse',(courseId,genderId,limit))
+        data = cursor.fetchall()
+
+        top_team_course_results_dict = []
+        for row in data:
+            team_course_result_dict = {
+                'Rank': row[0],
+                'Year': row[1],
+                'TeamTime': formatTime(row[2]),
+                'TeamPace': formatTime(row[3]),
+            }
+            top_team_course_results_dict.append(team_course_result_dict)
+
+        return json.dumps(top_team_course_results_dict)
+    except Exception as e:
+        return render_template('error.html',error = str(e))
+
+
+@app.route('/top25CsTeamGirls')
+def top25CsTeamGirls():
+    return render_template('teamCourseResults.html', cId = 1, gId = 3, limit = 15)
+
+
+@app.route('/top25CsTeamBoys')
+def top25CsTeamBoys():
+    return render_template('teamCourseResults.html', cId = 1, gId = 2, limit = 15)
+
+
+@app.route('/top25TpTeamGirls')
+def top25TpTeamGirls():
+    return render_template('teamCourseResults.html', cId = 2, gId = 3, limit = 15)
+
+
+@app.route('/top25TpTeamBoys')
+def top25TpTeamBoys():
+    return render_template('teamCourseResults.html', cId = 2, gId = 2, limit = 15)
+
+
+@app.route('/top25CpTeamGirls')
+def top25CpTeamGirls():
+    return render_template('teamCourseResults.html', cId = 6, gId = 3, limit = 15)
+
+
+@app.route('/top25CpTeamBoys')
+def top25CpTeamBoys():
+    return render_template('teamCourseResults.html', cId = 6, gId = 2, limit = 15)
 
 	
 if __name__ == "__main__":
