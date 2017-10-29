@@ -393,7 +393,7 @@ def season():
 def getCompetitorResults():
     try:
         competitorId = request.args.get('competitorId', default = 1.12, type = str)
-        print competitorId
+
         conn = mysql.connect()
         cursor = conn.cursor()
         cursor.callproc('GetCompetitorResults',[competitorId])
@@ -431,7 +431,6 @@ def getRaceResults():
     try:
         raceId = request.args.get('raceId', default = 1000132, type = int)
         genderId = request.args.get('genderId', default = 0, type = int)
-        print genderId
 
         conn = mysql.connect()
         cursor = conn.cursor()
