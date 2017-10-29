@@ -130,6 +130,16 @@ def top25CpBoys():
     return render_template('topResults.html', cId = 6, gId = 2, limit = 25)
 
 
+@app.route('/top25BpGirls')
+def top25BpGirls():
+    return render_template('topResults.html', cId = 4, gId = 3, limit = 25)
+
+
+@app.route('/top25BpBoys')
+def top25BpBoys():
+    return render_template('topResults.html', cId = 4, gId = 2, limit = 25)
+
+
 @app.route('/getTopTeamCourseResults',methods=['GET'])
 def getTopTeamCourseResults():
     try:
@@ -185,6 +195,16 @@ def top25CpTeamGirls():
 @app.route('/top25CpTeamBoys')
 def top25CpTeamBoys():
     return render_template('teamCourseResults.html', cId = 6, gId = 2, limit = 15)
+
+
+@app.route('/top25BpTeamGirls')
+def top25BpTeamGirls():
+    return render_template('teamCourseResults.html', cId = 4, gId = 3, limit = 15)
+
+
+@app.route('/top25BpTeamBoys')
+def top25BpTeamBoys():
+    return render_template('teamCourseResults.html', cId = 4, gId = 2, limit = 15)
 
 
 @app.route('/getRunners',methods=['GET'])
