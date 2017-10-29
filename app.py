@@ -1,5 +1,3 @@
-# https://code.tutsplus.com/tutorials/creating-a-web-app-from-scratch-using-python-flask-and-mysql-part-3--cms-23120
-
 from flask import Flask, render_template, json, request, redirect, session, jsonify, url_for
 from flask.ext.mysql import MySQL
 from werkzeug import generate_password_hash, check_password_hash
