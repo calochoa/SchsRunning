@@ -1,3 +1,5 @@
+# https://code.tutsplus.com/tutorials/creating-a-web-app-from-scratch-using-python-flask-and-mysql-part-3--cms-23120
+
 from flask import Flask, render_template, json, request, redirect, session, jsonify, url_for
 from flask.ext.mysql import MySQL
 from werkzeug import generate_password_hash, check_password_hash
@@ -174,15 +176,15 @@ def getTopTeamCourseResults():
             all_top_competitor_ids.append(row[5])
             
         race_competitor_data_dict = getResultsByRaceCompetitor(all_top_race_ids,all_top_competitor_ids)
-        
+
         for result in top_team_course_results_dict:
-        	race_id = str(result['RaceId'])
-        	competitor_times = []
-        	for competitor_id in str(result['CompetitorIds']).split(','):
-        		key = race_id + ':' + competitor_id
-        		competitor_times.append(race_competitor_data_dict[key])
-        		
-        	result['CompetitorTimes'] = competitor_times
+            race_id = str(result['RaceId'])
+            competitor_times = []
+            for competitor_id in str(result['CompetitorIds']).split(','):
+                key = race_id + ':' + competitor_id
+                competitor_times.append(race_competitor_data_dict[key])
+
+            result['CompetitorTimes'] = competitor_times
 
         return json.dumps(top_team_course_results_dict)
     except Exception as e:
@@ -192,8 +194,8 @@ def getTopTeamCourseResults():
 @app.route('/getResultsByRaceCompetitor',methods=['GET'])
 def getResultsByRaceCompetitor(race_ids,competitor_ids):
     try:
-    	race_ids_str = ','.join(str(e) for e in race_ids)
-    	competitor_ids_str = ','.join(str(e) for e in competitor_ids)
+        race_ids_str = ','.join(str(e) for e in race_ids)
+        competitor_ids_str = ','.join(str(e) for e in competitor_ids)
         conn = mysql.connect()
         cursor = conn.cursor()
         cursor.callproc('GetResultsByRaceCompetitor',(race_ids_str,competitor_ids_str))
@@ -201,16 +203,16 @@ def getResultsByRaceCompetitor(race_ids,competitor_ids):
 
         race_competitor_data_dict = {}
         for row in data:
-        	race_id = str(row[0])
-        	competitor_id = str(row[1])
-        	time = formatTime(row[2])
-        	pace = formatTime(row[3])
-        	grade = str(row[4])
-        	first_name = row[5]
-        	last_name = row[6]
-        	key = race_id + ':' + competitor_id
-        	value = first_name + ' ' + last_name + ' (' + grade + ') - ' + time + ' (' + pace + ')'
-        	race_competitor_data_dict[key] = value
+            race_id = str(row[0])
+            competitor_id = str(row[1])
+            time = formatTime(row[2])
+            pace = formatTime(row[3])
+            grade = str(row[4])
+            first_name = row[5]
+            last_name = row[6]
+            key = race_id + ':' + competitor_id
+            value = first_name + ' ' + last_name + ' (' + grade + ') - ' + time + ' (' + pace + ')'
+            race_competitor_data_dict[key] = value
 
         return race_competitor_data_dict
     except Exception as e:
