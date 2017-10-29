@@ -1,3 +1,5 @@
+# https://code.tutsplus.com/tutorials/creating-a-web-app-from-scratch-using-python-flask-and-mysql-part-3--cms-23120
+
 from flask import Flask, render_template, json, request, redirect, session, jsonify, url_for
 from flask.ext.mysql import MySQL
 from werkzeug import generate_password_hash, check_password_hash
@@ -13,11 +15,16 @@ app.config['MYSQL_DATABASE_USER'] = 'b31e9fc461a5fd'
 app.config['MYSQL_DATABASE_PASSWORD'] = '105c24d7'
 app.config['MYSQL_DATABASE_DB'] = 'heroku_d5e2f87dc3f9601'
 app.config['MYSQL_DATABASE_HOST'] = 'us-cdbr-iron-east-05.cleardb.net'
+#app.config['MYSQL_DATABASE_USER'] = 'nova'
+#app.config['MYSQL_DATABASE_PASSWORD'] = 'stardust'
+#app.config['MYSQL_DATABASE_DB'] = 'highSchoolCrossCountry'
+#app.config['MYSQL_DATABASE_HOST'] = 'localhost'
 mysql.init_app(app)
+
 
 @app.route('/')
 def main():
-    return render_template('index.html')	
+    return render_template('index.html')
 
 
 @app.route('/getTopResults',methods=['GET'])
@@ -153,16 +160,61 @@ def getTopTeamCourseResults():
         data = cursor.fetchall()
 
         top_team_course_results_dict = []
+        all_top_race_ids = []
+        all_top_competitor_ids = []
         for row in data:
             team_course_result_dict = {
                 'Rank': row[0],
                 'Year': row[1],
                 'TeamTime': formatTime(row[2]),
                 'TeamPace': formatTime(row[3]),
+                'RaceId': row[4],
+                'CompetitorIds': row[5],                
             }
             top_team_course_results_dict.append(team_course_result_dict)
+            all_top_race_ids.append(row[4])
+            all_top_competitor_ids.append(row[5])
+            
+        race_competitor_data_dict = getResultsByRaceCompetitor(all_top_race_ids,all_top_competitor_ids)
+        
+        for result in top_team_course_results_dict:
+        	race_id = str(result['RaceId'])
+        	competitor_times = []
+        	for competitor_id in str(result['CompetitorIds']).split(','):
+        		key = race_id + ':' + competitor_id
+        		competitor_times.append(race_competitor_data_dict[key])
+        		
+        	result['CompetitorTimes'] = competitor_times
 
         return json.dumps(top_team_course_results_dict)
+    except Exception as e:
+        return render_template('error.html',error = str(e))
+
+
+@app.route('/getResultsByRaceCompetitor',methods=['GET'])
+def getResultsByRaceCompetitor(race_ids,competitor_ids):
+    try:
+    	race_ids_str = ','.join(str(e) for e in race_ids)
+    	competitor_ids_str = ','.join(str(e) for e in competitor_ids)
+        conn = mysql.connect()
+        cursor = conn.cursor()
+        cursor.callproc('GetResultsByRaceCompetitor',(race_ids_str,competitor_ids_str))
+        data = cursor.fetchall()
+
+        race_competitor_data_dict = {}
+        for row in data:
+        	race_id = str(row[0])
+        	competitor_id = str(row[1])
+        	time = formatTime(row[2])
+        	pace = formatTime(row[3])
+        	grade = str(row[4])
+        	first_name = row[5]
+        	last_name = row[6]
+        	key = race_id + ':' + competitor_id
+        	value = first_name + ' ' + last_name + ' (' + grade + ') - ' + time + ' (' + pace + ')'
+        	race_competitor_data_dict[key] = value
+
+        return race_competitor_data_dict
     except Exception as e:
         return render_template('error.html',error = str(e))
 
@@ -277,6 +329,6 @@ def getCompetitorResults():
 def runner():
     return render_template('runner.html')
 
-	
+
 if __name__ == "__main__":
-	app.run()
+    app.run()

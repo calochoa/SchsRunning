@@ -42,6 +42,13 @@
 				    var timeStr = value.TeamTime + ' (' + value.TeamPace + ')'
 					results = $(div).clone();
 					$(results).find('h3').text(resultStr + ' - ' + timeStr);
+					
+					var competitorTimes = ''
+					for (i in value.CompetitorTimes) {
+						competitorTimes += "<div>" + value.CompetitorTimes[i] + "</div>"
+					}
+					
+					$(results).find('p').append(competitorTimes);
 					$('.jumbotron').append(results);
 				});
 			},
