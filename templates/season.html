@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>SCHS XC Season</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <link href="https://getbootstrap.com/docs/3.3/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet">
+    <link href="../static/css/signup.css" rel="stylesheet">
+    <script src="../static/js/jquery-1.11.2.js"></script>
+    <script>
+    var urlParams = new URLSearchParams(window.location.search);
+    var year = urlParams.get('yr');
+
+	$(function(){
+		$.ajax({
+			url: '/getCompetitorsByYear',
+			type: 'GET',
+			data: {
+				"year": year,
+				"genderId": 2,
+			},
+			success: function(res){
+				$('.text-muted').text(year + ' SCHS XC Season');
+
+				var resultsObj = JSON.parse(res);
+				var count = resultsObj.length
+				$('.mRunnerTitle').text('Male Runners (' +count + ')');
+
+				$.each(resultsObj,function(index, value){
+				    var nameStr = value.LastName + ', ' + value.FirstName + ' (' + value.Grade + ')'
+				    var link = "competitor?cId=" + value.CompetitorId
+					$('.mRunnerNames').append("<div><a href='" + link + "'>" + nameStr + "</a></div>");
+				});
+			},
+			error: function(error){
+				console.log(error);
+			}
+		});
+	});
+	
+	$(function(){
+		$.ajax({
+			url: '/getCompetitorsByYear',
+			type: 'GET',
+			data: {
+				"year": year,
+				"genderId": 3,
+			},
+			success: function(res){							    				
+				var resultsObj = JSON.parse(res);
+				var count = resultsObj.length
+				$('.fRunnerTitle').text('Female Runners (' +count + ')');
+
+				$.each(resultsObj,function(index, value){
+				    var nameStr = value.LastName + ', ' + value.FirstName + ' (' + value.Grade + ')'
+				    var link = "competitor?cId=" + value.CompetitorId
+					$('.fRunnerNames').append("<div><a href='" + link + "'>" + nameStr + "</a></div>");
+				});
+			},
+			error: function(error){
+				console.log(error);
+			}
+		});
+	});
+	
+	$(function(){
+		$.ajax({
+			url: '/getRacesByYear',
+			type: 'GET',
+			data: {
+				"year": year,
+			},
+			success: function(res){							    				
+				var resultsObj = JSON.parse(res);
+				var count = resultsObj.length
+				$('.raceTitle').text('Races (' +count + ')');
+
+				$.each(resultsObj,function(index, value){
+					var raceStr = value.RaceName.replace('Invitational', 'Inv')
+					raceStr = raceStr.replace('Center', 'Ctr')
+					var dateStr = value.Date.substring(5)
+					dateStr = dateStr.replace('-','/')
+				    var nameStr = dateStr + ' - ' + raceStr + ': ' + value.CourseName + ' (' + value.CourseDistance + 'M)'
+				    var link = "raceResults?raceId=" + value.RaceId
+					$('.raceNames').append("<div>" + nameStr + "</div>"
+						+ "<div>&raquo; <a href='" + link + "&gId=3'>Girls</a>"
+						+ " | <a href='" + link + "&gId=2'>Boys</a>"
+						+ " | <a href='" + link + "'>Combined</a></div>"
+						+ "<div>&nbsp;</div>");
+				});
+			},
+			error: function(error){
+				console.log(error);
+			}
+		});
+	});
+    </script>
+  </head>
+  <body>
+
+    <div class="container">
+      <div class="header">
+        <nav>
+          <ul class="nav nav-pills pull-right">
+            <li role="presentation"><a href="/">Home</a></li>
+          </ul>
+        </nav>
+        <h3 class="text-muted"></h3>
+      </div>
+      
+      <div class="row marketing">
+        <div class="col-lg-6">
+          <h4 class="fRunnerTitle"></h4>
+          <p class=fRunnerNames></p>
+          <h4 class="mRunnerTitle"></h4>
+          <p class=mRunnerNames></p>
+        </div>
+        <div class="col-lg-6">
+          <h4 class="raceTitle"></h4>
+          <p class=raceNames>
+          </p>
+        </div>
+      </div>
+        
+      <footer class="footer">
+        <p>&copy; Cal Workouts 2017</p>
+      </footer>
+    </div>
+  </body>
+</html>
+

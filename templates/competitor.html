@@ -1,26 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>SCHS XC Runner</title>
+    <title>SCHS XC Competitor</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
     <link href="https://getbootstrap.com/docs/3.3/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet">
     <link href="../static/css/signup.css" rel="stylesheet">
     <style>
-    .runnerResults p {
+    .competitorResults p {
     	font-size:18px;
 	}
     </style>
     <script src="../static/js/jquery-1.11.2.js"></script>
     <script>
     var urlParams = new URLSearchParams(window.location.search);
-    var runnerId = urlParams.get('rId');
+    var competitorId = urlParams.get('cId');
         
 	$(function(){
 		$.ajax({
-			url: '/getRunnerResults',
+			url: '/getCompetitorResults',
 			type: 'GET',
 			data: {
-				"runnerId": runnerId
+				"competitorId": competitorId
 			},
 			success: function(res){
 				var div = $('<div>')
@@ -35,17 +35,19 @@
 				var resultsObj = JSON.parse(res);
 				var results = '';
 				var fullName = '';
+				var titleStr = '';
 				$.each(resultsObj,function(index, value){
 					fullName = value.FirstName + ' ' + value.LastName
+					titleStr = fullName + ' - ' + value.Grade + 'th grade - ' + value.Year + ' Season'
 					var headerStr = value.Date + ' - ' + value.RaceName + ': ' + value.CourseName + ', ' + value.CourseDistance + 'M'
 					headerStr += value.RaceCondition.localeCompare('unknown') ? ' *' + value.RaceCondition + '*' : ''
-				    var timeStr = value.Time + ' (' + value.Pace + ') - ' + value.Grade + 'th grade'
+				    var timeStr = value.Time + ' (' + value.Pace + ')'
 					results = $(div).clone();
 					$(results).find('h4').text(headerStr);
 					$(results).find('p').text(timeStr);
-					$('.runnerResults').append(results);
+					$('.competitorResults').append(results);
 				});
-				$('.text-muted').text(fullName);
+				$('.text-muted').text(titleStr);
 			},
 			error: function(error){
 				console.log(error);
@@ -65,7 +67,7 @@
         </nav>
         <h3 class="text-muted"></h3>
       </div>
-      <div class="runnerResults"></div>
+      <div class="competitorResults"></div>
       <footer class="footer">
         <p>&copy; Cal Workouts 2017</p>
       </footer>

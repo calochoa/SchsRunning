@@ -27,8 +27,8 @@ def main():
     return render_template('index.html')
 
 
-@app.route('/getTopResults',methods=['GET'])
-def getTopResults():
+@app.route('/getTopCourseResults',methods=['GET'])
+def getTopCourseResults():
     try:
         courseId = request.args.get('courseId', default = 1, type = int)
         genderId = request.args.get('genderId', default = 2, type = int)
@@ -109,42 +109,42 @@ def results():
 
 @app.route('/top25CsGirls')
 def top25CsGirls():
-    return render_template('topResults.html', cId = 1, gId = 3, limit = 25)
+    return render_template('topCourseResults.html', cId = 1, gId = 3, limit = 25)
 
 
 @app.route('/top25CsBoys')
 def top25CsBoys():
-    return render_template('topResults.html', cId = 1, gId = 2, limit = 25)
+    return render_template('topCourseResults.html', cId = 1, gId = 2, limit = 25)
 
 
 @app.route('/top25TpGirls')
 def top25TpGirls():
-    return render_template('topResults.html', cId = 2, gId = 3, limit = 25)
+    return render_template('topCourseResults.html', cId = 2, gId = 3, limit = 25)
 
 
 @app.route('/top25TpBoys')
 def top25TpBoys():
-    return render_template('topResults.html', cId = 2, gId = 2, limit = 25)
+    return render_template('topCourseResults.html', cId = 2, gId = 2, limit = 25)
 
 
 @app.route('/top25CpGirls')
 def top25CpGirls():
-    return render_template('topResults.html', cId = 6, gId = 3, limit = 25)
+    return render_template('topCourseResults.html', cId = 6, gId = 3, limit = 25)
 
 
 @app.route('/top25CpBoys')
 def top25CpBoys():
-    return render_template('topResults.html', cId = 6, gId = 2, limit = 25)
+    return render_template('topCourseResults.html', cId = 6, gId = 2, limit = 25)
 
 
 @app.route('/top25BpGirls')
 def top25BpGirls():
-    return render_template('topResults.html', cId = 4, gId = 3, limit = 25)
+    return render_template('topCourseResults.html', cId = 4, gId = 3, limit = 25)
 
 
 @app.route('/top25BpBoys')
 def top25BpBoys():
-    return render_template('topResults.html', cId = 4, gId = 2, limit = 25)
+    return render_template('topCourseResults.html', cId = 4, gId = 2, limit = 25)
 
 
 @app.route('/getTopTeamCourseResults',methods=['GET'])
@@ -294,14 +294,109 @@ def fRunners():
     return render_template('runners.html', gId = 3)
 
 
-@app.route('/getCompetitorResults',methods=['GET'])
-def getCompetitorResults():
+@app.route('/getRunnerResults',methods=['GET'])
+def getRunnerResults():
     try:
         runnerId = request.args.get('runnerId', default = 1, type = int)
 
         conn = mysql.connect()
         cursor = conn.cursor()
-        cursor.callproc('GetCompetitorResults',[runnerId])
+        cursor.callproc('GetRunnerResults',[runnerId])
+        data = cursor.fetchall()
+
+        runner_results_dict = []
+        for row in data:
+            result_dict = {
+                'Time': formatTime(row[0]),
+                'Pace': formatTime(row[1]),
+                'Grade': row[2],
+                'Date': str(row[3]),
+                'RaceName': row[4],
+                'CourseName': row[5],
+                'CourseDistance': formatDistance(row[6]),
+                'RaceCondition': row[7],
+                'FirstName': row[8],
+                'LastName': row[9],
+            }
+            runner_results_dict.append(result_dict)
+
+        return json.dumps(runner_results_dict)
+    except Exception as e:
+        return render_template('error.html',error = str(e))
+
+
+@app.route('/runner')
+def runner():
+    return render_template('runner.html')
+
+
+@app.route('/getCompetitorsByYear',methods=['GET'])
+def getCompetitorsByYear():
+    try:
+        year = request.args.get('year', default = 2003, type = int)
+        genderId = request.args.get('genderId', default = 2, type = int)
+
+        conn = mysql.connect()
+        cursor = conn.cursor()
+        cursor.callproc('GetCompetitorsByYear',(year,genderId))
+        data = cursor.fetchall()
+
+        competitors_dict = []
+        for row in data:
+            competitor_dict = {
+                'CompetitorId': row[0],
+                'Year': row[1],
+                'Grade': row[2],
+                'FirstName': row[3],
+                'LastName': row[4],
+                'Gender': row[5],
+            }
+            competitors_dict.append(competitor_dict)
+
+        return json.dumps(competitors_dict)
+    except Exception as e:
+        return render_template('error.html',error = str(e))
+
+
+@app.route('/getRacesByYear',methods=['GET'])
+def getRacesByYear():
+    try:
+        year = request.args.get('year', default = 2003, type = int)
+
+        conn = mysql.connect()
+        cursor = conn.cursor()
+        cursor.callproc('GetRacesByYear',[year])
+        data = cursor.fetchall()
+
+        races_dict = []
+        for row in data:
+            race_dict = {
+                'RaceId': row[0],
+                'Date': str(row[1]),
+                'RaceName': row[2],
+                'CourseName': row[3],
+                'CourseDistance': formatDistance(row[4]),
+            }
+            races_dict.append(race_dict)
+
+        return json.dumps(races_dict)
+    except Exception as e:
+        return render_template('error.html',error = str(e))
+
+
+@app.route('/season',methods=['GET'])
+def season():
+    return render_template('season.html')
+
+
+@app.route('/getCompetitorResults',methods=['GET'])
+def getCompetitorResults():
+    try:
+        competitorId = request.args.get('competitorId', default = 1.12, type = str)
+        print competitorId
+        conn = mysql.connect()
+        cursor = conn.cursor()
+        cursor.callproc('GetCompetitorResults',[competitorId])
         data = cursor.fetchall()
 
         competitor_results_dict = []
@@ -317,6 +412,7 @@ def getCompetitorResults():
                 'RaceCondition': row[7],
                 'FirstName': row[8],
                 'LastName': row[9],
+                'Year': row[10],
             }
             competitor_results_dict.append(result_dict)
 
@@ -325,9 +421,52 @@ def getCompetitorResults():
         return render_template('error.html',error = str(e))
 
 
-@app.route('/runner')
-def runner():
-    return render_template('runner.html')
+@app.route('/competitor',methods=['GET'])
+def competitor():
+    return render_template('competitor.html')
+
+
+@app.route('/getRaceResults',methods=['GET'])
+def getRaceResults():
+    try:
+        raceId = request.args.get('raceId', default = 1000132, type = int)
+        genderId = request.args.get('genderId', default = 0, type = int)
+        print genderId
+
+        conn = mysql.connect()
+        cursor = conn.cursor()
+        if genderId == 0:
+            cursor.callproc('GetAllRaceResults',[raceId])
+        else:
+            cursor.callproc('GetRaceResults',(raceId,genderId))
+        data = cursor.fetchall()
+
+        race_results_dict = []
+        for row in data:
+            result_dict = {
+                'Rank': row[0],
+                'Time': formatTime(row[1]),
+                'Pace': formatTime(row[2]),
+                'Grade': row[3],
+                'Date': str(row[4]),
+                'RaceName': row[5],
+                'CourseName': row[6],
+                'CourseDistance': formatDistance(row[7]),
+                'RaceCondition': row[8],
+                'FirstName': row[9],
+                'LastName': row[10],
+                'Year': row[11],
+            }
+            race_results_dict.append(result_dict)
+
+        return json.dumps(race_results_dict)
+    except Exception as e:
+        return render_template('error.html',error = str(e))
+
+
+@app.route('/raceResults',methods=['GET'])
+def raceResults():
+    return render_template('raceResults.html')
 
 
 if __name__ == "__main__":

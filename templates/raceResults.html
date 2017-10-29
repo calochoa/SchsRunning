@@ -1,26 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>SCHS XC Runner</title>
+    <title>SCHS XC Season Race Results</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
     <link href="https://getbootstrap.com/docs/3.3/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet">
     <link href="../static/css/signup.css" rel="stylesheet">
-    <style>
-    .runnerResults p {
-    	font-size:18px;
-	}
-    </style>
     <script src="../static/js/jquery-1.11.2.js"></script>
     <script>
     var urlParams = new URLSearchParams(window.location.search);
-    var runnerId = urlParams.get('rId');
+    var raceId = urlParams.get('raceId');
+    var genderId = urlParams.get('gId');
         
 	$(function(){
 		$.ajax({
-			url: '/getRunnerResults',
+			url: '/getRaceResults',
 			type: 'GET',
 			data: {
-				"runnerId": runnerId
+				"raceId": raceId,
+				"genderId": genderId,
 			},
 			success: function(res){
 				var div = $('<div>')
@@ -34,18 +31,19 @@
 							    				
 				var resultsObj = JSON.parse(res);
 				var results = '';
-				var fullName = '';
+				limit = resultsObj.length
 				$.each(resultsObj,function(index, value){
-					fullName = value.FirstName + ' ' + value.LastName
-					var headerStr = value.Date + ' - ' + value.RaceName + ': ' + value.CourseName + ', ' + value.CourseDistance + 'M'
-					headerStr += value.RaceCondition.localeCompare('unknown') ? ' *' + value.RaceCondition + '*' : ''
+					var titleStr = value.Date + ' - ' + value.RaceName + ': ' + value.CourseName + ', ' + value.CourseDistance + 'M'
+					titleStr += value.RaceCondition.localeCompare('unknown') ? ' *' + value.RaceCondition + '*' : ''
+					$('.text-muted').text(titleStr);
+
+				    var resultStr = value.Rank + '. ' + value.FirstName + ' ' + value.LastName + ' (' + value.Year + ')'
 				    var timeStr = value.Time + ' (' + value.Pace + ') - ' + value.Grade + 'th grade'
 					results = $(div).clone();
-					$(results).find('h4').text(headerStr);
+					$(results).find('h4').text(resultStr);
 					$(results).find('p').text(timeStr);
-					$('.runnerResults').append(results);
+					$('.jumbotron').append(results);
 				});
-				$('.text-muted').text(fullName);
 			},
 			error: function(error){
 				console.log(error);
@@ -65,7 +63,11 @@
         </nav>
         <h3 class="text-muted"></h3>
       </div>
-      <div class="runnerResults"></div>
+
+      <div class="jumbotron">
+
+      </div>
+
       <footer class="footer">
         <p>&copy; Cal Workouts 2017</p>
       </footer>
