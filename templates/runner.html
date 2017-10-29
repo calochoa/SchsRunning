@@ -1,25 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>SCHS XC Results</title>
+    <title>SCHS XC Runner</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
     <link href="https://getbootstrap.com/docs/3.3/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet">
     <link href="../static/css/signup.css" rel="stylesheet">
+    <style>
+    .runnerResults p {
+    	font-size:18px;
+	}
+    </style>
     <script src="../static/js/jquery-1.11.2.js"></script>
     <script>
     var urlParams = new URLSearchParams(window.location.search);
-    var courseId = urlParams.get('cId');
-    var genderId = urlParams.get('gId');
-    var limit = urlParams.get('limit');    
+    var runnerId = urlParams.get('rId');
         
 	$(function(){
 		$.ajax({
-			url: '/getTopResults',
+			url: '/getCompetitorResults',
 			type: 'GET',
 			data: {
-				"courseId": courseId,
-				"genderId": genderId,
-				"limit": limit
+				"runnerId": runnerId
 			},
 			success: function(res){
 				var div = $('<div>')
@@ -33,37 +34,18 @@
 							    				
 				var resultsObj = JSON.parse(res);
 				var results = '';
-				limit = resultsObj.length
+				var fullName = '';
 				$.each(resultsObj,function(index, value){
-				    var resultStr = value.Rank + '. ' + value.FirstName + ' ' + value.LastName + ' (' + value.Year + ')'
+					fullName = value.FirstName + ' ' + value.LastName
+					var headerStr = value.Date + ' - ' + value.RaceName + ': ' + value.CourseName + ', ' + value.CourseDistance + 'M'
+					headerStr += value.RaceCondition.localeCompare('unknown') ? ' *' + value.RaceCondition + '*' : ''
 				    var timeStr = value.Time + ' (' + value.Pace + ') - ' + value.Grade + 'th grade'
 					results = $(div).clone();
-					$(results).find('h4').text(resultStr);
+					$(results).find('h4').text(headerStr);
 					$(results).find('p').text(timeStr);
-					$('.testCal').append(results);
+					$('.runnerResults').append(results);
 				});
-			},
-			error: function(error){
-				console.log(error);
-			}
-		});
-	});
-	
-	$(function(){
-		$.ajax({
-			url: '/getCourseInfo',
-			type: 'GET',
-			data: {
-				"courseId": courseId
-			},
-			success: function(res){
-				var resultsObj = JSON.parse(res);
-				var courseObj = resultsObj[0]
-				var genderStr = (genderId && genderId == 3) ? 'Girls' : 'Boys'
-				var courseStr = courseObj.CourseName + ' (' + courseObj.CourseDistance + 'M)'
-				var topStr = limit > 0 ? limit : 'No Results for'
-				var titleStr =  topStr + ' ' + genderStr + ' - ' + courseStr
-				$('.text-muted').text(titleStr);
+				$('.text-muted').text(fullName);
 			},
 			error: function(error){
 				console.log(error);
@@ -83,11 +65,7 @@
         </nav>
         <h3 class="text-muted"></h3>
       </div>
-
-      <div class="testCal">
-
-      </div>
-
+      <div class="runnerResults"></div>
       <footer class="footer">
         <p>&copy; Cal Workouts 2017</p>
       </footer>

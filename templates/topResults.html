@@ -7,10 +7,9 @@
     <link href="../static/css/signup.css" rel="stylesheet">
     <script src="../static/js/jquery-1.11.2.js"></script>
     <script>
-    var urlParams = new URLSearchParams(window.location.search);
-    var courseId = urlParams.get('cId');
-    var genderId = urlParams.get('gId');
-    var limit = urlParams.get('limit');    
+    var courseId = {{cId}};
+    var genderId = {{gId}};
+    var limit = {{limit}};
         
 	$(function(){
 		$.ajax({
@@ -40,7 +39,7 @@
 					results = $(div).clone();
 					$(results).find('h4').text(resultStr);
 					$(results).find('p').text(timeStr);
-					$('.testCal').append(results);
+					$('.jumbotron').append(results);
 				});
 			},
 			error: function(error){
@@ -61,7 +60,7 @@
 				var courseObj = resultsObj[0]
 				var genderStr = (genderId && genderId == 3) ? 'Girls' : 'Boys'
 				var courseStr = courseObj.CourseName + ' (' + courseObj.CourseDistance + 'M)'
-				var topStr = limit > 0 ? limit : 'No Results for'
+				var topStr = limit > 0 ? 'Top ' + limit : 'No Results for'
 				var titleStr =  topStr + ' ' + genderStr + ' - ' + courseStr
 				$('.text-muted').text(titleStr);
 			},
@@ -84,7 +83,7 @@
         <h3 class="text-muted"></h3>
       </div>
 
-      <div class="testCal">
+      <div class="jumbotron">
 
       </div>
 
