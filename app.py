@@ -42,10 +42,14 @@ def getTopCourseResults():
         courseId = request.args.get('courseId', default = 1, type = int)
         genderId = request.args.get('genderId', default = 2, type = int)
         limit = request.args.get('limit', default = 25, type = int)
+        grade = request.args.get('grade', default = 0, type = int)
 
         conn = mysql.connect()
         cursor = conn.cursor()
-        cursor.callproc('GetTopIndividual',(courseId,genderId,limit))
+        if grade == 0:
+            cursor.callproc('GetTopIndividual',(courseId,genderId,limit))
+        else:
+            cursor.callproc('GetTopIndividualByGrade',(courseId,genderId,grade,limit))
         data = cursor.fetchall()
 
         top_results_dict = []
@@ -64,6 +68,11 @@ def getTopCourseResults():
         return json.dumps(top_results_dict)
     except Exception as e:
         return render_template('error.html',error = str(e))
+
+
+@app.route('/topCourseResults')
+def topCourseResults():
+    return render_template('topCourseResults.html', cId = 0, gId = 0, limit = 0)
 
 
 def formatTime(time):

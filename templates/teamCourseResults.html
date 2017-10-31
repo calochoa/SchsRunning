@@ -6,14 +6,15 @@
     <link href="https://getbootstrap.com/docs/3.3/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet">
     <link href="../static/css/signup.css" rel="stylesheet">
     <script src="../static/js/jquery-1.11.2.js"></script>
+    <script src="../static/js/utils.js"></script>
     <script>
-    var urlParams = new URLSearchParams(window.location.search);
     var cId = {{cId}};
     var gId = {{gId}};
     var li = {{limit}};
-    var courseId = cId ? cId : cIdurlParams.get('cId');
-    var genderId = gId ? gId : urlParams.get('gId');
-    var limit = li ? li : urlParams.get('limit');    
+    var urlParams = parseURL();
+    var courseId = cId ? cId : urlParams.cId;
+    var genderId = gId ? gId : urlParams.gId;
+    var limit = li ? li : urlParams.limit;
         
 	$(function(){
 		$.ajax({

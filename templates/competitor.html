@@ -11,9 +11,10 @@
 	}
     </style>
     <script src="../static/js/jquery-1.11.2.js"></script>
+    <script src="../static/js/utils.js"></script>
     <script>
-    var urlParams = new URLSearchParams(window.location.search);
-    var competitorId = urlParams.get('cId');
+    var urlParams = parseURL();
+    var competitorId = urlParams.cId;
         
 	$(function(){
 		$.ajax({

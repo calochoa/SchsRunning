@@ -6,10 +6,11 @@
     <link href="https://getbootstrap.com/docs/3.3/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet">
     <link href="../static/css/signup.css" rel="stylesheet">
     <script src="../static/js/jquery-1.11.2.js"></script>
+    <script src="../static/js/utils.js"></script>
     <script>
-    var urlParams = new URLSearchParams(window.location.search);
-    var raceId = urlParams.get('raceId');
-    var genderId = urlParams.get('gId');
+    var urlParams = parseURL();
+    var raceId = urlParams.raceId;
+    var genderId = urlParams.gId;
         
 	$(function(){
 		$.ajax({

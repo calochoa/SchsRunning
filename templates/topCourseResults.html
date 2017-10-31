@@ -6,11 +6,17 @@
     <link href="https://getbootstrap.com/docs/3.3/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet">
     <link href="../static/css/signup.css" rel="stylesheet">
     <script src="../static/js/jquery-1.11.2.js"></script>
+    <script src="../static/js/utils.js"></script>
     <script>
-    var courseId = {{cId}};
-    var genderId = {{gId}};
-    var limit = {{limit}};
-        
+    var cId = {{cId}};
+    var gId = {{gId}};
+    var li = {{limit}};
+    var urlParams = parseURL();
+    var courseId = cId && cId != 0 ? cId : urlParams.cId;
+    var genderId = gId && gId != 0 ? gId : urlParams.gId;
+    var limit = li && li != 0 ? li : urlParams.limit;
+    var grade = urlParams.grade;
+            
 	$(function(){
 		$.ajax({
 			url: '/getTopCourseResults',
@@ -18,7 +24,8 @@
 			data: {
 				"courseId": courseId,
 				"genderId": genderId,
-				"limit": limit
+				"limit": limit,
+				"grade": grade
 			},
 			success: function(res){
 				var div = $('<div>')
@@ -60,8 +67,9 @@
 				var courseObj = resultsObj[0]
 				var genderStr = (genderId && genderId == 3) ? 'Girls' : 'Boys'
 				var courseStr = courseObj.CourseName + ' (' + courseObj.CourseDistance + 'M)'
+				var gradeStr = grade == 9 ? 'Freshman ' : (grade == 10 ? 'Sophomore ' : (grade == 11 ? 'Junior ' : (grade == 12 ? 'Senior ' : '')))
 				var topStr = limit > 0 ? 'Top ' + limit : 'No Results for'
-				var titleStr =  topStr + ' ' + genderStr + ' - ' + courseStr
+				var titleStr =  topStr + ' ' + gradeStr + genderStr + ' - ' + courseStr
 				$('.text-muted').text(titleStr);
 			},
 			error: function(error){
