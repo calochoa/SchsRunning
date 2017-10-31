@@ -8,14 +8,6 @@ function parseURL() {
           const keyValue = keyValues[i].split('=');
           const key = keyValue[0];
           let value = keyValue[1]; // Bonus points for using LET
-
-          // Type conversions (bonus)
-          if (!isNaN(value)) {
-            value = Number(value);
-          }
-          else if (value.match(/^\[/)) {
-            value = value.substr(1).replace(']', '').split(',')
-          }
           params[key] = value;
         }
 
