@@ -19,10 +19,10 @@ app.config['MYSQL_DATABASE_HOST'] = 'rds-mysql-calworkouts.cu1fjz4ompeu.us-west-
 
 
 # heroku
-app.config['MYSQL_DATABASE_USER'] = 'b31e9fc461a5fd'
-app.config['MYSQL_DATABASE_PASSWORD'] = '105c24d7'
-app.config['MYSQL_DATABASE_DB'] = 'heroku_d5e2f87dc3f9601'
-app.config['MYSQL_DATABASE_HOST'] = 'us-cdbr-iron-east-05.cleardb.net'
+#app.config['MYSQL_DATABASE_USER'] = 'b31e9fc461a5fd'
+#app.config['MYSQL_DATABASE_PASSWORD'] = '105c24d7'
+#app.config['MYSQL_DATABASE_DB'] = 'heroku_d5e2f87dc3f9601'
+#app.config['MYSQL_DATABASE_HOST'] = 'us-cdbr-iron-east-05.cleardb.net'
 
 # localhost
 #app.config['MYSQL_DATABASE_USER'] = 'nova'
