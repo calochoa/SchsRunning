@@ -17,7 +17,6 @@ app.config['MYSQL_DATABASE_PASSWORD'] = 'quickies'
 app.config['MYSQL_DATABASE_DB'] = 'highSchoolCrossCountry'
 app.config['MYSQL_DATABASE_HOST'] = 'rds-mysql-calworkouts.cu1fjz4ompeu.us-west-1.rds.amazonaws.com'
 
-
 # heroku
 #app.config['MYSQL_DATABASE_USER'] = 'b31e9fc461a5fd'
 #app.config['MYSQL_DATABASE_PASSWORD'] = '105c24d7'
