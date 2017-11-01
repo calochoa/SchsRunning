@@ -198,15 +198,57 @@ def getTopTeamCourseResults():
         for result in top_team_course_results_dict:
             race_id = str(result['RaceId'])
             competitor_times = []
+            team_time_min = 0
+            team_time_sec = 0.0
             for competitor_id in str(result['CompetitorIds']).split(','):
                 key = race_id + ':' + competitor_id
-                competitor_times.append(race_competitor_data_dict[key])
+                competitor_data = race_competitor_data_dict[key]
+                competitor_times.append(competitor_data['Display'])
+                competitor_time_parts = competitor_data['Time'].split(':')
+                if len(competitor_time_parts) == 2:
+                     team_time_min += int(competitor_time_parts[0])
+                     team_time_sec += float(competitor_time_parts[1])
 
             result['CompetitorTimes'] = competitor_times
+            team_time = convertTeamTime(team_time_min,team_time_sec)
+            result['TeamTimeCalc'] = team_time
+            result['TeamAvgIndTimeCalc'] = getTeamAvgIndTime(team_time)
 
         return json.dumps(top_team_course_results_dict)
     except Exception as e:
+        print e
         return render_template('error.html',error = str(e))
+
+
+def convertTeamTime(team_time_min,team_time_sec):
+    time_min = team_time_min
+    time_sec = team_time_sec
+    if team_time_sec >= 60:
+        extra_min = team_time_sec / 60
+        time_sec = (extra_min - int(extra_min)) * 60
+        time_min += int(extra_min)
+
+    return formatTeamTime(time_min,time_sec)
+
+
+def getTeamAvgIndTime(team_time):
+    time_parts = team_time.split(':')
+    if len(time_parts) == 2:
+        time_min = int(time_parts[0])
+        time_sec = float(time_parts[1]) + (time_min * 60)
+        avg_time = time_sec / 5 / 60
+        avg_time_min = int(avg_time)
+        avg_time_sec = (avg_time - avg_time_min) * 60
+        return formatTeamTime(avg_time_min,avg_time_sec)
+
+
+def formatTeamTime(team_time_min,team_time_sec):
+    min_str = str(team_time_min)
+    sec_str = ('0' if team_time_sec < 10 else '') + str(round(team_time_sec,1))
+    if sec_str.endswith('.0'):
+       sec_str = sec_str[:-2]
+
+    return min_str + ':' + sec_str
 
 
 @app.route('/getResultsByRaceCompetitor',methods=['GET'])
@@ -229,7 +271,10 @@ def getResultsByRaceCompetitor(race_ids,competitor_ids):
             first_name = row[5]
             last_name = row[6]
             key = race_id + ':' + competitor_id
-            value = first_name + ' ' + last_name + ' (' + grade + ') - ' + time + ' (' + pace + ')'
+            value = {
+                'Display': first_name + ' ' + last_name + ' (' + grade + ') - ' + time + ' (' + pace + ')',
+                'Time': time
+            }
             race_competitor_data_dict[key] = value
 
         return race_competitor_data_dict

@@ -40,7 +40,7 @@
 				limit = resultsObj.length
 				$.each(resultsObj,function(index, value){
 				    var resultStr = value.Rank + '. ' + value.Year
-				    var timeStr = value.TeamTime + ' (' + value.TeamPace + ')'
+				    var timeStr = value.TeamTimeCalc + ' (' + value.TeamAvgIndTimeCalc + ')'
 					results = $(div).clone();
 					$(results).find('h3').text(resultStr + ' - ' + timeStr);
 					
