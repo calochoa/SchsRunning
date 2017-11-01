@@ -192,7 +192,7 @@ def getTopTeamCourseResults():
             top_team_course_results_dict.append(team_course_result_dict)
             all_top_race_ids.append(row[4])
             all_top_competitor_ids.append(row[5])
-            
+
         race_competitor_data_dict = getResultsByRaceCompetitor(all_top_race_ids,all_top_competitor_ids)
 
         for result in top_team_course_results_dict:
@@ -216,7 +216,6 @@ def getTopTeamCourseResults():
 
         return json.dumps(top_team_course_results_dict)
     except Exception as e:
-        print e
         return render_template('error.html',error = str(e))
 
 
