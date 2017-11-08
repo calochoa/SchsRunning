@@ -12,10 +12,10 @@ app = Flask(__name__)
 
 # MySQL configurations
 # aws 
-#app.config['MYSQL_DATABASE_USER'] = 'calworkouts'
-#app.config['MYSQL_DATABASE_PASSWORD'] = 'quickies'
-#app.config['MYSQL_DATABASE_DB'] = 'highSchoolCrossCountry'
-#app.config['MYSQL_DATABASE_HOST'] = 'rds-mysql-calworkouts.cu1fjz4ompeu.us-west-1.rds.amazonaws.com'
+app.config['MYSQL_DATABASE_USER'] = 'calworkouts'
+app.config['MYSQL_DATABASE_PASSWORD'] = 'quickies'
+app.config['MYSQL_DATABASE_DB'] = 'highSchoolCrossCountry'
+app.config['MYSQL_DATABASE_HOST'] = 'rds-mysql-calworkouts.cu1fjz4ompeu.us-west-1.rds.amazonaws.com'
 
 # heroku
 #app.config['MYSQL_DATABASE_USER'] = 'b31e9fc461a5fd'
@@ -24,10 +24,10 @@ app = Flask(__name__)
 #app.config['MYSQL_DATABASE_HOST'] = 'us-cdbr-iron-east-05.cleardb.net'
 
 # localhost
-app.config['MYSQL_DATABASE_USER'] = 'nova'
-app.config['MYSQL_DATABASE_PASSWORD'] = 'stardust'
-app.config['MYSQL_DATABASE_DB'] = 'highSchoolCrossCountry'
-app.config['MYSQL_DATABASE_HOST'] = 'localhost'
+#app.config['MYSQL_DATABASE_USER'] = 'nova'
+#app.config['MYSQL_DATABASE_PASSWORD'] = 'stardust'
+#app.config['MYSQL_DATABASE_DB'] = 'highSchoolCrossCountry'
+#app.config['MYSQL_DATABASE_HOST'] = 'localhost'
 mysql.init_app(app)
 
 
@@ -533,4 +533,4 @@ def raceResults():
 
 
 if __name__ == "__main__":
-    app.run(port=5002)
+    app.run()
