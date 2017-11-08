@@ -43,7 +43,7 @@
 				    var timeStr = value.TeamTimeCalc + ' (' + value.TeamAvgIndTimeCalc + ')'
 					results = $(div).clone();
 					$(results).find('h3').text(resultStr + ' - ' + timeStr);
-					$(results).find('a').attr('href', '/raceResults?raceId=' + value.RaceId);
+					$(results).find('a').attr('href', '/raceResults?raceId=' + value.RaceId + '&gId=' + genderId);
 					
 					var competitorTimes = ''
 					for (i in value.CompetitorTimes) {
