@@ -61,7 +61,8 @@ def getTopCourseResults():
                 'Time': formatTime(row[3]),
                 'Pace': formatTime(row[4]),
                 'Year': row[5],
-                'Grade': row[6]
+                'Grade': row[6],
+                'CompetitorId': row[7],
             }
             top_results_dict.append(result_dict)
 
