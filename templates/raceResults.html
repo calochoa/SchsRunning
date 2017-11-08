@@ -41,6 +41,7 @@
 				    var resultStr = value.Rank + '. ' + value.FirstName + ' ' + value.LastName + ' (' + value.Year + ')'
 				    var timeStr = value.Time + ' (' + value.Pace + ') - ' + value.Grade + 'th grade'
 					results = $(div).clone();
+					$(results).find('a').attr('href', '/competitor?cId='+ value.CompetitorId);
 					$(results).find('h4').text(resultStr);
 					$(results).find('p').text(timeStr);
 					$('.jumbotron').append(results);
