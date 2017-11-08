@@ -42,6 +42,7 @@
 					headerStr += value.RaceCondition.localeCompare('unknown') ? ' *' + value.RaceCondition + '*' : ''
 				    var timeStr = value.Time + ' (' + value.Pace + ') - ' + value.Grade + 'th grade'
 					results = $(div).clone();
+					$(results).find('a').attr('href', '/raceResults?raceId=' + value.RaceId);
 					$(results).find('h4').text(headerStr);
 					$(results).find('p').text(timeStr);
 					$('.runnerResults').append(results);

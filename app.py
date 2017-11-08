@@ -379,6 +379,7 @@ def getRunnerResults():
                 'RaceCondition': row[7],
                 'FirstName': row[8],
                 'LastName': row[9],
+                'RaceId': row[10],
             }
             runner_results_dict.append(result_dict)
 
