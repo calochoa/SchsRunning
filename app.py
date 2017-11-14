@@ -201,7 +201,7 @@ def getTopTeamCourseResults():
             competitor_times = []
             team_time_min = 0
             team_time_sec = 0.0
-            for competitor_id in str(result['CompetitorIds']).split(','):
+            for idx,competitor_id in enumerate(str(result['CompetitorIds']).split(',')):
                 key = race_id + ':' + competitor_id
                 competitor_data = race_competitor_data_dict[key]
                 competitor_times.append(competitor_data['Display'])
@@ -209,15 +209,31 @@ def getTopTeamCourseResults():
                 if len(competitor_time_parts) == 2:
                      team_time_min += int(competitor_time_parts[0])
                      team_time_sec += float(competitor_time_parts[1])
+                if idx == 0:
+                     first_time = competitor_data['Time']
+                elif idx == 4:
+                     fifth_time = competitor_data['Time']
 
             result['CompetitorTimes'] = competitor_times
             team_time = convertTeamTime(team_time_min,team_time_sec)
             result['TeamTimeCalc'] = team_time
             result['TeamAvgIndTimeCalc'] = getTeamAvgIndTime(team_time)
+            result['Spread'] = convertTeamTime(0, getTimeDiff(first_time, fifth_time))
 
         return json.dumps(top_team_course_results_dict)
     except Exception as e:
         return render_template('error.html',error = str(e))
+
+
+def getTimeDiff(time_1, time_2):
+    time_1_sec = getSecondsFromTime(time_1)
+    time_2_sec = getSecondsFromTime(time_2)
+    return time_2_sec - time_1_sec
+
+
+def getSecondsFromTime(time):
+    time_parts = time.split(':')
+    return (int(time_parts[0]) * 60) + float(time_parts[1])
 
 
 def convertTeamTime(team_time_min,team_time_sec):

@@ -49,7 +49,7 @@
 				limit = resultsObj.length
 				$.each(resultsObj,function(index, value){
 				    var resultStr = value.Rank + '. ' + value.Year
-				    var timeStr = value.TeamTimeCalc + ' (' + value.TeamAvgIndTimeCalc + ')'
+				    var timeStr = value.TeamTimeCalc + ' - ' + value.TeamAvgIndTimeCalc + ' - ' + value.Spread
 					results = $(div).clone();
 					$(results).find('h3').text(resultStr + ' - ' + timeStr);
 					$(results).find('a').attr('href', '/raceResults?raceId=' + value.RaceId + '&gId=' + genderId);
@@ -104,7 +104,7 @@
         <h3 class="text-muted"></h3>
       </div>
 
-      <div style="text-align:center"><h3>Year - Team Time (Avg. Ind. Time)</h3></div>
+      <div style="text-align:center"><h3>Year - Total Time - Avg Time - Spread</h3></div>
       
       <div class="jumbotron">
       
