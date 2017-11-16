@@ -103,6 +103,14 @@
 			}
 		});
 	});
+	
+	$.get("static/Uploads/team/"+year+".jpg")
+    .done(function() { 
+    	$("#team_img").attr("src", "static/Uploads/team/"+year+".jpg");
+        $("#team_img_container").show();
+    }).fail(function() { 
+        $("#team_img_container").hide();
+    })
     </script>
   </head>
   <body>
@@ -115,6 +123,10 @@
           </ul>
         </nav>
         <h3 class="text-muted"></h3>
+      </div>
+      
+      <div id="team_img_container" class="jumbotron">
+        <p><img id="team_img" src="" style="width: 100%;"></p>
       </div>
       
       <div class="row marketing">
