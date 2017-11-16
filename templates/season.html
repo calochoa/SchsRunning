@@ -19,6 +19,29 @@
     <script>
     var urlParams = parseURL();
     var year = urlParams.yr;
+	
+	$(function(){
+		$.ajax({
+			url: '/getCoachesByYear',
+			type: 'GET',
+			data: {
+				"year": year,
+			},
+			success: function(res){							    				
+				var resultsObj = JSON.parse(res);
+				var count = resultsObj.length
+				$('.coachesTitle').text('Coaches (' +count + ')');
+
+				$.each(resultsObj,function(index, value){
+				    var nameStr = value.FirstName + ' ' + value.LastName + ' (' + value.CoachType + ')'
+					$('.coachesNames').append("<div>" + nameStr + "</div>");
+				});
+			},
+			error: function(error){
+				console.log(error);
+			}
+		});
+	});
 
 	$(function(){
 		$.ajax({
@@ -96,29 +119,6 @@
 						+ " | <a href='" + link + "&gId=2'>Boys</a>"
 						+ " | <a href='" + link + "'>Combined</a></div>"
 						+ "<div>&nbsp;</div>");
-				});
-			},
-			error: function(error){
-				console.log(error);
-			}
-		});
-	});
-	
-	$(function(){
-		$.ajax({
-			url: '/getCoachesByYear',
-			type: 'GET',
-			data: {
-				"year": year,
-			},
-			success: function(res){							    				
-				var resultsObj = JSON.parse(res);
-				var count = resultsObj.length
-				$('.coachesTitle').text('Coaches (' +count + ')');
-
-				$.each(resultsObj,function(index, value){
-				    var nameStr = value.FirstName + ' ' + value.LastName + ' (' + value.CoachType + ')'
-					$('.coachesNames').append("<div>" + nameStr + "</div>");
 				});
 			},
 			error: function(error){
