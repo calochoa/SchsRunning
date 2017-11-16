@@ -104,6 +104,29 @@
 		});
 	});
 	
+	$(function(){
+		$.ajax({
+			url: '/getCoachesByYear',
+			type: 'GET',
+			data: {
+				"year": year,
+			},
+			success: function(res){							    				
+				var resultsObj = JSON.parse(res);
+				var count = resultsObj.length
+				$('.coachesTitle').text('Coaches (' +count + ')');
+
+				$.each(resultsObj,function(index, value){
+				    var nameStr = value.FirstName + ' ' + value.LastName + ' (' + value.CoachType + ')'
+					$('.coachesNames').append("<div>" + nameStr + "</div>");
+				});
+			},
+			error: function(error){
+				console.log(error);
+			}
+		});
+	});
+	
 	$.get("static/Uploads/team/"+year+".jpg")
     .done(function() { 
     	$("#team_img").attr("src", "static/Uploads/team/"+year+".jpg");
@@ -131,6 +154,8 @@
       
       <div class="row marketing">
         <div class="col-lg-6">
+          <h4 class="coachesTitle"></h4>
+          <p class=coachesNames></p>
           <h4 class="fRunnerTitle"></h4>
           <p class=fRunnerNames></p>
           <h4 class="mRunnerTitle"></h4>

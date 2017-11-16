@@ -303,13 +303,31 @@ DELIMITER ;
 
 
 
+DROP PROCEDURE IF EXISTS `GetCoachesByYear`;
+
+DELIMITER //
+CREATE PROCEDURE `GetCoachesByYear`(
+	IN inputYear INT 
+)
+BEGIN
+
+SELECT firstName, lastName, coachType, year 
+FROM `Coach` NATURAL JOIN `CoachType` NATURAL JOIN `CoachSeason`
+WHERE year=inputYear
+ORDER BY coachTypeId ASC;
+
+END //
+DELIMITER ;
+
+
+
 COMMIT;
 
 
 
 CALL GetTopIndividual(1,2,25);
 CALL GetCourseInfo(25);
-CALL GetTopTeamCourse(6,2,5);
+CALL GetTopTeamCourse(1,3,15);
 CALL GetRunnerResults(1);
 CALL GetRunners(3);
 CALL GetResultsByRaceCompetitor('1000173,1000160,1000075,1000183,1000131,1000088,1000139,1000149,1000259,1000248,1000062,1000122,1000239,1000003,1000101',
@@ -320,6 +338,7 @@ CALL GetCompetitorResults(1000157.10);
 CALL GetAllRaceResults(1000131);
 CALL GetRaceResults(1000131,3);
 CALL GetTopIndividualByGrade(1,2,10,25);
+CALL GetCoachesByYear(2015);
 
 
 

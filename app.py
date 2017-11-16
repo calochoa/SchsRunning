@@ -550,5 +550,30 @@ def raceResults():
     return render_template('raceResults.html')
 
 
+@app.route('/getCoachesByYear',methods=['GET'])
+def getCoachesByYear():
+    try:
+        year = request.args.get('year', default = 2017, type = int)
+
+        conn = mysql.connect()
+        cursor = conn.cursor()
+        cursor.callproc('GetCoachesByYear',[year])
+        data = cursor.fetchall()
+
+        coaches_dict = []
+        for row in data:
+            coach_dict = {
+                'FirstName': row[0],
+                'LastName': str(row[1]),
+                'CoachType': row[2],
+                'Year': row[3],
+            }
+            coaches_dict.append(coach_dict)
+
+        return json.dumps(coaches_dict)
+    except Exception as e:
+        return render_template('error.html',error = str(e))
+
+
 if __name__ == "__main__":
     app.run()
