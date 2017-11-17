@@ -567,6 +567,7 @@ def getCoachesByYear():
                 'LastName': row[1],
                 'CoachType': row[2],
                 'Year': row[3],
+                'CoachId': row[4],
             }
             coaches_dict.append(coach_dict)
 

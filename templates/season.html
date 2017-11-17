@@ -34,7 +34,8 @@
 
 				$.each(resultsObj,function(index, value){
 				    var nameStr = value.FirstName + ' ' + value.LastName + ' (' + value.CoachType + ')'
-					$('.coachesNames').append("<div>" + nameStr + "</div>");
+				    var link = "coach?coachId=" + value.CoachId
+					$('.coachesNames').append("<div><a href='" + link + "'>" + nameStr + "</a></div>");
 				});
 			},
 			error: function(error){

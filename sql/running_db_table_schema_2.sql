@@ -311,7 +311,7 @@ CREATE PROCEDURE `GetCoachesByYear`(
 )
 BEGIN
 
-SELECT firstName, lastName, coachType, year 
+SELECT firstName, lastName, coachType, year, coachId 
 FROM `Coach` NATURAL JOIN `CoachType` NATURAL JOIN `CoachSeason`
 WHERE year=inputYear
 ORDER BY coachTypeId ASC;
