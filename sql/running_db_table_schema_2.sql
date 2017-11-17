@@ -339,6 +339,40 @@ DELIMITER ;
 
 
 
+DROP PROCEDURE IF EXISTS `GetCoachById`;
+
+DELIMITER //
+CREATE PROCEDURE `GetCoachById`(
+	IN inputCoachId INT 
+)
+BEGIN
+
+SELECT firstName, lastName, coachType, year 
+FROM `Coach` NATURAL JOIN `CoachType` NATURAL JOIN `CoachSeason`
+WHERE coachId=inputCoachId
+ORDER BY year DESC;
+
+END //
+DELIMITER ;
+
+
+
+DROP PROCEDURE IF EXISTS `GetCoaches`;
+
+DELIMITER //
+CREATE PROCEDURE `GetCoaches`()
+BEGIN
+
+SELECT coachId, firstName, lastName, COUNT(year) AS numSeasons, 
+	GROUP_CONCAT(year ORDER BY year DESC SEPARATOR ", ") years
+FROM `Coach` NATURAL JOIN `CoachType` NATURAL JOIN `CoachSeason`
+GROUP BY coachId
+ORDER BY numSeasons DESC, firstName DESC;
+
+END //
+DELIMITER ;
+
+
 COMMIT;
 
 
@@ -358,7 +392,8 @@ CALL GetRaceResults(1000131,3);
 CALL GetTopIndividualByGrade(1,2,10,25);
 CALL GetCoachesByYear(2015);
 CALL GetCoachTimeline();
-
+CALL GetCoachById(1);
+CALL GetCoaches();
 
 
 -- need to consider if i want to separate by course, ie ccs: Crystal vs Toro

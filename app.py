@@ -597,8 +597,67 @@ def getCoachTimeline():
 
 
 @app.route('/coachTimeline',methods=['GET'])
-def coaches():
+def coachTimeline():
     return render_template('coachTimeline.html')
+
+
+@app.route('/getCoachById',methods=['GET'])
+def getCoachById():
+    try:
+        coachId = request.args.get('coachId', default = 1, type = int)
+
+        conn = mysql.connect()
+        cursor = conn.cursor()
+        cursor.callproc('GetCoachById',[coachId])
+        data = cursor.fetchall()
+
+        coaches_dict = []
+        for row in data:
+            coach_dict = {
+                'FirstName': row[0],
+                'LastName': row[1],
+                'CoachType': row[2],
+                'Year': row[3],
+            }
+            coaches_dict.append(coach_dict)
+
+        return json.dumps(coaches_dict)
+    except Exception as e:
+        return render_template('error.html',error = str(e))
+
+
+@app.route('/coach',methods=['GET'])
+def coach():
+    return render_template('coach.html')
+
+
+@app.route('/getCoaches',methods=['GET'])
+def getCoaches():
+    try:
+        conn = mysql.connect()
+        cursor = conn.cursor()
+        cursor.callproc('GetCoaches')
+        data = cursor.fetchall()
+
+        coaches_dict = []
+        for row in data:
+            coach_dict = {
+                'CoachId': row[0],
+                'FirstName': row[1],
+                'LastName': row[2],
+                'NumSeasons': row[3],
+                'Years': row[4],
+            }
+            coaches_dict.append(coach_dict)
+
+        return json.dumps(coaches_dict)
+    except Exception as e:
+        return render_template('error.html',error = str(e))
+
+
+@app.route('/coaches',methods=['GET'])
+def coaches():
+    return render_template('coaches.html')
 
 
 if __name__ == "__main__":
