@@ -564,7 +564,7 @@ def getCoachesByYear():
         for row in data:
             coach_dict = {
                 'FirstName': row[0],
-                'LastName': str(row[1]),
+                'LastName': row[1],
                 'CoachType': row[2],
                 'Year': row[3],
             }
@@ -573,6 +573,32 @@ def getCoachesByYear():
         return json.dumps(coaches_dict)
     except Exception as e:
         return render_template('error.html',error = str(e))
+
+
+@app.route('/getAllCoaches',methods=['GET'])
+def GetAllCoaches():
+    try:
+        conn = mysql.connect()
+        cursor = conn.cursor()
+        cursor.callproc('GetAllCoaches')
+        data = cursor.fetchall()
+
+        coaches_dict = []
+        for row in data:
+            coach_dict = {
+                'Year': row[0],
+                'Coaches': row[1],
+            }
+            coaches_dict.append(coach_dict)
+
+        return json.dumps(coaches_dict)
+    except Exception as e:
+        return render_template('error.html',error = str(e))
+
+
+@app.route('/coaches',methods=['GET'])
+def coaches():
+    return render_template('coaches.html')
 
 
 if __name__ == "__main__":

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-109364959-1"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+
+	  gtag('config', 'UA-109364959-1');
+	</script>
+    <title>SCHS XC Coaches</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <link href="https://getbootstrap.com/docs/3.3/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet">
+    <link href="../static/css/signup.css" rel="stylesheet">
+    <script src="../static/js/jquery-1.11.2.js"></script>
+    <script src="../static/js/utils.js"></script>
+    <script>
+	$(function(){
+		$.ajax({
+			url: '/getAllCoaches',
+			type: 'GET',
+			success: function(res){
+				var div = $('<div>')
+				    .attr('class', 'list-group')
+				    .append($('<a>')
+				        .attr('class', 'list-group-item active')
+				        .append($('<p>')
+				            .attr('class', 'list-group-item-text')));
+							    				
+				var resultsObj = JSON.parse(res);
+				var results = '';
+				limit = resultsObj.length
+				$.each(resultsObj,function(index, value){
+				    var resultStr = value.Year + ': ' + value.Coaches
+					results = $(div).clone();
+					$(results).find('p').text(resultStr);
+					$('.jumbotron').append(results);
+				});
+			},
+			error: function(error){
+				console.log(error);
+			}
+		});
+	});
+    </script>
+  </head>
+  <body>
+
+    <div class="container">
+      <div class="header">
+        <nav>
+          <ul class="nav nav-pills pull-right">
+            <li role="presentation"><a href="/">Home</a></li>
+          </ul>
+        </nav>
+        <h3 class="text-muted">SCHS XC Coaches</h3>
+      </div>
+      
+      <div class="jumbotron">
+
+      </div>
+        
+      <footer class="footer">
+        <p>&copy; Cal Workouts 2017</p>
+      </footer>
+    </div>
+  </body>
+</html>
+

@@ -321,6 +321,24 @@ DELIMITER ;
 
 
 
+DROP PROCEDURE IF EXISTS `GetAllCoaches`;
+
+DELIMITER //
+CREATE PROCEDURE `GetAllCoaches`()
+BEGIN
+
+SELECT year, GROUP_CONCAT(
+	CONCAT(firstName, " ", lastName, " (", coachType, ")") 
+	ORDER BY coachTypeId ASC, firstName ASC SEPARATOR ", ") AS "Coaches" 
+FROM `Coach` NATURAL JOIN `CoachType` NATURAL JOIN `CoachSeason` 
+GROUP BY year 
+ORDER BY year DESC;
+
+END //
+DELIMITER ;
+
+
+
 COMMIT;
 
 
@@ -339,6 +357,7 @@ CALL GetAllRaceResults(1000131);
 CALL GetRaceResults(1000131,3);
 CALL GetTopIndividualByGrade(1,2,10,25);
 CALL GetCoachesByYear(2015);
+CALL GetAllCoaches();
 
 
 
