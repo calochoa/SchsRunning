@@ -321,10 +321,10 @@ DELIMITER ;
 
 
 
-DROP PROCEDURE IF EXISTS `GetAllCoaches`;
+DROP PROCEDURE IF EXISTS `GetCoachTimeline`;
 
 DELIMITER //
-CREATE PROCEDURE `GetAllCoaches`()
+CREATE PROCEDURE `GetCoachTimeline`()
 BEGIN
 
 SELECT year, GROUP_CONCAT(
@@ -357,7 +357,7 @@ CALL GetAllRaceResults(1000131);
 CALL GetRaceResults(1000131,3);
 CALL GetTopIndividualByGrade(1,2,10,25);
 CALL GetCoachesByYear(2015);
-CALL GetAllCoaches();
+CALL GetCoachTimeline();
 
 
 

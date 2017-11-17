@@ -575,30 +575,30 @@ def getCoachesByYear():
         return render_template('error.html',error = str(e))
 
 
-@app.route('/getAllCoaches',methods=['GET'])
-def GetAllCoaches():
+@app.route('/getCoachTimeline',methods=['GET'])
+def getCoachTimeline():
     try:
         conn = mysql.connect()
         cursor = conn.cursor()
-        cursor.callproc('GetAllCoaches')
+        cursor.callproc('GetCoachTimeline')
         data = cursor.fetchall()
 
-        coaches_dict = []
+        coach_timeline_dict = []
         for row in data:
             coach_dict = {
                 'Year': row[0],
                 'Coaches': row[1],
             }
-            coaches_dict.append(coach_dict)
+            coach_timeline_dict.append(coach_dict)
 
-        return json.dumps(coaches_dict)
+        return json.dumps(coach_timeline_dict)
     except Exception as e:
         return render_template('error.html',error = str(e))
 
 
-@app.route('/coaches',methods=['GET'])
+@app.route('/coachTimeline',methods=['GET'])
 def coaches():
-    return render_template('coaches.html')
+    return render_template('coachTimeline.html')
 
 
 if __name__ == "__main__":
