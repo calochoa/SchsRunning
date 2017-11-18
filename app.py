@@ -54,7 +54,7 @@ def getTopCourseResults():
 
         top_results_dict = []
         for row in data:
-            result_dict = {
+            top_results_dict.append({
                 'Rank': row[0],
                 'FirstName': row[1],
                 'LastName': row[2],
@@ -63,8 +63,7 @@ def getTopCourseResults():
                 'Year': row[5],
                 'Grade': row[6],
                 'CompetitorId': row[7],
-            }
-            top_results_dict.append(result_dict)
+            })
 
         return json.dumps(top_results_dict)
     except Exception as e:
@@ -97,15 +96,14 @@ def getCourseInfo():
 
         courses_dict = []
         for row in data:
-            course_dict = {
+            courses_dict.append({
                 'CourseId': row[0],
                 'CourseName': row[1],
                 'CourseDistance': formatDistance(row[2]),
                 'City': row[3],
                 'State': row[4],
                 'CourseType': row[5]
-            }
-            courses_dict.append(course_dict)
+            })
 
         return json.dumps(courses_dict)
     except Exception as e:
@@ -182,15 +180,14 @@ def getTopTeamCourseResults():
         all_top_race_ids = []
         all_top_competitor_ids = []
         for row in data:
-            team_course_result_dict = {
+            top_team_course_results_dict.append({
                 'Rank': row[0],
                 'Year': row[1],
                 'TeamTime': formatTime(row[2]),
                 'TeamPace': formatTime(row[3]),
                 'RaceId': row[4],
                 'CompetitorIds': row[5],                
-            }
-            top_team_course_results_dict.append(team_course_result_dict)
+            })
             all_top_race_ids.append(row[4])
             all_top_competitor_ids.append(row[5])
 
@@ -201,6 +198,7 @@ def getTopTeamCourseResults():
             competitor_times = []
             team_time_min = 0
             team_time_sec = 0.0
+            
             for idx,competitor_id in enumerate(str(result['CompetitorIds']).split(',')):
                 key = race_id + ':' + competitor_id
                 competitor_data = race_competitor_data_dict[key]
@@ -287,11 +285,10 @@ def getResultsByRaceCompetitor(race_ids,competitor_ids):
             first_name = row[5]
             last_name = row[6]
             key = race_id + ':' + competitor_id
-            value = {
+            race_competitor_data_dict[key] = {
                 'Display': first_name + ' ' + last_name + ' (' + grade + ') - ' + time + ' (' + pace + ')',
                 'Time': time
             }
-            race_competitor_data_dict[key] = value
 
         return race_competitor_data_dict
     except Exception as e:
@@ -350,13 +347,12 @@ def getRunners():
 
         runners_dict = []
         for row in data:
-            runner_dict = {
+            runners_dict.append({
                 'RunnerId': row[0],
                 'FirstName': row[1],
                 'LastName': row[2],
                 'Years': row[3],
-            }
-            runners_dict.append(runner_dict)
+            })
 
         return json.dumps(runners_dict)
     except Exception as e:
@@ -385,7 +381,7 @@ def getRunnerResults():
 
         runner_results_dict = []
         for row in data:
-            result_dict = {
+            runner_results_dict.append({
                 'Time': formatTime(row[0]),
                 'Pace': formatTime(row[1]),
                 'Grade': row[2],
@@ -397,8 +393,7 @@ def getRunnerResults():
                 'FirstName': row[8],
                 'LastName': row[9],
                 'RaceId': row[10],
-            }
-            runner_results_dict.append(result_dict)
+            })
 
         return json.dumps(runner_results_dict)
     except Exception as e:
@@ -423,15 +418,14 @@ def getCompetitorsByYear():
 
         competitors_dict = []
         for row in data:
-            competitor_dict = {
+            competitors_dict.append({
                 'CompetitorId': row[0],
                 'Year': row[1],
                 'Grade': row[2],
                 'FirstName': row[3],
                 'LastName': row[4],
                 'Gender': row[5],
-            }
-            competitors_dict.append(competitor_dict)
+            })
 
         return json.dumps(competitors_dict)
     except Exception as e:
@@ -450,14 +444,13 @@ def getRacesByYear():
 
         races_dict = []
         for row in data:
-            race_dict = {
+            races_dict.append({
                 'RaceId': row[0],
                 'Date': str(row[1]),
                 'RaceName': row[2],
                 'CourseName': row[3],
                 'CourseDistance': formatDistance(row[4]),
-            }
-            races_dict.append(race_dict)
+            })
 
         return json.dumps(races_dict)
     except Exception as e:
@@ -481,7 +474,7 @@ def getCompetitorResults():
  
         competitor_results_dict = []
         for row in data:
-            result_dict = {
+            competitor_results_dict.append({
                 'Time': formatTime(row[0]),
                 'Pace': formatTime(row[1]),
                 'Grade': row[2],
@@ -494,8 +487,7 @@ def getCompetitorResults():
                 'LastName': row[9],
                 'Year': row[10],
                 'RaceId': row[11],
-            }
-            competitor_results_dict.append(result_dict)
+            })
 
         return json.dumps(competitor_results_dict)
     except Exception as e:
@@ -523,7 +515,7 @@ def getRaceResults():
 
         race_results_dict = []
         for row in data:
-            result_dict = {
+            race_results_dict.append({
                 'Rank': row[0],
                 'Time': formatTime(row[1]),
                 'Pace': formatTime(row[2]),
@@ -537,8 +529,7 @@ def getRaceResults():
                 'LastName': row[10],
                 'Year': row[11],
                 'CompetitorId': row[12],
-            }
-            race_results_dict.append(result_dict)
+            })
 
         return json.dumps(race_results_dict)
     except Exception as e:
@@ -562,14 +553,13 @@ def getCoachesByYear():
 
         coaches_dict = []
         for row in data:
-            coach_dict = {
+            coaches_dict.append({
                 'FirstName': row[0],
                 'LastName': row[1],
                 'CoachType': row[2],
                 'Year': row[3],
                 'CoachId': row[4],
-            }
-            coaches_dict.append(coach_dict)
+            })
 
         return json.dumps(coaches_dict)
     except Exception as e:
@@ -586,11 +576,10 @@ def getCoachTimeline():
 
         coach_timeline_dict = []
         for row in data:
-            coach_dict = {
+            coach_timeline_dict.append({
                 'Year': row[0],
                 'Coaches': row[1],
-            }
-            coach_timeline_dict.append(coach_dict)
+            })
 
         return json.dumps(coach_timeline_dict)
     except Exception as e:
@@ -614,13 +603,12 @@ def getCoachById():
 
         coaches_dict = []
         for row in data:
-            coach_dict = {
+            coaches_dict.append({
                 'FirstName': row[0],
                 'LastName': row[1],
                 'CoachType': row[2],
                 'Year': row[3],
-            }
-            coaches_dict.append(coach_dict)
+            })
 
         return json.dumps(coaches_dict)
     except Exception as e:
@@ -642,14 +630,13 @@ def getCoaches():
 
         coaches_dict = []
         for row in data:
-            coach_dict = {
+            coaches_dict.append({
                 'CoachId': row[0],
                 'FirstName': row[1],
                 'LastName': row[2],
                 'NumSeasons': row[3],
                 'Years': row[4],
-            }
-            coaches_dict.append(coach_dict)
+            })
 
         return json.dumps(coaches_dict)
     except Exception as e:
@@ -659,6 +646,106 @@ def getCoaches():
 @app.route('/coaches',methods=['GET'])
 def coaches():
     return render_template('coaches.html')
+
+
+@app.route('/getAwardsByYear',methods=['GET'])
+def getAwardsByYear():
+    try:
+        year = request.args.get('year', default = 2017, type = int)
+
+        conn = mysql.connect()
+        cursor = conn.cursor()
+        cursor.callproc('GetAwardsByYear',[year])
+        data = cursor.fetchall()
+
+        awards_dict = []
+        for row in data:
+            awards_dict.append({
+                'FirstName': row[0],
+                'LastName': row[1],
+                'AwardId': row[2],
+                'AwardName': row[3],
+                'AwardShortName': row[4],
+                'SquadId': row[5],
+                'SquadName': row[6],
+                'SquadAbbr': row[7],
+                'Year': row[8],
+            })
+
+        return json.dumps(awards_dict)
+    except Exception as e:
+        return render_template('error.html',error = str(e))
+
+
+@app.route('/getAwardById',methods=['GET'])
+def getAwardById():
+    try:
+        awardId = request.args.get('awardId', default = 0, type = int)
+        squadId = request.args.get('squadId', default = 0, type = int)
+
+        if awardId == 0 or awardId == 1 or awardId == 2:
+            awardId = '1,2'
+        if squadId == 0:
+            squadId = '1,2,3,4'
+
+        conn = mysql.connect()
+        cursor = conn.cursor()
+        cursor.callproc('GetAwardsById',(awardId,squadId))
+        data = cursor.fetchall()
+
+        awards_dict = []
+        for row in data:
+            awards_dict.append({
+                'FirstName': row[0],
+                'LastName': row[1],
+                'Award': row[2],
+                'Squad': row[3],
+                'Year': row[4],
+                'RunnerId': row[5],
+            })
+
+        return json.dumps(awards_dict)
+    except Exception as e:
+        return render_template('error.html',error = str(e))
+
+
+@app.route('/award',methods=['GET'])
+def award():
+    return render_template('award.html')
+
+
+@app.route('/getAwardsTimeline',methods=['GET'])
+def getAwardsTimeline():
+    try:
+        squadId = request.args.get('squadId', default = 0, type = int)
+
+        if squadId == 0:
+            squadId = '1,2,3,4'
+
+        conn = mysql.connect()
+        cursor = conn.cursor()
+        cursor.callproc('GetAwardsTimeline',[squadId])
+        data = cursor.fetchall()
+
+        awards_dict = []
+        for row in data:
+            awards_dict.append({
+                'FirstName': row[0],
+                'LastName': row[1],
+                'AwardName': row[2],
+                'SquadName': row[3],
+                'Year': row[4],
+                'RunnerId': row[5],
+            })
+
+        return json.dumps(awards_dict)
+    except Exception as e:
+        return render_template('error.html',error = str(e))
+
+
+@app.route('/awardsTimeline',methods=['GET'])
+def awardsTimeline():
+    return render_template('awardsTimeline.html')
 
 
 if __name__ == "__main__":

@@ -373,6 +373,63 @@ END //
 DELIMITER ;
 
 
+
+DROP PROCEDURE IF EXISTS `GetAwardsByYear`;
+
+DELIMITER //
+CREATE PROCEDURE `GetAwardsByYear`(
+	IN inputYear INT 
+)
+BEGIN
+
+SELECT firstName, lastName, awardId, awardName, awardShortName, squadId, squadName, squadAbbr, year
+FROM `Award` NATURAL JOIN `Squad` NATURAL JOIN `Awardee` NATURAL JOIN `Runner`
+WHERE year=inputYear
+ORDER BY squadId ASC, awardId ASC, lastName ASC, firstName ASC;
+
+END //
+DELIMITER ;
+
+
+
+DROP PROCEDURE IF EXISTS `GetAwardsById`;
+
+DELIMITER //
+CREATE PROCEDURE `GetAwardsById`(
+	IN inputAwardIds VARCHAR(15),
+	IN inputSquadIds VARCHAR(15)
+)
+BEGIN
+
+SELECT firstName, lastName, awardName, squadName, year, runnerId 
+FROM `Award` NATURAL JOIN `Squad` NATURAL JOIN `Awardee` NATURAL JOIN `Runner`
+WHERE FIND_IN_SET(awardId, inputAwardIds) 
+AND FIND_IN_SET(squadId, inputSquadIds) 
+ORDER BY year DESC, squadId ASC, lastName ASC, firstName ASC;
+
+END //
+DELIMITER ;
+
+
+
+DROP PROCEDURE IF EXISTS `GetAwardsTimeline`;
+
+DELIMITER //
+CREATE PROCEDURE `GetAwardsTimeline`(
+	IN inputSquadIds VARCHAR(15)
+)
+BEGIN
+
+SELECT firstName, lastName, awardName, squadName, year, runnerId
+FROM `Award` NATURAL JOIN `Squad` NATURAL JOIN `Awardee` NATURAL JOIN `Runner`
+WHERE FIND_IN_SET(squadId, inputSquadIds) 
+ORDER BY year DESC, squadId ASC, awardId ASC, lastName ASC, firstName ASC;
+
+END //
+DELIMITER ;
+
+
+
 COMMIT;
 
 
@@ -394,6 +451,10 @@ CALL GetCoachesByYear(2015);
 CALL GetCoachTimeline();
 CALL GetCoachById(1);
 CALL GetCoaches();
+CALL GetAwardsByYear(2017);
+CALL GetAwardsById('1,2','1,2,3,4');
+CALL GetAwardsTimeline('2');
+
 
 
 -- need to consider if i want to separate by course, ie ccs: Crystal vs Toro

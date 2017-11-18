@@ -135,6 +135,33 @@
     }).fail(function() { 
         $("#team_img_container").hide();
     })
+	
+	$(function(){
+		$.ajax({
+			url: '/getAwardsByYear',
+			type: 'GET',
+			data: {
+				"year": year,
+			},
+			success: function(res){							    				
+				var resultsObj = JSON.parse(res);
+				var count = resultsObj.length
+				$('.awardsTitle').text('Awards (' +count + ')');
+
+				$.each(resultsObj,function(index, value){
+				    var nameStr = value.FirstName + ' ' + value.LastName
+				    var linkText = value.SquadAbbr + ' ' + value.AwardShortName
+				    var link = 'award?awardId=' + value.AwardId + '&squadId=' + value.SquadId
+					var awardStr = "<a href='" + link + "'>" + linkText + "</a>"
+				    var resultStr = "<div>" + awardStr + ': ' + nameStr + "</div>"
+					$('.awardsNames').append(resultStr);
+				});
+			},
+			error: function(error){
+				console.log(error);
+			}
+		});
+	});
     </script>
   </head>
   <body>
@@ -161,11 +188,13 @@
           <p class=fRunnerNames></p>
           <h4 class="mRunnerTitle"></h4>
           <p class=mRunnerNames></p>
+          <br/>
         </div>
         <div class="col-lg-6">
           <h4 class="raceTitle"></h4>
-          <p class=raceNames>
-          </p>
+          <p class=raceNames></p>
+          <h4 class="awardsTitle"></h4>
+          <p class=awardsNames></p>
         </div>
       </div>
         

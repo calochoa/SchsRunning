@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-109364959-1"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+
+	  gtag('config', 'UA-109364959-1');
+	</script>
+    <title>SCHS XC Award</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <link href="https://getbootstrap.com/docs/3.3/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet">
+    <link href="../static/css/signup.css" rel="stylesheet">
+    <script src="../static/js/jquery-1.11.2.js"></script>
+    <script src="../static/js/utils.js"></script>
+    <script>
+    var urlParams = parseURL();
+    var awardId = urlParams.awardId;
+    var squadId = urlParams.squadId;
+
+	$(function(){
+		$.ajax({
+			url: '/getAwardById',
+			type: 'GET',
+			data: {
+				"awardId": awardId,
+				"squadId": squadId,
+			},
+			success: function(res){
+				var div = $('<div>')
+				    .attr('class', 'list-group')
+				    .append($('<a>')
+				        .attr('class', 'list-group-item active')
+				        .append($('<p>')
+				            .attr('class', 'list-group-item-text')));
+							    				
+				var resultsObj = JSON.parse(res);
+				var results = '';
+				var squadStr = '';
+				var awardStr = '';
+				var count = resultsObj.length
+				$.each(resultsObj,function(index, value){
+					squadStr = value.Squad
+					awardStr = value.Award
+					var infoStr = ''
+					if (awardStr.endsWith('(Co-MVP)')) {
+						infoStr += ' (Co-MVP)'
+					}
+					if (squadId == 0) {
+						infoStr += ' (' + value.Squad + ')'
+					}
+					var nameStr =  value.FirstName + ' ' + value.LastName
+				    var resultStr = value.Year + ': ' + nameStr + infoStr
+					results = $(div).clone();
+					$(results).find('a').attr('href', '/runner?rId='+ value.RunnerId);
+					$(results).find('p').text(resultStr);
+					$('.jumbotron').append(results);
+				});
+				awardStr = awardStr.replace('Co-','')
+				squadStr = squadId == 0 ? 'All Athletes' : squadStr;
+				$('.text-muted').text(awardStr + ' - ' + squadStr + ' (' + count + ')');
+			},
+			error: function(error){
+				console.log(error);
+			}
+		});
+	});
+    </script>
+  </head>
+  <body>
+
+    <div class="container">
+      <div class="header">
+        <nav>
+          <ul class="nav nav-pills pull-right">
+            <li role="presentation"><a href="/">Home</a></li>
+          </ul>
+        </nav>
+        <h3 class="text-muted"></h3>
+      </div>
+      
+      <div class="jumbotron">
+
+      </div>
+        
+      <footer class="footer">
+        <p>&copy; Cal Workouts 2017</p>
+      </footer>
+    </div>
+  </body>
+</html>
+
