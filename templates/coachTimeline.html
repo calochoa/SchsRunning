@@ -35,6 +35,7 @@
 				    var resultStr = value.Year + ': ' + value.Coaches
 					results = $(div).clone();
 					$(results).find('p').text(resultStr);
+					$(results).find('a').attr('href', '/season?yr='+ value.Year);
 					$('.jumbotron').append(results);
 				});
 			},

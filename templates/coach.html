@@ -43,6 +43,7 @@
 				$.each(resultsObj,function(index, value){
 				    var resultStr = value.Year + ': ' + value.CoachType + ' Coach'
 					results = $(div).clone();
+					$(results).find('a').attr('href', '/season?yr='+ value.Year);
 					$(results).find('p').text(resultStr);
 					$('.jumbotron').append(results);
 					coachStr =  value.FirstName + ' ' + value.LastName
