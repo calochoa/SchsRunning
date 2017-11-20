@@ -17,18 +17,19 @@
     <link href="../static/css/lightbox.css" rel="stylesheet">
     <script src="../static/js/lightbox-plus-jquery.js"></script>
     <script>
-    $(function(){
-		for (year = 2017; year >= 1988; year--) {
-			if ((year > 2016 || year < 2004) && year != 1990 && year != 1989) {
-    			$('.jumbotron').append(
-    				'<p><a href="static/Uploads/team/SC_XC_' + year + '.jpeg" '
-    				+ 'data-lightbox="schs-team-photos" data-title="'+year+' Santa Clara High School Cross Country Team">' 
-    				+ '<img id="team_img_' + year + '" src="static/Uploads/team/SC_XC_' + year + '.jpeg" '
-    				+ 'style="width: 100%;" onError="this.style.display=\'none\'"></a></p>'    			
-    			);
-			}
-    	}
+    $(function(){    	
+		for (year = new Date().getFullYear(); year >= 1988; year--) {
+   			$('.jumbotron').append(
+    			'<p><a href="static/Uploads/team/SC_XC_' + year + '.jpeg" '
+    			+ 'data-lightbox="schs-team-photos" data-title="'+year+' Santa Clara High School Cross Country Team">' 
+    			+ '<img id="team_img_' + year + '" src="static/Uploads/team/SC_XC_' + year + '.jpeg" '
+    			+ 'style="width: 100%;" onerror="imageError(this)"></a></p>'    			
+    		);
+		}
 	});
+	function imageError(img) {
+		$(img).parent().parent().remove();
+	}
     </script>
   </head>
   <body>
