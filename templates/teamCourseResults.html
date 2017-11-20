@@ -62,6 +62,7 @@
 					$(results).find('p').append(competitorTimes);
 					$('.jumbotron').append(results);
 				});
+				getCourseInfo();
 			},
 			error: function(error){
 				console.log(error);
@@ -69,7 +70,7 @@
 		});
 	});
 	
-	$(function(){
+	function getCourseInfo(){
 		$.ajax({
 			url: '/getCourseInfo',
 			type: 'GET',
@@ -89,7 +90,7 @@
 				console.log(error);
 			}
 		});
-	});
+	}
     </script>
   </head>
   <body>
