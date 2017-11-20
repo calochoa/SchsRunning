@@ -748,5 +748,10 @@ def awardsTimeline():
     return render_template('awardsTimeline.html')
 
 
+@app.route('/photosTeamTimeline',methods=['GET'])
+def photosTeamTimeline():
+    return render_template('photosTeamTimeline.html')
+
+
 if __name__ == "__main__":
     app.run()
