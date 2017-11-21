@@ -753,5 +753,10 @@ def photosTeamTimeline():
     return render_template('photosTeamTimeline.html')
 
 
+@app.route('/relatedSites',methods=['GET'])
+def relatedSites():
+    return render_template('relatedSites.html')
+
+
 if __name__ == "__main__":
     app.run()
