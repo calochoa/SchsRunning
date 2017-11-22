@@ -48,7 +48,9 @@
 				var titleStr = '';
 				$.each(resultsObj,function(index, value){
 					fullName = value.FirstName + ' ' + value.LastName
-					titleStr = fullName + ' - ' + value.Grade + 'th grade - ' + value.Year + ' Season'
+					var gradeStr = value.Grade == 0 ? 'Alumni' : value.Grade + 'th grade'
+				    var timeStr = value.Time + ' (' + value.Pace + ') - ' + gradeStr;
+					titleStr = fullName + ' - ' + gradeStr + ' - ' + value.Year + ' Season'
 					var headerStr = value.Date + ' - ' + value.RaceName + ': ' + value.CourseName + ', ' + value.CourseDistance + 'M'
 					headerStr += value.RaceCondition.localeCompare('unknown') ? ' *' + value.RaceCondition + '*' : ''
 				    var timeStr = value.Time + ' (' + value.Pace + ')'

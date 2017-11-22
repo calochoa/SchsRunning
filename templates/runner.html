@@ -49,7 +49,8 @@
 					fullName = value.FirstName + ' ' + value.LastName
 					var headerStr = value.Date + ' - ' + value.RaceName + ': ' + value.CourseName + ', ' + value.CourseDistance + 'M'
 					headerStr += value.RaceCondition.localeCompare('unknown') ? ' *' + value.RaceCondition + '*' : ''
-				    var timeStr = value.Time + ' (' + value.Pace + ') - ' + value.Grade + 'th grade'
+					var gradeStr = value.Grade == 0 ? 'Alumni' : value.Grade + 'th grade'
+				    var timeStr = value.Time + ' (' + value.Pace + ') - ' + gradeStr;
 					results = $(div).clone();
 					$(results).find('a').attr('href', '/raceResults?raceId=' + value.RaceId);
 					$(results).find('h4').text(headerStr);

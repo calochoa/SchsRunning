@@ -10,27 +10,27 @@
 
 	  gtag('config', 'UA-109364959-1');
 	</script>
-    <title>SCHS XC Photos: Team Timelinee</title>
+    <title>SCHS XC Videos: Crystal Springs Alumni Race</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
     <link href="https://getbootstrap.com/docs/3.3/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet">
     <link href="../static/css/signup.css" rel="stylesheet">
-    <link href="../static/css/lightbox.css" rel="stylesheet">
-    <script src="../static/js/lightbox-plus-jquery.js"></script>
+    <script src="../static/js/jquery-1.11.2.js"></script>
     <script>
-    	$(function(){    	
-			for (year = new Date().getFullYear(); year >= 1988; year--) {
+    	$(function(){
+    		var videos = ["yDG5khQ_l1c"]
+    		var dates = ["07/21/2012"]
+    		var races = ["1st"]
+			for (index = 0; index < videos.length; index++) {
+				var video = videos[index];
+				var date = dates[index];
+				var race = races[index];
    				$('.jumbotron').append(
-    				'<p><a href="static/Uploads/team/SC_XC_' + year + '.jpeg" '
-    				+ 'data-lightbox="schs-team-photos" data-title="'+year+' Santa Clara High School Cross Country Team">' 
-    				+ '<img id="team_img_' + year + '" src="static/Uploads/team/SC_XC_' + year + '.jpeg" '
-    				+ 'style="width: 100%;" onerror="imageError(this)"/></a></p>'    			
+   					'<h4>' + race + ' Annual Race - ' + date + '</h4>'
+   					+ '<iframe width="560" height="315" src="https://www.youtube.com/embed/' + video + '?rel=0" '
+   					+ 'frameborder="0" allowfullscreen></iframe>'    			
     			);
 			}
 		});
-		
-		function imageError(img) {
-			$(img).parent().parent().remove();
-		}
     </script>
   </head>
   <body>
@@ -42,7 +42,7 @@
             <li role="presentation"><a href="/">Home</a></li>
           </ul>
         </nav>
-        <h3 class="text-muted">SCHS XC Photos: Team Timeline</h3>
+        <h3 class="text-muted">SCHS XC Videos: Crystal Springs Alumni Race</h3>
       </div>
       
       <div class="jumbotron">

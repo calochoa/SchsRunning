@@ -758,5 +758,50 @@ def relatedSites():
     return render_template('relatedSites.html')
 
 
+@app.route('/photosCsAlumniRace',methods=['GET'])
+def photosCsAlumniRace():
+    return render_template('photosCsAlumniRace.html')
+
+
+@app.route('/videosCsAlumniRace',methods=['GET'])
+def videosCsAlumniRace():
+    return render_template('videosCsAlumniRace.html')
+
+
+@app.route('/pastXcAlumniChampions',methods=['GET'])
+def pastXcAlumniChampions():
+    return render_template('pastXcAlumniChampions.html')
+
+
+@app.route('/getPastXcAlumniChampions',methods=['GET'])
+def getPastXcAlumniChampions():
+    try:
+        conn = mysql.connect()
+        cursor = conn.cursor()
+        cursor.callproc('GetPastXcAlumniChampions')
+        data = cursor.fetchall()
+
+        alumni_race_dict = []
+        for row in data:
+            alumni_race_dict.append({
+                'Time': formatTime(row[0]),
+                'Pace': formatTime(row[1]),
+                'Grade': row[2],
+                'FirstName': row[3],
+                'LastName': row[4],
+                'RunnerId': row[5],
+                'Date': str(row[6]),
+                'RaceName': row[7],
+                'CourseName': row[8],
+                'CourseDistance': formatDistance(row[9]),
+                'RaceCondition': row[10],
+                'RaceId': row[11],
+            })
+
+        return json.dumps(alumni_race_dict)
+    except Exception as e:
+        return render_template('error.html',error = str(e))
+
+
 if __name__ == "__main__":
     app.run()

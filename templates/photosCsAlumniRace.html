@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-109364959-1"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+
+	  gtag('config', 'UA-109364959-1');
+	</script>
+    <title>SCHS XC Photos: Crystal Springs Alumni Race</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <link href="https://getbootstrap.com/docs/3.3/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet">
+    <link href="../static/css/signup.css" rel="stylesheet">
+    <link href="../static/css/lightbox.css" rel="stylesheet">
+    <script src="../static/js/lightbox-plus-jquery.js"></script>
+    <script>
+    	$(function(){
+    		var photos = ["2017-07-29", "2016-06-18", "2015-08-08", "2014-05-04", "2013-05-11", "2012-07-21"]
+    		var dates = ["07/29/2017", "06/18/2016", "08/08/2015", "05/04/2014", "05/11/2013", "07/21/2012"]
+    		var races = ["6th", "5th", "4th", "3rd", "2nd", "1st"]
+    		var picturedArr = [
+    			"Y. Abudra, J. L'Heureux, M. Biddle, C. L'Heureux, V. Glavtchev, S. L'Heureux, V. Rocha, S. Nava, W. Hourigan, C. Ochoa, T. Burnier",
+    			"W. Hourigan, T. McKenna, C. Ochoa, I. Long, M. Biddle, S. L'Heureux, J. L'Heureux",
+    			"C. Taylor, V. Rocha, J. L'Heureux, B. Treder, C. L'Heureux, S. L'Heureux, Y. Abudra, C. Ochoa, W. Hourigan, T. McKenna, V. Glavtchev",
+    			"J. L'Heureux, V. Rocha, W. Hourigan, S. Nava, Y. Abudra, J. Ochoa, C. Ochoa, C. Vivit",
+    			"C. Ochoa, S. Robinson, V. Rocha, G. Bauman, J. L'Heureux, S. Nava, Y. Abudra, W. Hourigan",
+    			"S. Nava, C. Ochoa, K. Kurani, S. Robinson, W. Hourigan, J. L'Heureux, V. Glavtchev, K. Rutledge, F. Morales",
+    		]
+			for (index = 0; index < photos.length; index++) {
+				var photo = photos[index];
+				var date = dates[index];
+				var race = races[index];
+				var pictured = picturedArr[index];
+   				$('.jumbotron').append(
+   					'<h4>' + race + ' Annual Race - ' + date + '</h4>'
+    				+ '<p><a href="static/Uploads/cs_alumni_race/' + photo + '.jpg" '
+    				+ 'data-lightbox="cs-alumni-race-photos" '
+    				+ 'data-title="'+date+': ' + race + ' Annual Crystal Springs Alumni Race<br/>Pictured: '+pictured+'">' 
+    				+ '<img id="cs_alumni_race_img_' + photo + '" src="static/Uploads/cs_alumni_race/' + photo + '.jpg" '
+    				+ 'style="width: 100%;""/></a></p><br/>'    			
+    			);
+			}
+		});
+    </script>
+  </head>
+  <body>
+
+    <div class="container">
+      <div class="header">
+        <nav>
+          <ul class="nav nav-pills pull-right">
+            <li role="presentation"><a href="/">Home</a></li>
+          </ul>
+        </nav>
+        <h3 class="text-muted">SCHS XC Photos: Crystal Springs Alumni Race</h3>
+      </div>
+      
+      <div class="jumbotron">
+      </div>
+        
+      <footer class="footer">
+        <p>&copy; Cal Workouts 2017</p>
+      </footer>
+    </div>
+  </body>
+</html>
+

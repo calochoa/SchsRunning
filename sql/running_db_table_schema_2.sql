@@ -18,7 +18,7 @@ FROM (
 			SELECT runnerid, MIN(time) 'best_time'
 			FROM Result NATURAL JOIN Competitor NATURAL JOIN Runner 
 				NATURAL JOIN Gender NATURAL JOIN Race NATURAL JOIN Course 
-			WHERE courseid=inputCourseId AND genderid=inputGenderId 
+			WHERE courseid=inputCourseId AND genderid=inputGenderId AND grade != 0
 			GROUP BY runnerid 
 		) best ON Runner.runnerid=best.runnerid AND Result.time=best.best_time
 	WHERE courseid=inputCourseId AND genderid=inputGenderId 
@@ -176,7 +176,7 @@ BEGIN
 
 SELECT competitorid,year,grade,firstname,lastname,gender 
 FROM Competitor NATURAL JOIN Runner NATURAL JOIN Gender 
-WHERE year=inputYear AND genderid=inputGenderId
+WHERE year=inputYear AND genderid=inputGenderId AND grade != 0
 ORDER BY lastname,firstname;
 
 END //
@@ -194,7 +194,7 @@ BEGIN
 
 SELECT raceid,date,racename,coursename,coursedistance
 FROM Race NATURAL JOIN RaceName NATURAL JOIN Course 
-WHERE YEAR(date)=inputYear
+WHERE YEAR(date)=inputYear AND raceid >=1000000
 ORDER BY date;
 
 END //
@@ -430,6 +430,48 @@ DELIMITER ;
 
 
 
+DROP PROCEDURE IF EXISTS `GetAlumniResultsByYear`;
+
+DELIMITER //
+CREATE PROCEDURE `GetAlumniResultsByYear`(
+	IN inputYear INT
+)
+BEGIN
+
+SELECT time,pace,grade,firstname,lastname,date,racename,coursename,coursedistance,racecondition,raceid
+FROM Result NATURAL JOIN Competitor NATURAL JOIN Runner NATURAL JOIN Race 
+	NATURAL JOIN RaceName NATURAL JOIN RaceCondition NATURAL JOIN Course
+WHERE raceId < 1000000 AND year=inputYear
+ORDER BY time ASC;
+
+END //
+DELIMITER ;
+
+
+
+DROP PROCEDURE IF EXISTS `GetPastXcAlumniChampions`;
+
+DELIMITER //
+CREATE PROCEDURE `GetPastXcAlumniChampions`()
+BEGIN
+
+SELECT time,pace,grade,firstname,lastname,runnerid,date,racename,coursename,coursedistance,racecondition,raceid
+FROM Result RIGHT JOIN (
+		SELECT MIN(time) 'best_time' 
+		FROM Result NATURAL JOIN Race NATURAL JOIN Competitor
+		WHERE raceId < 1000000 AND grade = 0
+		GROUP BY date
+	) best on Result.time=best.best_time
+	NATURAL JOIN Competitor NATURAL JOIN Runner NATURAL JOIN Race 
+	NATURAL JOIN RaceName NATURAL JOIN RaceCondition NATURAL JOIN Course
+WHERE raceId < 1000000 
+ORDER BY YEAR(date) DESC;
+
+END //
+DELIMITER ;
+
+
+
 COMMIT;
 
 
@@ -442,7 +484,7 @@ CALL GetRunners(3);
 CALL GetResultsByRaceCompetitor('1000173,1000160,1000075,1000183,1000131,1000088,1000139,1000149,1000259,1000248,1000062,1000122,1000239,1000003,1000101',
 '1000259.11,1000179.12,1000348.12,1000257.11,1000167.11,1000179.11,1000259.10,1000348.11,1000257.10,1000065.11,1000261.11,1000212.12,1000193.10,1000356.10,1000107.11,1000041.12,1000257.12,1000071.12,1000340.9,1000334.9,1000345.12,1000142.12,1.12,1000197.11,1000239.12,1000261.12,1000193.11,1000296.10,1000107.12,1000276.9,1000115.12,1000179.9,1000197.12,1000357.11,1000348.9,1000179.10,1000348.10,1000259.9,1000150.10,1000257.9,1000063.12,1000220.11,1000122.12,1000267.11,1000373.10,1000220.10,1000063.11,1000267.10,1000122.11,1000346.11,1000261.10,1000305.12,1000356.9,1000212.11,1000311.12,1.11,1000345.11,1000006.12,1000331.12,1000357.9,1000300.12,1000220.9,1000063.10,1000122.10,1000053.10,1000289.12,1000298.12,1000043.11,1000159.12,1000199.11,1000193.12,1000239.9,1000345.9,1000047.11,1.9');
 CALL GetCompetitorsByYEAR(2003,3);
-CALL GetRacesByYEAR(2003);
+CALL GetRacesByYear(2003);
 CALL GetCompetitorResults(1000157.10);
 CALL GetAllRaceResults(1000131);
 CALL GetRaceResults(1000131,3);
@@ -454,6 +496,8 @@ CALL GetCoaches();
 CALL GetAwardsByYear(2017);
 CALL GetAwardsById('1,2','1,2,3,4');
 CALL GetAwardsTimeline('2');
+CALL GetAlumniResultsByYear(2017);
+CALL GetPastXcAlumniChampions();
 
 
 
