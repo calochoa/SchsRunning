@@ -8,7 +8,7 @@ CREATE PROCEDURE `GetTopIndividual`(
 )
 BEGIN
 
-SELECT @rownum := @rownum + 1 AS rank, t.* 
+SELECT @rownum := @rownum + 1 AS myrank, t.* 
 FROM (
 	-- second, join the best times with runner information and sort by best time
 	SELECT DISTINCT firstname,lastname,Result.time,pace,year,grade,competitorid
@@ -29,7 +29,6 @@ FROM (
 
 END //
 DELIMITER ;
-
 
 
 DROP PROCEDURE IF EXISTS `GetCourseInfo`;
@@ -59,8 +58,8 @@ CREATE PROCEDURE `GetTopTeamCourse`(
 )
 BEGIN
 
--- fifth, add rank number column
-SELECT @rownum := @rownum + 1 AS rank, t.* 
+-- fifth, add myrank number column
+SELECT @rownum := @rownum + 1 AS myrank, t.* 
 FROM (
 	-- fourth, get the best time for each year and sort by best team time
 	SELECT yr AS 'Year', 
@@ -229,7 +228,7 @@ CREATE PROCEDURE `GetAllRaceResults`(
 )
 BEGIN
 
-SELECT @rownum := @rownum + 1 AS rank, t.* 
+SELECT @rownum := @rownum + 1 AS myrank, t.* 
 FROM (
 	SELECT time,pace,grade,date,racename,coursename,coursedistance,racecondition,firstname,lastname,year,competitorid
 	FROM Result NATURAL JOIN Competitor NATURAL JOIN Runner NATURAL JOIN Race 
@@ -253,7 +252,7 @@ CREATE PROCEDURE `GetRaceResults`(
 )
 BEGIN
 
-SELECT @rownum := @rownum + 1 AS rank, t.* 
+SELECT @rownum := @rownum + 1 AS myrank, t.* 
 FROM (
 	SELECT time,pace,grade,date,racename,coursename,coursedistance,racecondition,firstname,lastname,year,competitorid
 	FROM Result NATURAL JOIN Competitor NATURAL JOIN Runner NATURAL JOIN Race 
@@ -279,7 +278,7 @@ CREATE PROCEDURE `GetTopIndividualByGrade`(
 )
 BEGIN
 
-SELECT @rownum := @rownum + 1 AS rank, t.* 
+SELECT @rownum := @rownum + 1 AS myrank, t.* 
 FROM (
 	-- second, joIN the best times with runner information and sort by best time
 	SELECT DISTINCT firstname,lastname,Result.time,pace,year,grade,competitorid
@@ -471,41 +470,6 @@ END //
 DELIMITER ;
 
 
-
-COMMIT;
-
-
-
-CALL GetTopIndividual(1,2,25);
-CALL GetCourseInfo(25);
-CALL GetTopTeamCourse(1,3,15);
-CALL GetRunnerResults(1);
-CALL GetRunners(3);
-CALL GetResultsByRaceCompetitor('1000173,1000160,1000075,1000183,1000131,1000088,1000139,1000149,1000259,1000248,1000062,1000122,1000239,1000003,1000101',
-'1000259.11,1000179.12,1000348.12,1000257.11,1000167.11,1000179.11,1000259.10,1000348.11,1000257.10,1000065.11,1000261.11,1000212.12,1000193.10,1000356.10,1000107.11,1000041.12,1000257.12,1000071.12,1000340.9,1000334.9,1000345.12,1000142.12,1.12,1000197.11,1000239.12,1000261.12,1000193.11,1000296.10,1000107.12,1000276.9,1000115.12,1000179.9,1000197.12,1000357.11,1000348.9,1000179.10,1000348.10,1000259.9,1000150.10,1000257.9,1000063.12,1000220.11,1000122.12,1000267.11,1000373.10,1000220.10,1000063.11,1000267.10,1000122.11,1000346.11,1000261.10,1000305.12,1000356.9,1000212.11,1000311.12,1.11,1000345.11,1000006.12,1000331.12,1000357.9,1000300.12,1000220.9,1000063.10,1000122.10,1000053.10,1000289.12,1000298.12,1000043.11,1000159.12,1000199.11,1000193.12,1000239.9,1000345.9,1000047.11,1.9');
-CALL GetCompetitorsByYEAR(2003,3);
-CALL GetRacesByYear(2003);
-CALL GetCompetitorResults(1000157.10);
-CALL GetAllRaceResults(1000131);
-CALL GetRaceResults(1000131,3);
-CALL GetTopIndividualByGrade(1,2,10,25);
-CALL GetCoachesByYear(2015);
-CALL GetCoachTimeline();
-CALL GetCoachById(1);
-CALL GetCoaches();
-CALL GetAwardsByYear(2017);
-CALL GetAwardsById('1,2','1,2,3,4');
-CALL GetAwardsTimeline('2');
-CALL GetAlumniResultsByYear(2017);
-CALL GetPastXcAlumniChampions();
-
-
-
--- need to consider if i want to separate by course, ie ccs: Crystal vs Toro
--- or if i just want ORDER BY pace... discuss with Julie
-CALL GetTopIndividualByRace(3,3,0,0);
-
-
 DROP PROCEDURE IF EXISTS `GetTopIndividualByRace`;
 
 DELIMITER //
@@ -558,11 +522,11 @@ IF inputLimit > 0 THEN
 END IF;
 
 
--- for final query: add rank
+-- for final query: add myrank
 
 -- create final query
 SET @finalQuery = CONCAT(
-		"SELECT @rownum := @rownum + 1 AS rank, t.* 
+		"SELECT @rownum := @rownum + 1 AS myrank, t.* 
 		FROM (", @secondQuery, ") t, 
 		(SELECT @rownum := 0) r;"
 	);
@@ -575,4 +539,39 @@ DEALLOCATE PREPARE stmt;
 
 END //
 DELIMITER ;
+
+
+
+COMMIT;
+
+
+
+CALL GetTopIndividual(1,2,25);
+CALL GetCourseInfo(25);
+CALL GetTopTeamCourse(1,3,15);
+CALL GetRunnerResults(1);
+CALL GetRunners(3);
+CALL GetResultsByRaceCompetitor('1000173,1000160,1000075,1000183,1000131,1000088,1000139,1000149,1000259,1000248,1000062,1000122,1000239,1000003,1000101',
+'1000259.11,1000179.12,1000348.12,1000257.11,1000167.11,1000179.11,1000259.10,1000348.11,1000257.10,1000065.11,1000261.11,1000212.12,1000193.10,1000356.10,1000107.11,1000041.12,1000257.12,1000071.12,1000340.9,1000334.9,1000345.12,1000142.12,1.12,1000197.11,1000239.12,1000261.12,1000193.11,1000296.10,1000107.12,1000276.9,1000115.12,1000179.9,1000197.12,1000357.11,1000348.9,1000179.10,1000348.10,1000259.9,1000150.10,1000257.9,1000063.12,1000220.11,1000122.12,1000267.11,1000373.10,1000220.10,1000063.11,1000267.10,1000122.11,1000346.11,1000261.10,1000305.12,1000356.9,1000212.11,1000311.12,1.11,1000345.11,1000006.12,1000331.12,1000357.9,1000300.12,1000220.9,1000063.10,1000122.10,1000053.10,1000289.12,1000298.12,1000043.11,1000159.12,1000199.11,1000193.12,1000239.9,1000345.9,1000047.11,1.9');
+CALL GetCompetitorsByYEAR(2003,3);
+CALL GetRacesByYear(2003);
+CALL GetCompetitorResults(1000157.10);
+CALL GetAllRaceResults(1000131);
+CALL GetRaceResults(1000131,3);
+CALL GetTopIndividualByGrade(1,2,10,25);
+CALL GetCoachesByYear(2015);
+CALL GetCoachTimeline();
+CALL GetCoachById(1);
+CALL GetCoaches();
+CALL GetAwardsByYear(2017);
+CALL GetAwardsById('1,2','1,2,3,4');
+CALL GetAwardsTimeline('2');
+CALL GetAlumniResultsByYear(2017);
+CALL GetPastXcAlumniChampions();
+
+
+
+-- need to consider if i want to separate by course, ie ccs: Crystal vs Toro
+-- or if i just want ORDER BY pace... discuss with Julie
+CALL GetTopIndividualByRace(3,3,0,0);
 
