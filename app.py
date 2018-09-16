@@ -164,6 +164,16 @@ def top25BpBoys():
     return render_template('topCourseResults.html', cId = 4, gId = 2, limit = 25)
 
 
+@app.route('/top25LynHsGirls')
+def top25LynHsGirls():
+    return render_template('topCourseResults.html', cId = 25, gId = 3, limit = 25)
+
+
+@app.route('/top25LynHsBoys')
+def top25LynHsBoys():
+    return render_template('topCourseResults.html', cId = 25, gId = 2, limit = 25)
+
+
 @app.route('/getTopTeamCourseResults',methods=['GET'])
 def getTopTeamCourseResults():
     try:

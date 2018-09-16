@@ -291,7 +291,7 @@ FROM (
 			WHERE courseid=inputCourseId AND genderid=inputGenderId AND grade=inputGrade
 			GROUP BY runnerid 
 		) best ON Runner.runnerid=best.runnerid AND Result.time=best.best_time
-	WHERE courseid=inputCourseId AND genderid=inputGenderId 
+	WHERE courseid=inputCourseId AND genderid=inputGenderId AND grade=inputGrade 
 	ORDER BY Result.time
 	LIMIT inputLimit
 ) t, 
