@@ -55,8 +55,14 @@
 				    var timeStr = value.Time + ' (' + value.Pace + ') - ' + gradeStr;
 				    if (currentGradeStr != gradeStr) {
 				    	currentGradeStr = gradeStr;
-				    	var gradeDisplayStr = "<div><h3 class=\"grade\">" + gradeStr + " Results</h3></div>"
-				    	$('.runnerResults').append(gradeDisplayStr);
+				    	var resultsHeaderDisplayStr = 'Alumni Results'
+				    	if (value.Grade != 0) {
+				    		resultsHeaderDisplayStr = value.Grade + 'th Grade Results - ' 
+				    			+ new Date(value.Date).getFullYear() + ' Season'
+				    	}
+				    	var resultsHeaderDiv = "<div><h3 class=\"grade\">" + resultsHeaderDisplayStr + "</h3></div>"
+				    	$('.runnerResults').append(resultsHeaderDiv);
+
 				    }
 					results = $(div).clone();
 					$(results).find('a').attr('href', '/raceResults?raceId=' + value.RaceId);
