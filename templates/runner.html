@@ -41,16 +41,23 @@
 				            .attr('class', 'list-group-item-heading'),
 				            $('<p>')
 				            .attr('class', 'list-group-item-text')));
+				var div2 = $('<div>');
 							    				
 				var resultsObj = JSON.parse(res);
 				var results = '';
 				var fullName = '';
+				var currentGradeStr = '';
 				$.each(resultsObj,function(index, value){
 					fullName = value.FirstName + ' ' + value.LastName
 					var headerStr = value.Date + ' - ' + value.RaceName + ': ' + value.CourseName + ', ' + value.CourseDistance + 'M'
 					headerStr += value.RaceCondition.localeCompare('unknown') ? ' *' + value.RaceCondition + '*' : ''
 					var gradeStr = value.Grade == 0 ? 'Alumni' : value.Grade + 'th grade'
 				    var timeStr = value.Time + ' (' + value.Pace + ') - ' + gradeStr;
+				    if (currentGradeStr != gradeStr) {
+				    	currentGradeStr = gradeStr;
+				    	var gradeDisplayStr = "<div><h3 class=\"grade\">" + gradeStr + " Results</h3></div>"
+				    	$('.runnerResults').append(gradeDisplayStr);
+				    }
 					results = $(div).clone();
 					$(results).find('a').attr('href', '/raceResults?raceId=' + value.RaceId);
 					$(results).find('h4').text(headerStr);

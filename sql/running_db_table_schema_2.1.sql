@@ -194,7 +194,7 @@ BEGIN
 SELECT raceid,date,racename,coursename,coursedistance
 FROM Race NATURAL JOIN RaceName NATURAL JOIN Course 
 WHERE YEAR(date)=inputYear AND raceid >=1000000
-ORDER BY date;
+ORDER BY date DESC;
 
 END //
 DELIMITER ;
