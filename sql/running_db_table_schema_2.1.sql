@@ -542,6 +542,24 @@ DELIMITER ;
 
 
 
+DROP PROCEDURE IF EXISTS `GetSpecialAchieversById`;
+
+DELIMITER //
+CREATE PROCEDURE `GetSpecialAchieversById`(
+	IN inputSpecialAchievementIds VARCHAR(15)
+)
+BEGIN
+
+SELECT `specialAchievementName`, `runnerId`, `firstName`, `lastName`, `grade`, `year`, `notes`
+FROM `SpecialAchiever` NATURAL JOIN `Competitor` NATURAL JOIN `SpecialAchievement` NATURAL JOIN `Runner` 
+WHERE FIND_IN_SET(`specialAchievementId`, inputSpecialAchievementIds)
+ORDER BY `year` DESC, FIELD(specialAchievementId, 3,2,1), `notes` ASC;
+
+END //
+DELIMITER ;
+
+
+
 COMMIT;
 
 
@@ -568,6 +586,7 @@ CALL GetAwardsById('1,2','1,2,3,4');
 CALL GetAwardsTimeline('2');
 CALL GetAlumniResultsByYear(2017);
 CALL GetPastXcAlumniChampions();
+CALL GetSpecialAchieversById('1,2,3');
 
 
 

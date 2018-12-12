@@ -6,6 +6,10 @@ CREATE DATABASE IF NOT EXISTS highSchoolCrossCountry
 
 use highSchoolCrossCountry;
 
+DROP TABLE IF EXISTS `SpecialAchiever`;
+DROP TABLE IF EXISTS `SpecialAchievement`;
+DROP TABLE IF EXISTS `Awardee`;
+DROP TABLE IF EXISTS `Award`;
 DROP TABLE IF EXISTS `Result`;
 DROP TABLE IF EXISTS `Competitor`;
 DROP TABLE IF EXISTS `Runner`;
@@ -19,8 +23,6 @@ DROP TABLE IF EXISTS `CourseType`;
 DROP TABLE IF EXISTS `CoachSeason`;
 DROP TABLE IF EXISTS `CoachType`;
 DROP TABLE IF EXISTS `Coach`;
-DROP TABLE IF EXISTS `Awardee`;
-DROP TABLE IF EXISTS `Award`;
 DROP TABLE IF EXISTS `Squad`;
 DROP TABLE IF EXISTS `Gender`;
 
@@ -304,6 +306,38 @@ CREATE TABLE `Awardee` (
 INSERT INTO `Awardee` (`runnerId`, `awardId`, `squadId`, `year`) VALUES (1000123, 2, 1, 2017), (1000254, 2, 1, 2017), (1000234, 3, 1, 2017), (1000016, 1, 2, 2017), (1000210, 3, 2, 2017), (1000339, 4, 2, 2017), (1000374, 8, 3, 2017), (1000378, 3, 3, 2017), (1000377, 4, 3, 2017), (1000385, 2, 4, 2017), (1000382, 2, 4, 2017), (1000388, 3, 4, 2017), (1000254, 1, 1, 2016), (1000234, 3, 1, 2016), (1000001, 4, 1, 2016), (1000016, 1, 2, 2016), (1000339, 3, 2, 2016), (1000373, 6, 2, 2016), (1000367, 3, 3, 2016), (1000210, 1, 4, 2016), (1000123, 2, 1, 2015), (1000117, 2, 1, 2015), (1000234, 3, 1, 2015), (1000063, 1, 2, 2015), (1000060, 3, 2, 2015), (1000346, 4, 2, 2015), (1000373, 1, 4, 2015), (1000026, 3, 4, 2015), (1000210, 6, 4, 2015), (1000166, 1, 1, 2014), (1000123, 3, 1, 2014), (1000266, 4, 1, 2014), (1000063, 1, 2, 2014), (1000120, 3, 2, 2014), (1000151, 4, 2, 2014), (1000373, 1, 4, 2014), (1000026, 3, 4, 2014), (1000220, 9, 4, 2014), (1000166, 1, 1, 2013), (1000292, 3, 1, 2013), (1000116, 4, 1, 2013), (1000300, 1, 2, 2013), (1000220, 1, 4, 2013), (1000064, 3, 4, 2013), (1000346, 4, 4, 2013), (1000037, 1, 3, 2013), (1000166, 1, 1, 2012), (1000028, 3, 1, 2012), (1000096, 5, 1, 2012), (1000127, 1, 3, 2012), (1000010, 1, 4, 2012), (1000074, 5, 4, 2012), (1000300, 1, 2, 2012), (1000264, 3, 2, 2012), (1000300, 1, 2, 2011), (1000050, 6, 2, 2011), (1000310, 4, 2, 2011), (1000196, 1, 4, 2011), (1000010, 5, 4, 2011), (1000182, 1, 1, 2011), (1000116, 3, 1, 2011), (1000166, 5, 1, 2011), (1000174, 1, 3, 2011), (1000127, 3, 3, 2011), (1000244, 4, 3, 2011), (1000182, 1, 1, 2010), (1000116, 5, 1, 2010), (1000355, 7, 1, 2010), (1000036, 1, 3, 2010), (1000030, 4, 3, 2010), (1000014, 1, 2, 2010), (1000050, 3, 2, 2010), (1000196, 1, 4, 2010), (1000355, 2, 1, 2009), (1000281, 2, 1, 2009), (1000182, 5, 1, 2009), (1000287, 2, 2, 2009), (1000014, 2, 2, 2009), (1000227, 3, 2, 2009), (1000334, 1, 4, 2009), (1000310, 3, 4, 2009), (1000167, 2, 2, 2008), (1000041, 2, 2, 2008), (1000071, 3, 2, 2008), (1000154, 1, 1, 2008), (1000354, 3, 1, 2008), (1000275, 6, 1, 2008), (1000336, 4, 3, 2008), (1000014, 1, 4, 2008), (1000340, 10, 4, 2008), (1000310, 6, 4, 2008), (1000259, 2, 2, 2007), (1000167, 2, 2, 2007), (1000041, 3, 2, 2007), (1000287, 2, 4, 2007), (1000014, 2, 4, 2007), (1000021, 4, 4, 2007), (1000154, 1, 1, 2007), (1000343, 3, 1, 2007), (1000275, 7, 1, 2007), (1000255, 1, 3, 2007), (1000138, 3, 3, 2007), (1000247, 1, 1, 2004), (1000070, 3, 1, 2004), (1000062, 4, 1, 2004), (1000115, 1, 2, 2004), (1000146, 4, 2, 2004), (1000179, 1, 4, 2004), (1000150, 3, 4, 2004), (1000069, 4, 4, 2004), (1, 1, 2, 2003), (1, 1, 2, 2002), (1, 1, 4, 2001), (1, 3, 4, 2000);
 -- add 2018 awardees
 INSERT INTO `Awardee` (`runnerId`, `awardId`, `squadId`, `year`) VALUES (1000234, 1, 1, 2018), (1000367, 3, 1, 2018), (1000254, 4, 1, 2018), (1000016, 1, 2, 2018), (1000411, 5, 2, 2018), (1000210, 4, 2, 2018), (1000398, 5, 3, 2018), (1000375, 3, 3, 2018), (1000395, 4, 3, 2018), (1000385, 1, 4, 2018), (1000382, 3, 4, 2018);
+
+
+
+CREATE TABLE `SpecialAchievement` (
+	`specialAchievementId` TINYINT NOT NULL AUTO_INCREMENT,
+	`specialAchievementName` VARCHAR(255) UNIQUE NOT NULL,
+
+	PRIMARY KEY (`specialAchievementId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO `SpecialAchievement` (`specialAchievementId`, `specialAchievementName`) VALUES (1, "League Champion"), (2, "Section Champion"), (3, "State Qualifier");
+
+
+
+CREATE TABLE `SpecialAchiever` (
+	`competitorId` VARCHAR(15) NOT NULL,
+	`specialAchievementId` TINYINT NOT NULL,
+	`notes` VARCHAR(255) NOT NULL,
+
+	UNIQUE KEY (`competitorId`,`specialAchievementId`),
+	FOREIGN KEY (`competitorId`) REFERENCES Competitor(`competitorId`), 
+	FOREIGN KEY (`specialAchievementId`) REFERENCES SpecialAchievement(`specialAchievementId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO `SpecialAchiever` (`competitorId`, `specialAchievementId`, `notes`) VALUES 
+('1000261.12', 1, 'El Camino League'), ('1000261.12', 2, 'Central Coast Section - Division 2'), ('1000261.12', 3, '3rd place - Division 2'), ('1000261.11', 3, '5th place - Division 3'), 
+('1000193.12', 1, 'El Camino League'), ('1000193.12', 2, 'Central Coast Section - Division 2'), ('1000193.12', 3, '53rd place - Division 2'), 
+('1000289.12', 1, 'El Camino League'), ('1000289.12', 3, '60th place - Division 2'), 
+('1000179.11', 1, 'El Camino League'), ('1000179.11', 3, '37th place - Division 2'), ('1000179.12', 3, '57th place - Division 2'), 
+('1000259.10', 3, '19th place - Division 2'), ('1000259.11', 3, '92nd place - Division 2'), 
+('1000390.12', 3, '68th place - Division 2');
+
 
 
 COMMIT;

@@ -302,3 +302,28 @@ SELECT table_schema AS "Database",
 ROUND(SUM(data_length + index_length) / 1024 / 1024, 2) AS "Size (MB)" 
 FROM information_schema.TABLES 
 GROUP BY table_schema;
+
+
+-- get all special achievements
+SELECT `specialAchievementName`, `firstName`, `lastName`, `grade`, `year`, `notes`
+FROM `SpecialAchiever` NATURAL JOIN `Competitor` NATURAL JOIN `SpecialAchievement` NATURAL JOIN `Runner` 
+ORDER BY `year` DESC, `specialAchievementId` DESC;
+
+-- league champions
+SELECT `specialAchievementName`, `firstName`, `lastName`, `grade`, `year`, `notes`
+FROM `SpecialAchiever` NATURAL JOIN `Competitor` NATURAL JOIN `SpecialAchievement` NATURAL JOIN `Runner` 
+WHERE `specialAchievementId`=1
+ORDER BY `year` DESC;
+
+-- section champions
+SELECT `specialAchievementName`, `firstName`, `lastName`, `grade`, `year`, `notes`
+FROM `SpecialAchiever` NATURAL JOIN `Competitor` NATURAL JOIN `SpecialAchievement` NATURAL JOIN `Runner` 
+WHERE `specialAchievementId`=2
+ORDER BY `year` DESC;
+
+-- state qualifiers
+SELECT `specialAchievementName`, `firstName`, `lastName`, `grade`, `year`, `notes`
+FROM `SpecialAchiever` NATURAL JOIN `Competitor` NATURAL JOIN `SpecialAchievement` NATURAL JOIN `Runner` 
+WHERE `specialAchievementId`=3
+ORDER BY `year` DESC, `notes` ASC;
+
