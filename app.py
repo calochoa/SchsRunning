@@ -843,11 +843,8 @@ def getSpecialAchieversById():
         cursor = conn.cursor()
         cursor.callproc('GetSpecialAchieversById',[specialAchievementIds])
         data = cursor.fetchall()
-        print 'hello world'
-        print type(data)
 
         special_achievers_dict = []
-        print len(data)
         for row in data:
             special_achievers_dict.append({
                 'SpecialAchievementName': row[0],
