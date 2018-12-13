@@ -813,5 +813,54 @@ def getPastXcAlumniChampions():
         return render_template('error.html',error = str(e))
 
 
+@app.route('/xcAllSpecialAchievements',methods=['GET'])
+def xcAllSpecialAchievements():
+    return render_template('specialAchievement.html', splAchvId=0)
+
+
+@app.route('/xcLeagueChampions',methods=['GET'])
+def xcLeagueChampions():
+    return render_template('specialAchievement.html', splAchvId=1)
+
+
+@app.route('/xcSectionChampions',methods=['GET'])
+def xcSectionChampions():
+    return render_template('specialAchievement.html', splAchvId=2)
+
+
+@app.route('/xcStateQualifiers',methods=['GET'])
+def xcStateQualifiers():
+    return render_template('specialAchievement.html', splAchvId=3)
+
+
+@app.route('/getSpecialAchieversById',methods=['GET'])
+def getSpecialAchieversById():
+    try:
+        splAchvId = request.args.get('splAchvId', default = 0, type = int)
+
+        specialAchievementIds = '1,2,3' if splAchvId == 0 else str(splAchvId)
+        conn = mysql.connect()
+        cursor = conn.cursor()
+        cursor.callproc('GetSpecialAchieversById',[specialAchievementIds])
+        data = cursor.fetchall()
+        print 'hello world'
+        print type(data)
+
+        special_achievers_dict = []
+        print len(data)
+        for row in data:
+            special_achievers_dict.append({
+                'SpecialAchievementName': row[0],
+                'RunnerId': row[1],
+                'FirstName': row[2],
+                'LastName': row[3],
+                'Grade': row[4],
+                'Year': row[5],
+                'Notes': row[6],
+            })
+        return json.dumps(special_achievers_dict)
+    except Exception as e:
+        return render_template('error.html',error = str(e))
+
 if __name__ == "__main__":
     app.run()
