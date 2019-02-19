@@ -11,12 +11,6 @@ mysql = MySQL()
 app = Flask(__name__)
 
 # MySQL configurations
-# aws 
-#app.config['MYSQL_DATABASE_USER'] = 'calworkouts'
-#app.config['MYSQL_DATABASE_PASSWORD'] = 'quickies'
-#app.config['MYSQL_DATABASE_DB'] = 'highSchoolCrossCountry'
-#app.config['MYSQL_DATABASE_HOST'] = 'rds-mysql-calworkouts.cu1fjz4ompeu.us-west-1.rds.amazonaws.com'
-
 # heroku
 app.config['MYSQL_DATABASE_USER'] = 'b31e9fc461a5fd'
 app.config['MYSQL_DATABASE_PASSWORD'] = '105c24d7'
@@ -34,6 +28,16 @@ mysql.init_app(app)
 @app.route('/')
 def main():
     return render_template('index.html')
+
+
+@app.route('/xc')
+def main_xc():
+    return render_template('xc/index.html')
+
+
+@app.route('/track')
+def main_track():
+    return render_template('track/index.html')
 
 
 @app.route('/getTopCourseResults',methods=['GET'])
@@ -70,9 +74,9 @@ def getTopCourseResults():
         return render_template('error.html',error = str(e))
 
 
-@app.route('/topCourseResults')
-def topCourseResults():
-    return render_template('topCourseResults.html', cId = 0, gId = 0, limit = 0)
+@app.route('/xcTopCourseResults')
+def xcTopCourseResults():
+    return render_template('xc/topCourseResults.html', cId = 0, gId = 0, limit = 0)
 
 
 def formatTime(time):
@@ -115,63 +119,63 @@ def formatDistance(distance):
     if distanceStr.endswith('.00'):
         distanceStr = distanceStr[:-3]
     elif distanceStr.endswith('0'):
-    	distanceStr = distanceStr[:-1]
+        distanceStr = distanceStr[:-1]
     return distanceStr
     
 
-@app.route('/results')
-def results():
-    return render_template('results.html')    
+@app.route('/xcResults')
+def xcResults():
+    return render_template('xc/results.html')    
 
 
-@app.route('/top25CsGirls')
-def top25CsGirls():
-    return render_template('topCourseResults.html', cId = 1, gId = 3, limit = 25)
+@app.route('/xcTop25CsGirls')
+def xcTop25CsGirls():
+    return render_template('xc/topCourseResults.html', cId = 1, gId = 3, limit = 25)
 
 
-@app.route('/top25CsBoys')
-def top25CsBoys():
-    return render_template('topCourseResults.html', cId = 1, gId = 2, limit = 25)
+@app.route('/xcTop25CsBoys')
+def xcTop25CsBoys():
+    return render_template('xc/topCourseResults.html', cId = 1, gId = 2, limit = 25)
 
 
-@app.route('/top25TpGirls')
-def top25TpGirls():
-    return render_template('topCourseResults.html', cId = 2, gId = 3, limit = 25)
+@app.route('/xcTop25TpGirls')
+def xcTop25TpGirls():
+    return render_template('xc/topCourseResults.html', cId = 2, gId = 3, limit = 25)
 
 
-@app.route('/top25TpBoys')
-def top25TpBoys():
-    return render_template('topCourseResults.html', cId = 2, gId = 2, limit = 25)
+@app.route('/xcTop25TpBoys')
+def xcTop25TpBoys():
+    return render_template('xc/topCourseResults.html', cId = 2, gId = 2, limit = 25)
 
 
-@app.route('/top25CpGirls')
-def top25CpGirls():
-    return render_template('topCourseResults.html', cId = 6, gId = 3, limit = 25)
+@app.route('/xcTop25CpGirls')
+def xcTop25CpGirls():
+    return render_template('xc/topCourseResults.html', cId = 6, gId = 3, limit = 25)
 
 
-@app.route('/top25CpBoys')
-def top25CpBoys():
-    return render_template('topCourseResults.html', cId = 6, gId = 2, limit = 25)
+@app.route('/xcTop25CpBoys')
+def xcTop25CpBoys():
+    return render_template('xc/topCourseResults.html', cId = 6, gId = 2, limit = 25)
 
 
-@app.route('/top25BpGirls')
-def top25BpGirls():
-    return render_template('topCourseResults.html', cId = 4, gId = 3, limit = 25)
+@app.route('/xcTop25BpGirls')
+def xcTop25BpGirls():
+    return render_template('xc/topCourseResults.html', cId = 4, gId = 3, limit = 25)
 
 
-@app.route('/top25BpBoys')
-def top25BpBoys():
-    return render_template('topCourseResults.html', cId = 4, gId = 2, limit = 25)
+@app.route('/xcTop25BpBoys')
+def xcTop25BpBoys():
+    return render_template('xc/topCourseResults.html', cId = 4, gId = 2, limit = 25)
 
 
-@app.route('/top25LynHsGirls')
-def top25LynHsGirls():
-    return render_template('topCourseResults.html', cId = 25, gId = 3, limit = 25)
+@app.route('/xcTop25LynHsGirls')
+def xcTop25LynHsGirls():
+    return render_template('xc/topCourseResults.html', cId = 25, gId = 3, limit = 25)
 
 
-@app.route('/top25LynHsBoys')
-def top25LynHsBoys():
-    return render_template('topCourseResults.html', cId = 25, gId = 2, limit = 25)
+@app.route('/xcTop25LynHsBoys')
+def xcTop25LynHsBoys():
+    return render_template('xc/topCourseResults.html', cId = 25, gId = 2, limit = 25)
 
 
 @app.route('/getTopTeamCourseResults',methods=['GET'])
@@ -305,44 +309,44 @@ def getResultsByRaceCompetitor(race_ids,competitor_ids):
         return render_template('error.html',error = str(e))
 
 
-@app.route('/top25CsTeamGirls')
-def top25CsTeamGirls():
-    return render_template('teamCourseResults.html', cId = 1, gId = 3, limit = 15)
+@app.route('/xcTop25CsTeamGirls')
+def xcTop25CsTeamGirls():
+    return render_template('xc/teamCourseResults.html', cId = 1, gId = 3, limit = 15)
 
 
-@app.route('/top25CsTeamBoys')
-def top25CsTeamBoys():
-    return render_template('teamCourseResults.html', cId = 1, gId = 2, limit = 15)
+@app.route('/xcTop25CsTeamBoys')
+def xcTop25CsTeamBoys():
+    return render_template('xc/teamCourseResults.html', cId = 1, gId = 2, limit = 15)
 
 
-@app.route('/top25TpTeamGirls')
-def top25TpTeamGirls():
-    return render_template('teamCourseResults.html', cId = 2, gId = 3, limit = 15)
+@app.route('/xcTop25TpTeamGirls')
+def xcTop25TpTeamGirls():
+    return render_template('xc/teamCourseResults.html', cId = 2, gId = 3, limit = 15)
 
 
-@app.route('/top25TpTeamBoys')
-def top25TpTeamBoys():
-    return render_template('teamCourseResults.html', cId = 2, gId = 2, limit = 15)
+@app.route('/xcTop25TpTeamBoys')
+def xcTop25TpTeamBoys():
+    return render_template('xc/teamCourseResults.html', cId = 2, gId = 2, limit = 15)
 
 
-@app.route('/top25CpTeamGirls')
-def top25CpTeamGirls():
-    return render_template('teamCourseResults.html', cId = 6, gId = 3, limit = 15)
+@app.route('/xcTop25CpTeamGirls')
+def xcTop25CpTeamGirls():
+    return render_template('xc/teamCourseResults.html', cId = 6, gId = 3, limit = 15)
 
 
-@app.route('/top25CpTeamBoys')
-def top25CpTeamBoys():
-    return render_template('teamCourseResults.html', cId = 6, gId = 2, limit = 15)
+@app.route('/xcTop25CpTeamBoys')
+def xcTop25CpTeamBoys():
+    return render_template('xc/teamCourseResults.html', cId = 6, gId = 2, limit = 15)
 
 
-@app.route('/top25BpTeamGirls')
-def top25BpTeamGirls():
-    return render_template('teamCourseResults.html', cId = 4, gId = 3, limit = 15)
+@app.route('/xcTop25BpTeamGirls')
+def xcTop25BpTeamGirls():
+    return render_template('xc/teamCourseResults.html', cId = 4, gId = 3, limit = 15)
 
 
-@app.route('/top25BpTeamBoys')
+@app.route('/xcTop25BpTeamBoys')
 def top25BpTeamBoys():
-    return render_template('teamCourseResults.html', cId = 4, gId = 2, limit = 15)
+    return render_template('xc/teamCourseResults.html', cId = 4, gId = 2, limit = 15)
 
 
 @app.route('/getRunners',methods=['GET'])
@@ -369,14 +373,14 @@ def getRunners():
         return render_template('error.html',error = str(e))
 
 
-@app.route('/mRunners')
-def mRunners():
-    return render_template('runners.html', gId = 2)
+@app.route('/xcMRunners')
+def xcMRunners():
+    return render_template('xc/runners.html', gId = 2)
 
 
-@app.route('/fRunners')
-def fRunners():
-    return render_template('runners.html', gId = 3)
+@app.route('/xcFRunners')
+def xcFRunners():
+    return render_template('xc/runners.html', gId = 3)
 
 
 @app.route('/getRunnerResults',methods=['GET'])
@@ -410,9 +414,9 @@ def getRunnerResults():
         return render_template('error.html',error = str(e))
 
 
-@app.route('/runner')
-def runner():
-    return render_template('runner.html')
+@app.route('/xcRunner')
+def xcRunner():
+    return render_template('xc/runner.html')
 
 
 @app.route('/getCompetitorsByYear',methods=['GET'])
@@ -467,9 +471,9 @@ def getRacesByYear():
         return render_template('error.html',error = str(e))
 
 
-@app.route('/season',methods=['GET'])
-def season():
-    return render_template('season.html')
+@app.route('/xcSeason',methods=['GET'])
+def xcSeason():
+    return render_template('xc/season.html')
 
 
 @app.route('/getCompetitorResults',methods=['GET'])
@@ -504,9 +508,9 @@ def getCompetitorResults():
         return render_template('error.html',error = str(e))
 
 
-@app.route('/competitor',methods=['GET'])
-def competitor():
-    return render_template('competitor.html')
+@app.route('/xcCompetitor',methods=['GET'])
+def xcCompetitor():
+    return render_template('xc/competitor.html')
 
 
 @app.route('/getRaceResults',methods=['GET'])
@@ -546,9 +550,9 @@ def getRaceResults():
         return render_template('error.html',error = str(e))
 
 
-@app.route('/raceResults',methods=['GET'])
-def raceResults():
-    return render_template('raceResults.html')
+@app.route('/xcRaceResults',methods=['GET'])
+def xcRaceResults():
+    return render_template('xc/raceResults.html')
 
 
 @app.route('/getCoachesByYear',methods=['GET'])
@@ -596,9 +600,9 @@ def getCoachTimeline():
         return render_template('error.html',error = str(e))
 
 
-@app.route('/coachTimeline',methods=['GET'])
-def coachTimeline():
-    return render_template('coachTimeline.html')
+@app.route('/xcCoachTimeline',methods=['GET'])
+def xcCoachTimeline():
+    return render_template('xc/coachTimeline.html')
 
 
 @app.route('/getCoachById',methods=['GET'])
@@ -625,9 +629,9 @@ def getCoachById():
         return render_template('error.html',error = str(e))
 
 
-@app.route('/coach',methods=['GET'])
-def coach():
-    return render_template('coach.html')
+@app.route('/xcCoach',methods=['GET'])
+def xcCoach():
+    return render_template('xc/coach.html')
 
 
 @app.route('/getCoaches',methods=['GET'])
@@ -653,9 +657,9 @@ def getCoaches():
         return render_template('error.html',error = str(e))
 
 
-@app.route('/coaches',methods=['GET'])
-def coaches():
-    return render_template('coaches.html')
+@app.route('/xcCoaches',methods=['GET'])
+def xcCoaches():
+    return render_template('xc/coaches.html')
 
 
 @app.route('/getAwardsByYear',methods=['GET'])
@@ -719,9 +723,9 @@ def getAwardById():
         return render_template('error.html',error = str(e))
 
 
-@app.route('/award',methods=['GET'])
-def award():
-    return render_template('award.html')
+@app.route('/xcAward',methods=['GET'])
+def xcAward():
+    return render_template('xc/award.html')
 
 
 @app.route('/getAwardsTimeline',methods=['GET'])
@@ -753,14 +757,14 @@ def getAwardsTimeline():
         return render_template('error.html',error = str(e))
 
 
-@app.route('/awardsTimeline',methods=['GET'])
-def awardsTimeline():
-    return render_template('awardsTimeline.html')
+@app.route('/xcAwardsTimeline',methods=['GET'])
+def xcAwardsTimeline():
+    return render_template('xc/awardsTimeline.html')
 
 
-@app.route('/photosTeamTimeline',methods=['GET'])
-def photosTeamTimeline():
-    return render_template('photosTeamTimeline.html')
+@app.route('/xcPhotosTeamTimeline',methods=['GET'])
+def xcPhotosTeamTimeline():
+    return render_template('xc/photosTeamTimeline.html')
 
 
 @app.route('/relatedSites',methods=['GET'])
@@ -768,19 +772,19 @@ def relatedSites():
     return render_template('relatedSites.html')
 
 
-@app.route('/photosCsAlumniRace',methods=['GET'])
-def photosCsAlumniRace():
-    return render_template('photosCsAlumniRace.html')
+@app.route('/xcPhotosCsAlumniRace',methods=['GET'])
+def xcPhotosCsAlumniRace():
+    return render_template('xc/photosCsAlumniRace.html')
 
 
-@app.route('/videosCsAlumniRace',methods=['GET'])
-def videosCsAlumniRace():
-    return render_template('videosCsAlumniRace.html')
+@app.route('/xcVideosCsAlumniRace',methods=['GET'])
+def xcVideosCsAlumniRace():
+    return render_template('xc/videosCsAlumniRace.html')
 
 
 @app.route('/pastXcAlumniChampions',methods=['GET'])
 def pastXcAlumniChampions():
-    return render_template('pastXcAlumniChampions.html')
+    return render_template('xc/pastXcAlumniChampions.html')
 
 
 @app.route('/getPastXcAlumniChampions',methods=['GET'])
@@ -815,22 +819,22 @@ def getPastXcAlumniChampions():
 
 @app.route('/xcAllSpecialAchievements',methods=['GET'])
 def xcAllSpecialAchievements():
-    return render_template('specialAchievement.html', splAchvId=0)
+    return render_template('xc/specialAchievement.html', splAchvId=0)
 
 
 @app.route('/xcLeagueChampions',methods=['GET'])
 def xcLeagueChampions():
-    return render_template('specialAchievement.html', splAchvId=1)
+    return render_template('xc/specialAchievement.html', splAchvId=1)
 
 
 @app.route('/xcSectionChampions',methods=['GET'])
 def xcSectionChampions():
-    return render_template('specialAchievement.html', splAchvId=2)
+    return render_template('xc/specialAchievement.html', splAchvId=2)
 
 
 @app.route('/xcStateQualifiers',methods=['GET'])
 def xcStateQualifiers():
-    return render_template('specialAchievement.html', splAchvId=3)
+    return render_template('xc/specialAchievement.html', splAchvId=3)
 
 
 @app.route('/getSpecialAchieversById',methods=['GET'])
@@ -858,6 +862,7 @@ def getSpecialAchieversById():
         return json.dumps(special_achievers_dict)
     except Exception as e:
         return render_template('error.html',error = str(e))
+
 
 if __name__ == "__main__":
     app.run()

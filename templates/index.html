@@ -17,268 +17,43 @@
   <body>
 
     <div class="container">
-      <div class="header">
-        <nav>
-          <ul class="nav nav-pills pull-right">
-            <li role="presentation" class="active"><a href="#">Home</a></li>
-          </ul>
-        </nav>
+{% include "nav_active_home.html" %}
+      <div>
         <h3 class="text-muted">Santa Clara High School Running</h3>
       </div>
 
       <div class="jumbotron">
-        <p><img src="static/Uploads/schs_xc_2018_league_team_1.jpg" alt="SCHS XC 2018 SCVAL League Meet" width="550"></p>
+        <p><img src="static/Uploads/schs_xc_2018_coaches_cropped.jpg" alt="SCHS XC 2018 Coaches" width="550"></p>
       </div>
 
       <div class="row marketing">
         <div class="col-lg-6">
-          <h4 style="color:red">Recent Updates</h4>
+          <h4 style="color:red">Latest Updates</h4>
           <p>
-            <div>&raquo; 12/12/18 - added <a href="xcAllSpecialAchievements">XC Special Achievements</a></div>
-            <div>&raquo; 12/09/18 - added <a href="season?yr=2018">2018 XC Awards</a> + <a href="photosTeamTimeline">team photo</a></div>
+            <div>&raquo; 02/18/19 - added outline for <a href="track">Track &amp; Field</a> page</div>
+            <div>&raquo; 02/18/19 - added <a href="/">SCHS Running</a> homepage</div>
           </p>
-          <h4>XC Results by Runner</h4>
+          <h4>SCHS Cross Country</h4>
           <p>
-            <div>Boys: 
-              <a href="runner?rId=1000261">Girmay Guangul</a>, 
-              <a href="runner?rId=1000259">Vince Rodriguez</a>, 
-              <a href="runner?rId=1000179">Kindu Ejigu</a>, 
-              <a href="runner?rId=1000193">Lenin Zapata</a>,
-              <a href="runner?rId=1000300">Rick Dueñas</a>,
-              <a href="runner?rId=1">Cal Ochoa</a> ...
-              <a href="mRunners">All Boys</a>
-            </div>
-            <div>&nbsp;</div>
-            <div>Girls: 
-              <a href="runner?rId=1000154">Bita Manesh</a>, 
-              <a href="runner?rId=1000247">Rachel Newman</a>, 
-              <a href="runner?rId=1000254">Sophia Kennedy</a>, 
-              <a href="runner?rId=1000182">Regan Dyer</a>, 
-              <a href="runner?rId=1000316">Ingrid Lacy</a>,               
-              <a href="runner?rId=1000166">Abby Olsen</a> ...
-              <a href="fRunners">All Girls</a>
-            </div>
+            <a href="xc">XC Home</a>
           </p>
-          <h4>XC Seasons</h4>
+          <h4>SCHS Track &amp; Field</h4>
           <p>
-            <a href="season?yr=2018">2018</a>, 
-          	<a href="season?yr=2017">2017</a>, 
-          	<a href="season?yr=2016">2016</a>, 
-          	<a href="season?yr=2015">2015</a>, 
-          	<a href="season?yr=2014">2014</a>, 
-          	<a href="season?yr=2013">2013</a>, 
-          	<a href="season?yr=2012">2012</a>, 
-          	<a href="season?yr=2011">2011</a>, 
-          	<a href="season?yr=2010">2010</a>, 
-          	<a href="season?yr=2009">2009</a>, 
-          	<a href="season?yr=2008">2008</a>, 
-          	<a href="season?yr=2007">2007</a>, 
-          	<a href="season?yr=2006">2006</a>, 
-          	<a href="season?yr=2005">2005</a>, 
-          	<a href="season?yr=2004">2004</a>, 
-          	<a href="season?yr=2003">2003</a>, 
-          	<a href="season?yr=2002">2002</a>, 
-          	<a href="season?yr=2001">2001</a>, 
-          	<a href="season?yr=2000">2000</a>, 
-          	<a href="season?yr=1999">1999</a>, 
-          	<a href="season?yr=1998">1998</a>, 
-          	<a href="season?yr=1997">1997</a>, 
-          	<a href="season?yr=1996">1996</a>, 
-          	<a href="season?yr=1995">1995</a>, 
-          	<a href="season?yr=1994">1994</a>, 
-          	<a href="season?yr=1993">1993</a>, 
-          	<a href="season?yr=1992">1992</a>, 
-          	<a href="season?yr=1991">1991</a>, 
-          	<a href="season?yr=1988">1988</a>
-          </p>
-          <h4>XC Coaches</h4>
-          <p>
-          	<a href="coachTimeline">Timeline</a>, 
-          	<a href="coach?coachId=1">Julie L'Heureux</a>, 
-          	<a href="coach?coachId=2">Cal Ochoa</a>, 
-          	<a href="coach?coachId=6">Jamie Vierling</a>, 
-          	<a href="coach?coachId=7">Mario Bouza</a> ...
-          	<a href="coaches">All Coaches</a>
-          </p>
-          <h4>XC Special Achievements</h4>
-          <p>
-            <a href="xcAllSpecialAchievements">All</a>, 
-            <a href="xcStateQualifiers">State Qualifiers</a>,
-            <a href="xcSectionChampions">CCS Champions</a>,
-            <a href="xcLeagueChampions">League Champions</a> 
-          </p>
-          <h4>XC Awards</h4>
-          <p>
-            <div>Timeline: 
-          	  <a href="awardsTimeline?squadId=0">All</a>,
-          	  <a href="awardsTimeline?squadId=1">VG</a>,
-          	  <a href="awardsTimeline?squadId=2">VB</a>,
-          	  <a href="awardsTimeline?squadId=3">JVG</a>,
-          	  <a href="awardsTimeline?squadId=4">FSB</a>
-          	</div>
-            <div>Most Valuable Runner: 
-          	  <a href="award?awardId=0&squadId=0">All</a>,
-          	  <a href="award?awardId=0&squadId=1">VG</a>,
-          	  <a href="award?awardId=0&squadId=2">VB</a>,
-          	  <a href="award?awardId=0&squadId=3">JVG</a>,
-          	  <a href="award?awardId=0&squadId=4">FSB</a>
-          	</div>
-            <div>Most Improved: 
-          	  <a href="award?awardId=3&squadId=0">All</a>,
-          	  <a href="award?awardId=3&squadId=1">VG</a>,
-          	  <a href="award?awardId=3&squadId=2">VB</a>,
-          	  <a href="award?awardId=3&squadId=3">JVG</a>,
-          	  <a href="award?awardId=3&squadId=4">FSB</a>
-          	</div>
-          </p>
-          <h4>XC Photos</h4>
-          <p>
-          	<a href="photosTeamTimeline">Team Timeline</a>, 
-          	<a href="photosCsAlumniRace">Crystal Springs Alumni Race</a>
-          </p>
-          <p>&nbsp;</p>
-        </div>
-
-        <div class="col-lg-6">
-          <h4>XC Top 25 Individual List</h4>
-          <p>
-          	<div>Crystal Springs: </div>
-          	<div>&raquo; Boys: 
-          	  <a href="top25CsBoys">All Time</a>,
-          	  <a href="topCourseResults?cId=1&gId=2&limit=25&grade=12">Senior</a>,
-          	  <a href="topCourseResults?cId=1&gId=2&limit=25&grade=11">Junior</a>,
-          	  <a href="topCourseResults?cId=1&gId=2&limit=25&grade=10">Soph</a>,
-          	  <a href="topCourseResults?cId=1&gId=2&limit=25&grade=9">Frosh</a>
-          	</div>
-          	<div>&raquo; Girls: 
-          	  <a href="top25CsGirls">All Time</a>,
-          	  <a href="topCourseResults?cId=1&gId=3&limit=25&grade=12">Senior</a>,
-          	  <a href="topCourseResults?cId=1&gId=3&limit=25&grade=11">Junior</a>,
-          	  <a href="topCourseResults?cId=1&gId=3&limit=25&grade=10">Soph</a>,
-          	  <a href="topCourseResults?cId=1&gId=3&limit=25&grade=9">Frosh</a>
-          	</div>
-          	<div>&nbsp;</div>
-          	<div>Toro Park: </div>
-          	<div>&raquo; Boys: 
-          	  <a href="top25TpBoys">All Time</a>,
-          	  <a href="topCourseResults?cId=2&gId=2&limit=25&grade=12">Senior</a>,
-          	  <a href="topCourseResults?cId=2&gId=2&limit=25&grade=11">Junior</a>,
-          	  <a href="topCourseResults?cId=2&gId=2&limit=25&grade=10">Soph</a>,
-          	  <a href="topCourseResults?cId=2&gId=2&limit=25&grade=9">Frosh</a>
-          	</div>
-          	<div>&raquo; Girls: 
-          	  <a href="top25TpGirls">All Time</a>,
-          	  <a href="topCourseResults?cId=2&gId=3&limit=25&grade=12">Senior</a>,
-          	  <a href="topCourseResults?cId=2&gId=3&limit=25&grade=11">Junior</a>,
-          	  <a href="topCourseResults?cId=2&gId=3&limit=25&grade=10">Soph</a>,
-          	  <a href="topCourseResults?cId=2&gId=3&limit=25&grade=9">Frosh</a>
-          	</div>
-          	<div>&nbsp;</div>
-          	<div>Central Park: </div>
-          	<div>&raquo; Boys: 
-          	  <a href="top25CpBoys">All Time</a>,
-          	  <a href="topCourseResults?cId=6&gId=2&limit=25&grade=12">Senior</a>,
-          	  <a href="topCourseResults?cId=6&gId=2&limit=25&grade=11">Junior</a>,
-          	  <a href="topCourseResults?cId=6&gId=2&limit=25&grade=10">Soph</a>,
-          	  <a href="topCourseResults?cId=6&gId=2&limit=25&grade=9">Frosh</a>
-          	</div>
-          	<div>&raquo; Girls: 
-          	  <a href="top25CpGirls">All Time</a>,
-          	  <a href="topCourseResults?cId=6&gId=3&limit=25&grade=12">Senior</a>,
-          	  <a href="topCourseResults?cId=6&gId=3&limit=25&grade=11">Junior</a>,
-          	  <a href="topCourseResults?cId=6&gId=3&limit=25&grade=10">Soph</a>,
-          	  <a href="topCourseResults?cId=6&gId=3&limit=25&grade=9">Frosh</a>
-          	</div>
-          	<div>&nbsp;</div>
-          	<div>Baylands Park: </div>
-          	<div>&raquo; Boys: 
-          	  <a href="top25BpBoys">All Time</a>,
-          	  <a href="topCourseResults?cId=4&gId=2&limit=25&grade=12">Senior</a>,
-          	  <a href="topCourseResults?cId=4&gId=2&limit=25&grade=11">Junior</a>,
-          	  <a href="topCourseResults?cId=4&gId=2&limit=25&grade=10">Soph</a>,
-          	  <a href="topCourseResults?cId=4&gId=2&limit=25&grade=9">Frosh</a>
-          	</div>
-          	<div>&raquo; Girls: 
-          	  <a href="top25BpGirls">All Time</a>,
-          	  <a href="topCourseResults?cId=4&gId=3&limit=25&grade=12">Senior</a>,
-          	  <a href="topCourseResults?cId=4&gId=3&limit=25&grade=11">Junior</a>,
-          	  <a href="topCourseResults?cId=4&gId=3&limit=25&grade=10">Soph</a>,
-          	  <a href="topCourseResults?cId=4&gId=3&limit=25&grade=9">Frosh</a>
-          	</div>
-            <div>&nbsp;</div>
-            <div><a name="top25LynHs"></a>Lynbrook High School: </div>
-            <div>&raquo; Boys: 
-              <a href="top25LynHsBoys">All Time</a>,
-              <a href="topCourseResults?cId=25&gId=2&limit=25&grade=12">Senior</a>,
-              <a href="topCourseResults?cId=25&gId=2&limit=25&grade=11">Junior</a>,
-              <a href="topCourseResults?cId=25&gId=2&limit=25&grade=10">Soph</a>,
-              <a href="topCourseResults?cId=25&gId=2&limit=25&grade=9">Frosh</a>
-            </div>
-            <div>&raquo; Girls: 
-              <a href="top25LynHsGirls">All Time</a>,
-              <a href="topCourseResults?cId=25&gId=3&limit=25&grade=12">Senior</a>,
-              <a href="topCourseResults?cId=25&gId=3&limit=25&grade=11">Junior</a>,
-              <a href="topCourseResults?cId=25&gId=3&limit=25&grade=10">Soph</a>,
-              <a href="topCourseResults?cId=25&gId=3&limit=25&grade=9">Frosh</a>
-            </div>
-          </p>
-          <h4>XC Top 15 Team List</h4>
-          <p>
-            <div>
-              <span style="font-size:12px; color:gray;">
-            	(Note: Based on fastest 5 runners for a given race, as opposed to a competing squad, i.e. VB, VG, FSB, JVG)
-              </span>
-            </div>
-          	<div>Crystal Springs: 
-          	  <a href="top25CsTeamBoys">Boys</a>, 
-          	  <a href="top25CsTeamGirls">Girls</a>
-          	</div>
-          	<div>Toro Park: 
-          	  <a href="top25TpTeamBoys">Boys</a>, 
-          	  <a href="top25TpTeamGirls">Girls</a>
-          	</div>
-          	<div>Central Park: 
-          	  <a href="top25CpTeamBoys">Boys</a>, 
-          	  <a href="top25CpTeamGirls">Girls</a>
-          	</div>
-          	<div>Baylands Park: 
-          	  <a href="top25BpTeamBoys">Boys</a>, 
-          	  <a href="top25BpTeamGirls">Girls</a>
-          	</div>
-          </p>
-          <h4>XC Alumni Race</h4>
-          <p>
-          	<div>
-          		Results: 
-              <a href="raceResults?raceId=100006">2018</a>, 
-              <a href="raceResults?raceId=100005">2017</a>, 
-	          	<a href="raceResults?raceId=100004">2016</a>, 
-	          	<a href="raceResults?raceId=100003">2015</a>, 
-	          	<a href="raceResults?raceId=100002">2014</a>, 
-	          	<a href="raceResults?raceId=100001">2013</a>, 
-	          	<a href="raceResults?raceId=100000">2012</a>
-          	</div>
-          	<div>
-          		<a href="photosCsAlumniRace">Photos</a>, 
-          		<a href="videosCsAlumniRace">Videos</a>, 
-          		<a href="pastXcAlumniChampions">Past Alumni Champions</a>
-          	</div>
+            <a href="track">Track Home</a>
           </p>
           <h4>Related Sites</h4>
           <p>
-          	<a href="https://www.athletic.net/TrackAndField/California/CentralCoast.aspx">Athletic Track &amp; Field</a>, 
-          	<a href="https://www.xcstats.com/">XC Stats</a>, 
-          	<a href="http://www.prepcaltrack.com/">Prep Cal Track</a>, 
-          	<a href="http://www.runnerspace.com/">Runner Space</a>, 
-          	<a href="http://www.lynbrooksports.com">Lynbrook HS XC/Track</a> ...
-          	<a href="relatedSites">All Sites</a>
+            <a href="https://www.athletic.net/TrackAndField/California/CentralCoast.aspx">Athletic Track &amp; Field</a>, 
+            <a href="https://www.xcstats.com/">XC Stats</a>, 
+            <a href="http://www.prepcaltrack.com/">Prep Cal Track</a>, 
+            <a href="http://www.runnerspace.com/">Runner Space</a>, 
+            <a href="http://www.lynbrooksports.com">Lynbrook HS XC/Track</a> ...
+            <a href="relatedSites">All Sites</a>
           </p>
         </div>
       </div>
 
-      <footer class="footer">
-        <p>&copy; Cal Workouts 2018</p>
-      </footer>
+{% include "footer.html" %}
     </div>
   </body>
 </html>

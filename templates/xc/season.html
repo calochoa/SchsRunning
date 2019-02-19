@@ -34,7 +34,7 @@
 
 				$.each(resultsObj,function(index, value){
 				    var nameStr = value.FirstName + ' ' + value.LastName + ' (' + value.CoachType + ')'
-				    var link = "coach?coachId=" + value.CoachId
+				    var link = "xcCoach?coachId=" + value.CoachId
 					$('.coachesNames').append("<div><a href='" + link + "'>" + nameStr + "</a></div>");
 				});
 			},
@@ -61,7 +61,7 @@
 
 				$.each(resultsObj,function(index, value){
 				    var nameStr = value.LastName + ', ' + value.FirstName + ' (' + value.Grade + ')'
-				    var link = "competitor?cId=" + value.CompetitorId
+				    var link = "xcCompetitor?cId=" + value.CompetitorId
 					$('.mRunnerNames').append("<div><a href='" + link + "'>" + nameStr + "</a></div>");
 				});
 			},
@@ -86,7 +86,7 @@
 
 				$.each(resultsObj,function(index, value){
 				    var nameStr = value.LastName + ', ' + value.FirstName + ' (' + value.Grade + ')'
-				    var link = "competitor?cId=" + value.CompetitorId
+				    var link = "xcCompetitor?cId=" + value.CompetitorId
 					$('.fRunnerNames').append("<div><a href='" + link + "'>" + nameStr + "</a></div>");
 				});
 			},
@@ -114,7 +114,7 @@
 					var dateStr = value.Date.substring(5)
 					dateStr = dateStr.replace('-','/')
 				    var nameStr = dateStr + ' - ' + raceStr + ': ' + value.CourseName + ' (' + value.CourseDistance + 'M)'
-				    var link = "raceResults?raceId=" + value.RaceId
+				    var link = "xcRaceResults?raceId=" + value.RaceId
 					$('.raceNames').append("<div>" + nameStr + "</div>"
 						+ "<div>&raquo; <a href='" + link + "&gId=3'>Girls</a>"
 						+ " | <a href='" + link + "&gId=2'>Boys</a>"
@@ -151,7 +151,7 @@
 				$.each(resultsObj,function(index, value){
 				    var nameStr = value.FirstName + ' ' + value.LastName
 				    var linkText = value.SquadAbbr + ' ' + value.AwardShortName
-				    var link = 'award?awardId=' + value.AwardId + '&squadId=' + value.SquadId
+				    var link = 'xcAward?awardId=' + value.AwardId + '&squadId=' + value.SquadId
 					var awardStr = "<a href='" + link + "'>" + linkText + "</a>"
 				    var resultStr = "<div>" + awardStr + ': ' + nameStr + "</div>"
 					$('.awardsNames').append(resultStr);
@@ -165,21 +165,14 @@
     </script>
   </head>
   <body>
-
     <div class="container">
-      <div class="header">
-        <nav>
-          <ul class="nav nav-pills pull-right">
-            <li role="presentation"><a href="/">Home</a></li>
-          </ul>
-        </nav>
+{% include "nav.html" %}
+	  <div>
         <h3 class="text-muted"></h3>
       </div>
-      
       <div id="team_img_container" class="jumbotron" style="display: none;">
         <p><img id="team_img" src="" style="width: 100%;"></p>
       </div>
-      
       <div class="row marketing">
         <div class="col-lg-6">
           <h4 class="coachesTitle"></h4>
@@ -196,11 +189,8 @@
           <h4 class="awardsTitle"></h4>
           <p class=awardsNames></p>
         </div>
-      </div>
-        
-      <footer class="footer">
-        <p>&copy; Cal Workouts 2018</p>
-      </footer>
+      </div>        
+{% include "footer.html" %}
     </div>
   </body>
 </html>

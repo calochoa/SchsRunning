@@ -10,12 +10,12 @@
 
 	  gtag('config', 'UA-109364959-1');
 	</script>
-    <title>SCHS XC Runner</title>
+    <title>SCHS XC Competitor</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
     <link href="https://getbootstrap.com/docs/3.3/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet">
     <link href="../static/css/signup.css" rel="stylesheet">
     <style>
-    .runnerResults p {
+    .competitorResults p {
     	font-size:18px;
 	}
     </style>
@@ -23,14 +23,14 @@
     <script src="../static/js/utils.js"></script>
     <script>
     var urlParams = parseURL();
-    var runnerId = urlParams.rId
+    var competitorId = urlParams.cId;
         
 	$(function(){
 		$.ajax({
-			url: '/getRunnerResults',
+			url: '/getCompetitorResults',
 			type: 'GET',
 			data: {
-				"runnerId": runnerId
+				"competitorId": competitorId
 			},
 			success: function(res){
 				var div = $('<div>')
@@ -41,36 +41,26 @@
 				            .attr('class', 'list-group-item-heading'),
 				            $('<p>')
 				            .attr('class', 'list-group-item-text')));
-				var div2 = $('<div>');
 							    				
 				var resultsObj = JSON.parse(res);
 				var results = '';
 				var fullName = '';
-				var currentGradeStr = '';
+				var titleStr = '';
 				$.each(resultsObj,function(index, value){
 					fullName = value.FirstName + ' ' + value.LastName
-					var headerStr = value.Date + ' - ' + value.RaceName + ': ' + value.CourseName + ', ' + value.CourseDistance + 'M'
-					headerStr += value.RaceCondition.localeCompare('unknown') ? ' *' + value.RaceCondition + '*' : ''
 					var gradeStr = value.Grade == 0 ? 'Alumni' : value.Grade + 'th grade'
 				    var timeStr = value.Time + ' (' + value.Pace + ') - ' + gradeStr;
-				    if (currentGradeStr != gradeStr) {
-				    	currentGradeStr = gradeStr;
-				    	var resultsHeaderDisplayStr = 'Alumni Results'
-				    	if (value.Grade != 0) {
-				    		resultsHeaderDisplayStr = value.Grade + 'th Grade Results - ' 
-				    			+ new Date(value.Date).getFullYear() + ' Season'
-				    	}
-				    	var resultsHeaderDiv = "<div><h3 class=\"grade\">" + resultsHeaderDisplayStr + "</h3></div>"
-				    	$('.runnerResults').append(resultsHeaderDiv);
-
-				    }
+					titleStr = fullName + ' - ' + gradeStr + ' - ' + value.Year + ' Season'
+					var headerStr = value.Date + ' - ' + value.RaceName + ': ' + value.CourseName + ', ' + value.CourseDistance + 'M'
+					headerStr += value.RaceCondition.localeCompare('unknown') ? ' *' + value.RaceCondition + '*' : ''
+				    var timeStr = value.Time + ' (' + value.Pace + ')'
 					results = $(div).clone();
-					$(results).find('a').attr('href', '/raceResults?raceId=' + value.RaceId);
+					$(results).find('a').attr('href', '/xcRaceResults?raceId=' + value.RaceId);
 					$(results).find('h4').text(headerStr);
 					$(results).find('p').text(timeStr);
-					$('.runnerResults').append(results);
+					$('.competitorResults').append(results);
 				});
-				$('.text-muted').text(fullName);
+				$('.text-muted').text(titleStr);
 			},
 			error: function(error){
 				console.log(error);
@@ -80,20 +70,13 @@
     </script>
   </head>
   <body>
-
     <div class="container">
-      <div class="header">
-        <nav>
-          <ul class="nav nav-pills pull-right">
-            <li role="presentation"><a href="/">Home</a></li>
-          </ul>
-        </nav>
+{% include "nav.html" %}
+	  <div>
         <h3 class="text-muted"></h3>
       </div>
-      <div class="runnerResults"></div>
-      <footer class="footer">
-        <p>&copy; Cal Workouts 2018</p>
-      </footer>
+      <div class="competitorResults"></div>
+{% include "footer.html" %}
     </div>
   </body>
 </html>

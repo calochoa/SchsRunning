@@ -10,7 +10,7 @@
 
 	  gtag('config', 'UA-109364959-1');
 	</script>
-    <title>SCHS XC Top Team Course Results</title>
+    <title>SCHS XC Top Individual Course Results</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
     <link href="https://getbootstrap.com/docs/3.3/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet">
     <link href="../static/css/signup.css" rel="stylesheet">
@@ -21,25 +21,27 @@
     var gId = {{gId}};
     var li = {{limit}};
     var urlParams = parseURL();
-    var courseId = cId ? cId : urlParams.cId;
-    var genderId = gId ? gId : urlParams.gId;
-    var limit = li ? li : urlParams.limit;
-        
+    var courseId = cId && cId != 0 ? cId : urlParams.cId;
+    var genderId = gId && gId != 0 ? gId : urlParams.gId;
+    var limit = li && li != 0 ? li : urlParams.limit;
+    var grade = urlParams.grade;
+            
 	$(function(){
 		$.ajax({
-			url: '/getTopTeamCourseResults',
+			url: '/getTopCourseResults',
 			type: 'GET',
 			data: {
 				"courseId": courseId,
 				"genderId": genderId,
-				"limit": limit
+				"limit": limit,
+				"grade": grade
 			},
 			success: function(res){
 				var div = $('<div>')
 				    .attr('class', 'list-group')
 				    .append($('<a>')
 				        .attr('class', 'list-group-item active')
-				        .append($('<h3>')
+				        .append($('<h4>')
 				            .attr('class', 'list-group-item-heading'),
 				            $('<p>')
 				            .attr('class', 'list-group-item-text')));
@@ -48,18 +50,12 @@
 				var results = '';
 				limit = resultsObj.length
 				$.each(resultsObj,function(index, value){
-				    var resultStr = value.Rank + '. ' + value.Year
-				    var timeStr = value.TeamTimeCalc + ' - ' + value.TeamAvgIndTimeCalc + ' - ' + value.Spread
+				    var resultStr = value.Rank + '. ' + value.FirstName + ' ' + value.LastName + ' (' + value.Year + ')'
+				    var timeStr = value.Time + ' (' + value.Pace + ') - ' + value.Grade + 'th grade'
 					results = $(div).clone();
-					$(results).find('h3').text(resultStr + ' - ' + timeStr);
-					$(results).find('a').attr('href', '/raceResults?raceId=' + value.RaceId + '&gId=' + genderId);
-					
-					var competitorTimes = ''
-					for (i in value.CompetitorTimes) {
-						competitorTimes += "<div>" + value.CompetitorTimes[i] + "</div>"
-					}
-					
-					$(results).find('p').append(competitorTimes);
+					$(results).find('a').attr('href', '/xcCompetitor?cId='+ value.CompetitorId);
+					$(results).find('h4').text(resultStr);
+					$(results).find('p').text(timeStr);
 					$('.jumbotron').append(results);
 				});
 				getCourseInfo();
@@ -82,8 +78,9 @@
 				var courseObj = resultsObj[0]
 				var genderStr = (genderId && genderId == 3) ? 'Girls' : 'Boys'
 				var courseStr = courseObj.CourseName + ' (' + courseObj.CourseDistance + 'M)'
-				var topStr = limit > 0 ? 'Top ' + limit + ' Team' : 'No Team Results for'
-				var titleStr =  topStr + ' ' + genderStr + ' - ' + courseStr
+				var gradeStr = grade == 9 ? 'Freshman ' : (grade == 10 ? 'Sophomore ' : (grade == 11 ? 'Junior ' : (grade == 12 ? 'Senior ' : '')))
+				var topStr = limit > 0 ? 'Top ' + limit : 'No Results for'
+				var titleStr =  topStr + ' ' + gradeStr + genderStr + ' - ' + courseStr
 				$('.text-muted').text(titleStr);
 			},
 			error: function(error){
@@ -97,27 +94,7 @@
 	</style>
   </head>
   <body>
-
-    <div class="container">
-      <div class="header">
-        <nav>
-          <ul class="nav nav-pills pull-right">
-            <li role="presentation"><a href="/">Home</a></li>
-          </ul>
-        </nav>
-        <h3 class="text-muted"></h3>
-      </div>
-
-      <div style="text-align:center"><h3>Year - Total Time - Avg Time - Spread</h3></div>
-      
-      <div class="jumbotron">
-      
-      </div>
-
-      <footer class="footer">
-        <p>&copy; Cal Workouts 2018</p>
-      </footer>
-    </div>
+{% include "xc/body.html" %}
   </body>
 </html>
 

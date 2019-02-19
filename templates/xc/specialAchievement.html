@@ -48,7 +48,7 @@
 				    resultStr += ': ' + nameStr;
 				    var notesStr = value.Notes + ' - ' + value.Grade + 'th grade'
 					results = $(div).clone();
-					$(results).find('a').attr('href', '/runner?rId='+ value.RunnerId);
+					$(results).find('a').attr('href', '/xcRunner?rId='+ value.RunnerId);
 					$(results).find('h4').text(resultStr);
 					$(results).find('p').text(notesStr);
 					$('.jumbotron').append(results);
@@ -66,25 +66,7 @@
 	</style>
   </head>
   <body>
-
-    <div class="container">
-      <div class="header">
-        <nav>
-          <ul class="nav nav-pills pull-right">
-            <li role="presentation"><a href="/">Home</a></li>
-          </ul>
-        </nav>
-        <h3 class="text-muted"></h3>
-      </div>
-      
-      <div class="jumbotron">
-
-      </div>
-        
-      <footer class="footer">
-        <p>&copy; Cal Workouts 2018</p>
-      </footer>
-    </div>
+{% include "xc/body.html" %}
   </body>
 </html>
 

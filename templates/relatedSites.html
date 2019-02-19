@@ -18,13 +18,9 @@
   <body>
 
     <div class="container">
-      <div class="header">
-        <nav>
-          <ul class="nav nav-pills pull-right">
-            <li role="presentation"><a href="/">Home</a></li>
-          </ul>
-        </nav>
-        <h3 class="text-muted">SCHS XC: Related Sites</h3>
+{% include "nav.html" %}
+      <div>
+        <h3 class="text-muted">SCHS Running: Related Sites</h3>
       </div>
       <div class="row marketing">
         <h4>Running Sites</h4>
@@ -53,9 +49,7 @@
           	<div>Wilcox HS: <a href="http://waltvzwil.tripod.com/">XC/Track</a></div>         	
         </p>
       </div>
-      <footer class="footer">
-        <p>&copy; Cal Workouts 2018</p>
-      </footer>
+{% include "footer.html" %}
     </div>
   </body>
 </html>

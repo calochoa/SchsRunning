@@ -10,24 +10,27 @@
 
 	  gtag('config', 'UA-109364959-1');
 	</script>
-    <title>SCHS XC Season Race Results</title>
+    <title>SCHS XC Runner</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
     <link href="https://getbootstrap.com/docs/3.3/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet">
     <link href="../static/css/signup.css" rel="stylesheet">
+    <style>
+    .runnerResults p {
+    	font-size:16px;
+	}
+    </style>
     <script src="../static/js/jquery-1.11.2.js"></script>
     <script src="../static/js/utils.js"></script>
     <script>
     var urlParams = parseURL();
-    var raceId = urlParams.raceId;
-    var genderId = urlParams.gId;
+    var runnerId = urlParams.rId
         
 	$(function(){
 		$.ajax({
-			url: '/getRaceResults',
+			url: '/getRunnerResults',
 			type: 'GET',
 			data: {
-				"raceId": raceId,
-				"genderId": genderId,
+				"runnerId": runnerId
 			},
 			success: function(res){
 				var div = $('<div>')
@@ -38,25 +41,36 @@
 				            .attr('class', 'list-group-item-heading'),
 				            $('<p>')
 				            .attr('class', 'list-group-item-text')));
+				var div2 = $('<div>');
 							    				
 				var resultsObj = JSON.parse(res);
 				var results = '';
-				limit = resultsObj.length
+				var fullName = '';
+				var currentGradeStr = '';
 				$.each(resultsObj,function(index, value){
-					var titleStr = value.Date + ' - ' + value.RaceName + ': ' + value.CourseName + ', ' + value.CourseDistance + 'M'
-					titleStr += value.RaceCondition.localeCompare('unknown') ? ' *' + value.RaceCondition + '*' : ''
-					$('.text-muted').text(titleStr);
-
-				    var resultStr = value.Rank + '. ' + value.FirstName + ' ' + value.LastName + ' (' + value.Year + ')'
-					var runnerId = parseInt(value.CompetitorId)
-					var gradeStr = value.Grade == 0 ? (runnerId >= 100000 && runnerId < 1000000 ? 'Special Guest' : 'Alumni' ) : value.Grade + 'th grade'
+					fullName = value.FirstName + ' ' + value.LastName
+					var headerStr = value.Date + ' - ' + value.RaceName + ': ' + value.CourseName + ', ' + value.CourseDistance + 'M'
+					headerStr += value.RaceCondition.localeCompare('unknown') ? ' *' + value.RaceCondition + '*' : ''
+					var gradeStr = value.Grade == 0 ? 'Alumni' : value.Grade + 'th grade'
 				    var timeStr = value.Time + ' (' + value.Pace + ') - ' + gradeStr;
+				    if (currentGradeStr != gradeStr) {
+				    	currentGradeStr = gradeStr;
+				    	var resultsHeaderDisplayStr = 'Alumni Results'
+				    	if (value.Grade != 0) {
+				    		resultsHeaderDisplayStr = value.Grade + 'th Grade Results - ' 
+				    			+ new Date(value.Date).getFullYear() + ' Season'
+				    	}
+				    	var resultsHeaderDiv = "<div><h3 class=\"grade\">" + resultsHeaderDisplayStr + "</h3></div>"
+				    	$('.runnerResults').append(resultsHeaderDiv);
+
+				    }
 					results = $(div).clone();
-					$(results).find('a').attr('href', '/competitor?cId='+ value.CompetitorId);
-					$(results).find('h4').text(resultStr);
+					$(results).find('a').attr('href', '/xcRaceResults?raceId=' + value.RaceId);
+					$(results).find('h4').text(headerStr);
 					$(results).find('p').text(timeStr);
-					$('.jumbotron').append(results);
+					$('.runnerResults').append(results);
 				});
+				$('.text-muted').text(fullName);
 			},
 			error: function(error){
 				console.log(error);
@@ -64,29 +78,15 @@
 		});
 	});
     </script>
-    <style>
-    	.jumbotron p {margin-bottom: 0px;font-size:18px;}
-	</style>
   </head>
   <body>
-
     <div class="container">
-      <div class="header">
-        <nav>
-          <ul class="nav nav-pills pull-right">
-            <li role="presentation"><a href="/">Home</a></li>
-          </ul>
-        </nav>
+{% include "nav.html" %}
+      <div>
         <h3 class="text-muted"></h3>
       </div>
-
-      <div class="jumbotron">
-
-      </div>
-
-      <footer class="footer">
-        <p>&copy; Cal Workouts 2018</p>
-      </footer>
+      <div class="runnerResults"></div>
+{% include "footer.html" %}
     </div>
   </body>
 </html>

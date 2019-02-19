@@ -10,24 +10,24 @@
 
 	  gtag('config', 'UA-109364959-1');
 	</script>
-    <title>SCHS XC Results</title>
+    <title>SCHS XC Season Race Results</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
     <link href="https://getbootstrap.com/docs/3.3/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet">
     <link href="../static/css/signup.css" rel="stylesheet">
     <script src="../static/js/jquery-1.11.2.js"></script>
+    <script src="../static/js/utils.js"></script>
     <script>
-    var courseId = {{cId}};
-    var genderId = {{gId}};
-    var limit = {{limit}};
+    var urlParams = parseURL();
+    var raceId = urlParams.raceId;
+    var genderId = urlParams.gId;
         
 	$(function(){
 		$.ajax({
-			url: '/getTopResults',
+			url: '/getRaceResults',
 			type: 'GET',
 			data: {
-				"courseId": courseId,
+				"raceId": raceId,
 				"genderId": genderId,
-				"limit": limit
 			},
 			success: function(res){
 				var div = $('<div>')
@@ -43,9 +43,16 @@
 				var results = '';
 				limit = resultsObj.length
 				$.each(resultsObj,function(index, value){
+					var titleStr = value.Date + ' - ' + value.RaceName + ': ' + value.CourseName + ', ' + value.CourseDistance + 'M'
+					titleStr += value.RaceCondition.localeCompare('unknown') ? ' *' + value.RaceCondition + '*' : ''
+					$('.text-muted').text(titleStr);
+
 				    var resultStr = value.Rank + '. ' + value.FirstName + ' ' + value.LastName + ' (' + value.Year + ')'
-				    var timeStr = value.Time + ' (' + value.Pace + ') - ' + value.Grade + 'th grade'
+					var runnerId = parseInt(value.CompetitorId)
+					var gradeStr = value.Grade == 0 ? (runnerId >= 100000 && runnerId < 1000000 ? 'Special Guest' : 'Alumni' ) : value.Grade + 'th grade'
+				    var timeStr = value.Time + ' (' + value.Pace + ') - ' + gradeStr;
 					results = $(div).clone();
+					$(results).find('a').attr('href', '/xcCompetitor?cId='+ value.CompetitorId);
 					$(results).find('h4').text(resultStr);
 					$(results).find('p').text(timeStr);
 					$('.jumbotron').append(results);
@@ -56,50 +63,13 @@
 			}
 		});
 	});
-	
-	$(function(){
-		$.ajax({
-			url: '/getCourseInfo',
-			type: 'GET',
-			data: {
-				"courseId": courseId
-			},
-			success: function(res){
-				var resultsObj = JSON.parse(res);
-				var courseObj = resultsObj[0]
-				var genderStr = (genderId && genderId == 3) ? 'Girls' : 'Boys'
-				var courseStr = courseObj.CourseName + ' (' + courseObj.CourseDistance + 'M)'
-				var topStr = limit > 0 ? 'Top ' + limit : 'No Results for'
-				var titleStr =  topStr + ' ' + genderStr + ' - ' + courseStr
-				$('.text-muted').text(titleStr);
-			},
-			error: function(error){
-				console.log(error);
-			}
-		});
-	});
     </script>
+    <style>
+    	.jumbotron p {margin-bottom: 0px;font-size:18px;}
+	</style>
   </head>
   <body>
-
-    <div class="container">
-      <div class="header">
-        <nav>
-          <ul class="nav nav-pills pull-right">
-            <li role="presentation"><a href="/">Home</a></li>
-          </ul>
-        </nav>
-        <h3 class="text-muted"></h3>
-      </div>
-
-      <div class="jumbotron">
-
-      </div>
-
-      <footer class="footer">
-        <p>&copy; Cal Workouts 2018</p>
-      </footer>
-    </div>
+{% include "xc/body.html" %}
   </body>
 </html>
 
