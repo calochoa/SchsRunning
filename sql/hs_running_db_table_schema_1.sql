@@ -48,7 +48,7 @@ DROP TABLE IF EXISTS `Gender`;
 -- shared
 CREATE TABLE `Gender` (
 	`genderId` TINYINT NOT NULL AUTO_INCREMENT,
-	`gender` VARCHAR(255) UNIQUE NOT NULL,
+	`gender` VARCHAR(191) UNIQUE NOT NULL,
 
 	PRIMARY KEY (`genderId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE utf8mb4_unicode_ci;
@@ -60,8 +60,8 @@ INSERT INTO `Gender` (`genderId`, `gender`) VALUES (1, "unknown"), (2, "male"), 
 -- shared
 CREATE TABLE `Athlete` (
 	`athleteId` BIGINT NOT NULL AUTO_INCREMENT,
-	`firstName` VARCHAR(255) NOT NULL,
-	`lastName` VARCHAR(255) NOT NULL,
+	`firstName` VARCHAR(191) NOT NULL,
+	`lastName` VARCHAR(191) NOT NULL,
 	`startHsYear` YEAR NOT NULL,
 	`endHsYear` YEAR NOT NULL,
 	`genderId` TINYINT DEFAULT 1,
@@ -99,7 +99,7 @@ INSERT INTO `Competitor` (`competitorId`, `athleteId`, `year`, `grade`) VALUES (
 -- xc
 CREATE TABLE `CourseType` (
 	`courseTypeId` TINYINT NOT NULL AUTO_INCREMENT,
-	`courseType` VARCHAR(255) UNIQUE NOT NULL,
+	`courseType` VARCHAR(191) UNIQUE NOT NULL,
 
 	PRIMARY KEY (`courseTypeId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE utf8mb4_unicode_ci;
@@ -111,7 +111,7 @@ INSERT INTO `CourseType` (`courseTypeId`, `courseType`) VALUES (1, "unknown"),(2
 -- xc, but could be shared
 CREATE TABLE `State` (
 	`stateId` TINYINT NOT NULL AUTO_INCREMENT,
-	`state` VARCHAR(255) UNIQUE NOT NULL,
+	`state` VARCHAR(191) UNIQUE NOT NULL,
 
 	PRIMARY KEY (`stateId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE utf8mb4_unicode_ci;
@@ -124,7 +124,7 @@ INSERT INTO `State` (`stateId`, `state`) VALUES (1, "California");
 CREATE TABLE `Location` (
 	`locationId` INT NOT NULL AUTO_INCREMENT,
 	`stateId` TINYINT DEFAULT 1,
-	`city` VARCHAR(255) NOT NULL,
+	`city` VARCHAR(191) NOT NULL,
 
 	PRIMARY KEY (`locationId`),
 	UNIQUE KEY (`stateId`,`city`),
@@ -141,7 +141,7 @@ INSERT INTO `Location` (`locationId`,`city`) VALUES
 -- xc, but could be shared
 CREATE TABLE `RaceCondition` (
 	`raceConditionId` TINYINT NOT NULL AUTO_INCREMENT,
-	`raceCondition` VARCHAR(255) UNIQUE NOT NULL,
+	`raceCondition` VARCHAR(191) UNIQUE NOT NULL,
 
 	PRIMARY KEY (`raceConditionId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE utf8mb4_unicode_ci;
@@ -154,7 +154,7 @@ INSERT INTO `RaceCondition` (`raceConditionId`, `raceCondition`) VALUES
 -- xc, but could be shared
 CREATE TABLE `RaceName` (
 	`raceNameId` TINYINT NOT NULL AUTO_INCREMENT,
-	`raceName` VARCHAR(255) UNIQUE NOT NULL,
+	`raceName` VARCHAR(191) UNIQUE NOT NULL,
 
 	PRIMARY KEY (`raceNameId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE utf8mb4_unicode_ci;
@@ -175,7 +175,7 @@ INSERT INTO `RaceName` (`raceNameId`, `raceName`) VALUES (100, "Crystal Springs 
 -- xc
 CREATE TABLE `Course` (
 	`courseId` INT NOT NULL AUTO_INCREMENT,
-	`courseName` VARCHAR(255) NOT NULL,
+	`courseName` VARCHAR(191) NOT NULL,
 	`courseDistance` DECIMAL(4,2) NOT NULL,
 	`locationId` INT DEFAULT 1,
 	`courseTypeId` TINYINT DEFAULT 1,
@@ -243,8 +243,8 @@ INSERT INTO `Result` (`competitorId`, `raceId`, `time`, `pace`) VALUES ('1000210
 -- shared
 CREATE TABLE `Coach` (
 	`coachId` TINYINT NOT NULL AUTO_INCREMENT,
-	`firstName` VARCHAR(255) NOT NULL,
-	`lastName` VARCHAR(255) NOT NULL,
+	`firstName` VARCHAR(191) NOT NULL,
+	`lastName` VARCHAR(191) NOT NULL,
 	`genderId` TINYINT DEFAULT 1,
 	
 	PRIMARY KEY (`coachId`),
@@ -260,7 +260,7 @@ INSERT INTO `Coach` (`coachId`,`firstName`,`lastName`,`genderId`) VALUES (1, "Ju
 -- shared
 CREATE TABLE `CoachType` (
 	`coachTypeId` TINYINT NOT NULL AUTO_INCREMENT,
-	`coachType` VARCHAR(255) UNIQUE NOT NULL,
+	`coachType` VARCHAR(191) UNIQUE NOT NULL,
 
 	PRIMARY KEY (`coachTypeId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE utf8mb4_unicode_ci;
@@ -287,7 +287,7 @@ INSERT INTO `CoachSeason` (`coachId`,`coachTypeId`,`year`) VALUES (1, 1, 1992), 
 -- shared
 CREATE TABLE `Squad` (
 	`squadId` TINYINT NOT NULL AUTO_INCREMENT,
-	`squadName` VARCHAR(255) UNIQUE NOT NULL,
+	`squadName` VARCHAR(191) UNIQUE NOT NULL,
 	`squadAbbr` VARCHAR(7) UNIQUE NOT NULL,
 
 	PRIMARY KEY (`squadId`)
@@ -300,7 +300,7 @@ INSERT INTO `Squad` (`squadId`, `squadName`, `squadAbbr`) VALUES (1, "Varsity Gi
 -- shared
 CREATE TABLE `Award` (
 	`awardId` TINYINT NOT NULL AUTO_INCREMENT,
-	`awardName` VARCHAR(255) UNIQUE NOT NULL,
+	`awardName` VARCHAR(191) UNIQUE NOT NULL,
 	`awardShortName` VARCHAR(31) UNIQUE NOT NULL,
 
 	PRIMARY KEY (`awardId`)
@@ -313,7 +313,7 @@ INSERT INTO `Award` (`awardId`, `awardName`, `awardShortName`) VALUES (1, "Most 
 -- shared
 CREATE TABLE `Sport` (
 	`sportId` TINYINT NOT NULL AUTO_INCREMENT,
-	`sportName` VARCHAR(255) UNIQUE NOT NULL,
+	`sportName` VARCHAR(191) UNIQUE NOT NULL,
 
 	PRIMARY KEY (`sportId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE utf8mb4_unicode_ci;
@@ -344,7 +344,7 @@ INSERT INTO `Awardee` (`athleteId`, `awardId`, `squadId`, `year`) VALUES (100012
 -- shared
 CREATE TABLE `SpecialAchievement` (
 	`specialAchievementId` TINYINT NOT NULL AUTO_INCREMENT,
-	`specialAchievementName` VARCHAR(255) UNIQUE NOT NULL,
+	`specialAchievementName` VARCHAR(191) UNIQUE NOT NULL,
 
 	PRIMARY KEY (`specialAchievementId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE utf8mb4_unicode_ci;
@@ -357,7 +357,7 @@ INSERT INTO `SpecialAchievement` (`specialAchievementId`, `specialAchievementNam
 CREATE TABLE `SpecialAchiever` (
 	`competitorId` VARCHAR(15) NOT NULL,
 	`specialAchievementId` TINYINT NOT NULL,
-	`notes` VARCHAR(255) NOT NULL,
+	`notes` VARCHAR(191) NOT NULL,
     `sportId` TINYINT DEFAULT 1,
 	`year` YEAR NOT NULL,
 
@@ -380,7 +380,7 @@ INSERT INTO `SpecialAchiever` (`competitorId`, `specialAchievementId`, `notes`, 
 -- track and field
 CREATE TABLE `EventType` (
 	`eventTypeId` TINYINT NOT NULL AUTO_INCREMENT,
-	`eventType` VARCHAR(255) UNIQUE NOT NULL,
+	`eventType` VARCHAR(191) UNIQUE NOT NULL,
 
 	PRIMARY KEY (`eventTypeId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE utf8mb4_unicode_ci;
@@ -392,7 +392,7 @@ INSERT INTO `EventType` (`eventTypeId`, `eventType`) VALUES (1, "Track"), (2, "F
 -- track and field
 CREATE TABLE `EventSubType` (
 	`eventSubTypeId` TINYINT NOT NULL AUTO_INCREMENT,
-	`eventSubType` VARCHAR(255) UNIQUE NOT NULL,
+	`eventSubType` VARCHAR(191) UNIQUE NOT NULL,
 	`eventTypeId` TINYINT,
 
 	PRIMARY KEY (`eventSubTypeId`),
@@ -406,7 +406,7 @@ INSERT INTO `EventSubType` (`eventSubTypeId`, `eventSubType`, `eventTypeId`) VAL
 -- track and field
 CREATE TABLE `Event` (
 	`eventId` TINYINT NOT NULL AUTO_INCREMENT,
-	`event` VARCHAR(255) UNIQUE NOT NULL,
+	`event` VARCHAR(191) UNIQUE NOT NULL,
 	`eventSubTypeId` TINYINT,
 
 	PRIMARY KEY (`eventId`),
@@ -426,7 +426,7 @@ INSERT INTO `Event` (`eventId`, `event`, `eventSubTypeId`) VALUES
 -- track and field
 CREATE TABLE `TrackType` (
 	`trackTypeId` TINYINT NOT NULL AUTO_INCREMENT,
-	`trackType` VARCHAR(255) UNIQUE NOT NULL,
+	`trackType` VARCHAR(191) UNIQUE NOT NULL,
 
 	PRIMARY KEY (`trackTypeId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE utf8mb4_unicode_ci;
@@ -456,7 +456,7 @@ INSERT INTO `FieldResult` (`competitorId`, `eventId`, `footPartOfDistance`, `inc
 -- track and field
 CREATE TABLE `RaceTimeType` (
 	`raceTimeTypeId` VARCHAR(1) UNIQUE NOT NULL,
-	`raceTimeType` VARCHAR(255) UNIQUE NOT NULL,
+	`raceTimeType` VARCHAR(191) UNIQUE NOT NULL,
 
 	PRIMARY KEY (`raceTimeTypeId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE utf8mb4_unicode_ci;
