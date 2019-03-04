@@ -12,12 +12,22 @@ cross_country_db_app = Blueprint('cross_country_db_app', __name__, template_fold
 
 
 # MySQL configurations
-# heroku
+"""
+# heroku - ClearDB
 mydb = mysql.connector.connect(
     host="us-cdbr-iron-east-05.cleardb.net",
     user="b31e9fc461a5fd",
     passwd="105c24d7",
     database="heroku_d5e2f87dc3f9601",
+    auth_plugin='mysql_native_password'
+)
+"""
+# heroku - JawsDB
+mydb = mysql.connector.connect(
+    host="ofcmikjy9x4lroa2.cbetxkdyhwsb.us-east-1.rds.amazonaws.com ",
+    user="wrcpd5zfxppr2cew",
+    passwd="deyz4an53hsnvwko",
+    database="sodfafe0xvqscbco",
     auth_plugin='mysql_native_password'
 )
 """
