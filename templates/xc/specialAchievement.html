@@ -18,12 +18,14 @@
     <script src="../static/js/utils.js"></script>
     <script>
     var splAchvId = {{splAchvId}};
+    var sportId = {{sportId}};
 	$(function(){
 		$.ajax({
 			url: '/getSpecialAchieversById',
 			type: 'GET',
 			data: {
 				"splAchvId": splAchvId,
+				"sportId": sportId,
 			},
 			success: function(res){
 				var div = $('<div>')
