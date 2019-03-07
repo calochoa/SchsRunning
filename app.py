@@ -5,20 +5,51 @@ __email__ = "calochoa@gmail.com"
 
 from flask import Flask, render_template
 
-from bin.apps.cross_country_app import cross_country_app
-from bin.apps.cross_country_db_app import cross_country_db_app
+# cross country related apps
+from bin.apps.xc.xc_app import xc_app
+from bin.apps.xc.xc_db_app import xc_db_app
+from bin.apps.xc.xc_course_results_seo_app import xc_course_results_seo_app
+from bin.apps.xc.xc_season_seo_app import xc_season_seo_app
+from bin.apps.xc.xc_runners_seo_app import xc_runners_seo_app
+from bin.apps.xc.xc_coaches_seo_app import xc_coaches_seo_app
+from bin.apps.xc.xc_special_achievements_seo_app import xc_special_achievements_seo_app
+from bin.apps.xc.xc_awards_seo_app import xc_awards_seo_app
+from bin.apps.xc.xc_photos_seo_app import xc_photos_seo_app
+from bin.apps.xc.xc_videos_seo_app import xc_videos_seo_app
+from bin.apps.xc.xc_race_results_seo_app import xc_race_results_seo_app
+from bin.apps.xc.xc_competitors_seo_app import xc_competitors_seo_app
+
+# shared related apps
 from bin.apps.shared_db_app import shared_db_app
-from bin.apps.track_and_field_app import track_and_field_app
-from bin.apps.track_and_field_db_app import track_and_field_db_app
-from bin.apps.workouts_app import workouts_app
+
+# track and field related apps
+from bin.apps.track.track_and_field_app import track_and_field_app
+from bin.apps.track.track_and_field_db_app import track_and_field_db_app
+
+# workout related apps
+from bin.apps.workouts.workouts_app import workouts_app
 
 
 app = Flask(__name__)
-app.register_blueprint(cross_country_app)
-app.register_blueprint(cross_country_db_app)
+
+app.register_blueprint(xc_app)
+app.register_blueprint(xc_db_app)
+app.register_blueprint(xc_course_results_seo_app)
+app.register_blueprint(xc_season_seo_app)
+app.register_blueprint(xc_runners_seo_app)
+app.register_blueprint(xc_coaches_seo_app)
+app.register_blueprint(xc_special_achievements_seo_app)
+app.register_blueprint(xc_awards_seo_app)
+app.register_blueprint(xc_photos_seo_app)
+app.register_blueprint(xc_videos_seo_app)
+app.register_blueprint(xc_race_results_seo_app)
+app.register_blueprint(xc_competitors_seo_app)
+
 app.register_blueprint(shared_db_app)
+
 app.register_blueprint(track_and_field_app)
 app.register_blueprint(track_and_field_db_app)
+
 app.register_blueprint(workouts_app)
 
 app.config.update(
@@ -31,6 +62,7 @@ def main():
     return render_template('index.html')
 
 
+@app.route('/related-sites',methods=['GET'])
 @app.route('/relatedSites',methods=['GET'])
 def relatedSites():
     return render_template('relatedSites.html')

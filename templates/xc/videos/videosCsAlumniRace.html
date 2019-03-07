@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-109364959-1"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+
+	  gtag('config', 'UA-109364959-1');
+	</script>
+    <title>SCHS XC Videos: Crystal Springs Alumni Race</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <link href="https://getbootstrap.com/docs/3.3/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet">
+    <link href="../../../static/css/signup.css" rel="stylesheet">
+    <script src="../../../static/js/jquery-1.11.2.js"></script>
+    <script>
+    	$(function(){
+    		var videos = ["yDG5khQ_l1c"]
+    		var dates = ["07/21/2012"]
+    		var races = ["1st"]
+			for (index = 0; index < videos.length; index++) {
+				var video = videos[index];
+				var date = dates[index];
+				var race = races[index];
+   				$('.jumbotron').append(
+   					'<h4>' + race + ' Annual Race - ' + date + '</h4>'
+   					+ '<iframe width="560" height="315" src="https://www.youtube.com/embed/' + video + '?rel=0" '
+   					+ 'frameborder="0" allowfullscreen></iframe>'    			
+    			);
+			}
+      $('.text-muted').text('SCHS XC Videos: Crystal Springs Alumni Race');
+		});
+    </script>
+  </head>
+  <body>
+{% include "xc/body.html" %}
+  </body>
+</html>
+
