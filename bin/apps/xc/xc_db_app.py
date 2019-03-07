@@ -21,6 +21,7 @@ mydb = mysql.connector.connect(
     database="heroku_d5e2f87dc3f9601",
     auth_plugin='mysql_native_password'
 )
+"""
 # heroku - JawsDB
 mydb = mysql.connector.connect(
     host="ofcmikjy9x4lroa2.cbetxkdyhwsb.us-east-1.rds.amazonaws.com ",
@@ -38,7 +39,7 @@ mydb = mysql.connector.connect(
     database="highSchoolRunning",
     auth_plugin='mysql_native_password'
 )
-
+"""
 
 @xc_db_app.route('/getTopCourseResults',methods=['GET'])
 def getTopCourseResults():
