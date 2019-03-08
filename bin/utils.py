@@ -9,21 +9,21 @@ class Utils(object):
 
     @staticmethod
     def formatTime(time):
-        timeStr = str(time)[:9]
-        if timeStr.startswith('0:'):
-            timeStr = timeStr[2:]
-        if timeStr.startswith('0'):
-            timeStr = timeStr[1:]
-        return timeStr
+        time_str = str(time)[:9]
+        if time_str.startswith('0:'):
+            time_str = time_str[2:]
+        if time_str.startswith('0'):
+            time_str = time_str[1:]
+        return time_str
 
     @staticmethod
     def formatDistance(distance):
-        distanceStr = str(distance)
-        if distanceStr.endswith('.00'):
-            distanceStr = distanceStr[:-3]
-        elif distanceStr.endswith('0'):
-        	distanceStr = distanceStr[:-1]
-        return distanceStr
+        distance_str = str(distance)
+        if distance_str.endswith('.00'):
+            distance_str = distance_str[:-3]
+        elif distance_str.endswith('0'):
+        	distance_str = distance_str[:-1]
+        return distance_str
     
     @staticmethod
     def getTimeDiff(time_1, time_2):
@@ -66,17 +66,22 @@ class Utils(object):
         return min_str + ':' + sec_str
 
     @staticmethod
-    def formatTrackTime(time):
-        timeStr = str(time)[:10]
-        if timeStr.startswith('0:'):
-            timeStr = timeStr[2:]
-        if timeStr.startswith('00:'):
-            timeStr = timeStr[3:]
-        if timeStr.startswith('0'):
-            timeStr = timeStr[1:]
-        if '.' in timeStr and timeStr.endswith('0'):
-            timeStr = timeStr[:-1]
-        if '.' not in timeStr:
-            timeStr += '.0'
-        return timeStr
+    def format_track_time(time):
+        time_str = str(time)[:10]
+        if time_str.startswith('0:'):
+            time_str = time_str[2:]
+        if time_str.startswith('00:'):
+            time_str = time_str[3:]
+        if time_str.startswith('0'):
+            time_str = time_str[1:]
+        if '.' in time_str and time_str.endswith('0'):
+            time_str = time_str[:-1]
+        if '.' not in time_str:
+            time_str += '.0'
+        # time is a minute+, so we want to keep it in seconds IF its under 100 seconds
+        if time_str.startswith('1:'):
+            seconds = float(time_str[2:])
+            if seconds < 40:
+                time_str = str(seconds + 60)
+        return time_str
 

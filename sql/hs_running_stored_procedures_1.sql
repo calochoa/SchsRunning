@@ -694,7 +694,7 @@ BEGIN
 SELECT @`rownum` := @`rownum` + 1 AS `myrank`, `t`.* 
 FROM (
 	SELECT DISTINCT `event`, `firstname`, `lastname`, `RaceResult`.`time`, 
-		`raceTimeTypeId`, `stateMark`, `year`, `grade`, `competitorid`
+		`raceTimeTypeId`, `year`, `grade`, `competitorid`
 	FROM `RaceResult` NATURAL JOIN `Event` NATURAL JOIN `Competitor` 
 		NATURAL JOIN `Athlete` NATURAL JOIN `Gender` 
 	WHERE `eventId`=`inputEventId` AND `genderid`=`inputGenderId` 
@@ -726,7 +726,7 @@ BEGIN
 SELECT @`rownum` := @`rownum` + 1 AS `myrank`, `t`.* 
 FROM (
 	SELECT DISTINCT `event`, `firstname`, `lastname`, `footPartOfDistance`, 
-		`inchPartOfDistance`, `stateMark`, `year`, `grade`, `competitorid`
+		`inchPartOfDistance`, `year`, `grade`, `competitorid`
 	FROM `FieldResult` NATURAL JOIN `Event` NATURAL JOIN `Competitor` 
 		NATURAL JOIN `Athlete` NATURAL JOIN `Gender` 
 	WHERE `eventId`=`inputEventId` AND `genderid`=`inputGenderId` 
@@ -739,6 +739,43 @@ FROM (
 END //
 DELIMITER ;
 
+
+
+DROP PROCEDURE IF EXISTS `GetTopTrackRelayTeam`;
+
+SET NAMES utf8mb4;
+SET collation_connection = 'utf8mb4_unicode_ci';
+
+DELIMITER //
+CREATE PROCEDURE `GetTopTrackRelayTeam`(
+	IN `inputEventId` INT, 
+	IN `inputGenderId` TINYINT, 
+	IN `inputLimit` INT
+)
+BEGIN
+
+-- this part is necessary to distinguish between a competitor in xc vs track season:  AND `RaceResult`.`year`=`Competitor`.`year`
+SELECT @`rownum` := @`rownum` + 1 AS `myrank`, `t`.* 
+FROM (
+	SELECT DISTINCT `event`, `RelayResult`.`time`, `raceTimeTypeId`, `RelayResult`.`year`, 
+        `competitorId1`, CONCAT(`A1`.`firstName`, " ", `A1`.`lastName`) AS `fullName1`, `C1`.`grade` AS `grade1`,
+        `competitorId2`, CONCAT(`A2`.`firstName`, " ", `A2`.`lastName`) AS `fullName2`, `C2`.`grade` AS `grade2`,
+        `competitorId3`, CONCAT(`A3`.`firstName`, " ", `A3`.`lastName`) AS `fullName3`, `C3`.`grade` AS `grade3`,
+        `competitorId4`, CONCAT(`A4`.`firstName`, " ", `A4`.`lastName`) AS `fullName4`, `C4`.`grade` AS `grade4`
+	FROM `RelayResult` NATURAL JOIN `Event` 
+		JOIN `Competitor` AS `C1` ON (`C1`.`competitorId`=`competitorId1`) JOIN `Athlete` AS `A1` ON (`A1`.`athleteId`=`C1`.`athleteId`) 
+        JOIN `Competitor` AS `C2` ON (`C2`.`competitorId`=`competitorId2`) JOIN `Athlete` AS `A2` ON (`A2`.`athleteId`=`C2`.`athleteId`) 
+        JOIN `Competitor` AS `C3` ON (`C3`.`competitorId`=`competitorId3`) JOIN `Athlete` AS `A3` ON (`A3`.`athleteId`=`C3`.`athleteId`) 
+        JOIN `Competitor` AS `C4` ON (`C4`.`competitorId`=`competitorId4`) JOIN `Athlete` AS `A4` ON (`A4`.`athleteId`=`C4`.`athleteId`) 
+        JOIN `Gender` ON (`Gender`.`genderId`=`A1`.`genderId`)
+	WHERE `eventId`=`inputEventId` AND `Gender`.`genderid`=`inputGenderId` 
+	ORDER BY `RelayResult`.`time`, `RelayResult`.`year`
+	LIMIT `inputLimit`
+) `t`, 
+(SELECT @`rownum` := 0) `r`;
+
+END //
+DELIMITER ;
 
 
 COMMIT;
@@ -770,9 +807,9 @@ CALL `GetXcAlumniResultsByYear`(2017);
 CALL `GetPastXcAlumniChampions`();
 CALL `GetSpecialAchieversById`('1,2,3', 1);
 -- track specific calls
-CALL `GetTopTrackRaceIndividual`(1,2,15);
-CALL `GetTopFieldIndividual`(29, 2, 20);
-
+CALL `GetTopTrackRaceIndividual`(3,3,15);
+CALL `GetTopFieldIndividual`(29, 3, 20);
+CALL `GetTopTrackRelayTeam`(25, 2, 20);
 
 
 -- need to consider if i want to separate by course, ie ccs: Crystal vs Toro
