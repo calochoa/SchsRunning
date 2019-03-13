@@ -445,7 +445,6 @@ def get_track_athletes():
 
         track_athletes_dict = []
         for row in data:
-            print row
             track_athletes_dict.append({
                 'AthleteId': row[0],
                 'FirstName': row[1],
