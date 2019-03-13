@@ -990,7 +990,7 @@ SELECT `event`, `eventId`, CONCAT(`firstname`, " ", `lastname`) AS `fullName`,
 	`time` AS `result1`, `raceTimeTypeId` AS `result2`, `grade`, `competitorid`, `year`, `squadName`, `squadId`
 FROM `RaceResult` NATURAL JOIN `Event` NATURAL JOIN `Competitor` 
 	NATURAL JOIN `Athlete` NATURAL JOIN `Squad` 
-WHERE `RaceResult`.`year`=`Competitor`.`year` AND `raceTimeTypeId` NOT IN ("c", "F") AND `competitorId`=`inputCompetitorId`
+WHERE `RaceResult`.`year`=`Competitor`.`year` AND `competitorId`=`inputCompetitorId`
 UNION
 -- query field results
 SELECT `event`, `eventId`, CONCAT(`firstname`, " ", `lastname`) AS `fullName`, 
@@ -1005,29 +1005,151 @@ SELECT `event`, `eventId`, CONCAT(`firstname`, " ", `lastname`) AS `fullName`,
     `RelayResult`.`time` AS `result1`, `raceTimeTypeId` AS `result2`, `grade`, `competitorid`, `RelayResult`.`year`, `squadName`, `squadId`
 FROM `RelayResult` NATURAL JOIN `Event` NATURAL JOIN `Squad` 
 	JOIN `Competitor` ON (`Competitor`.`competitorId`=`competitorId1`) JOIN `Athlete`ON (`Athlete`.`athleteId`=`Competitor`.`athleteId`) 
-WHERE `RelayResult`.`year`=`Competitor`.`year` AND `raceTimeTypeId` NOT IN ("c", "F") AND `competitorId`=`inputCompetitorId`
+WHERE `RelayResult`.`year`=`Competitor`.`year` AND `competitorId`=`inputCompetitorId`
 UNION
 -- query leg 2 of relay results
 SELECT `event`, `eventId`, CONCAT(`firstname`, " ", `lastname`) AS `fullName`, 
 	`RelayResult`.`time` AS `result1`, `raceTimeTypeId` AS `result2`, `grade`, `competitorid`, `RelayResult`.`year`, `squadName`, `squadId`
 FROM `RelayResult` NATURAL JOIN `Event` NATURAL JOIN `Squad` 
 	JOIN `Competitor` ON (`Competitor`.`competitorId`=`competitorId2`) JOIN `Athlete`ON (`Athlete`.`athleteId`=`Competitor`.`athleteId`) 
-WHERE `RelayResult`.`year`=`Competitor`.`year` AND `raceTimeTypeId` NOT IN ("c", "F") AND `competitorId`=`inputCompetitorId`
+WHERE `RelayResult`.`year`=`Competitor`.`year` AND `competitorId`=`inputCompetitorId`
 UNION
 -- query leg 3 of relay results
 SELECT `event`, `eventId`, CONCAT(`firstname`, " ", `lastname`) AS `fullName`, 
 	`RelayResult`.`time` AS `result1`, `raceTimeTypeId` AS `result2`, `grade`, `competitorid`, `RelayResult`.`year`, `squadName`, `squadId`
 FROM `RelayResult` NATURAL JOIN `Event` NATURAL JOIN `Squad` 
 	JOIN `Competitor` ON (`Competitor`.`competitorId`=`competitorId3`) JOIN `Athlete`ON (`Athlete`.`athleteId`=`Competitor`.`athleteId`) 
-WHERE `RelayResult`.`year`=`Competitor`.`year` AND `raceTimeTypeId` NOT IN ("c", "F") AND `competitorId`=`inputCompetitorId`
+WHERE `RelayResult`.`year`=`Competitor`.`year` AND `competitorId`=`inputCompetitorId`
 UNION
 -- query leg 4 of relay results
 SELECT `event`, `eventId`, CONCAT(`firstname`, " ", `lastname`) AS `fullName`, 
 	`RelayResult`.`time` AS `result1`, `raceTimeTypeId` AS `result2`, `grade`, `competitorid`, `RelayResult`.`year`, `squadName`, `squadId`
 FROM `RelayResult` NATURAL JOIN `Event` NATURAL JOIN `Squad` 
 	JOIN `Competitor` ON (`Competitor`.`competitorId`=`competitorId4`) JOIN `Athlete`ON (`Athlete`.`athleteId`=`Competitor`.`athleteId`) 
-WHERE `RelayResult`.`year`=`Competitor`.`year` AND `raceTimeTypeId` NOT IN ("c", "F") AND `competitorId`=`inputCompetitorId`
+WHERE `RelayResult`.`year`=`Competitor`.`year` AND `competitorId`=`inputCompetitorId`
 ORDER BY `eventId`;
+
+END //
+DELIMITER ;
+
+
+
+DROP PROCEDURE IF EXISTS `GetTrackAthletes`;
+
+SET NAMES utf8mb4;
+SET collation_connection = 'utf8mb4_unicode_ci';
+
+DELIMITER //
+CREATE PROCEDURE `GetTrackAthletes`(
+	IN `inputGenderId` INT
+)
+BEGIN
+
+-- these parts are necessary to distinguish between a competitor in xc vs track season:  
+-- `RaceResult`.`year`=`year` ... `FieldResult`.`year`=`year` ... `RelayResult`.`year`=`Competitor`.`year`
+SELECT `athleteid`, `firstname`, `lastname`,
+	GROUP_CONCAT(DISTINCT `year` ORDER BY `year` ASC SEPARATOR ", ") `years`
+FROM (
+	-- query all race results
+	SELECT  `athleteid`, `firstname`, `lastname`, `year`
+	FROM `RaceResult` NATURAL JOIN `Competitor` NATURAL JOIN `Athlete` NATURAL JOIN `Gender` 
+	WHERE  `RaceResult`.`year`=`year` AND `genderId`=`inputGenderId`
+	UNION
+    -- query all field results
+	SELECT  `athleteid`, `firstname`, `lastname`, `year`
+	FROM `FieldResult` NATURAL JOIN `Competitor` NATURAL JOIN `Athlete` NATURAL JOIN `Gender` 
+	WHERE  `FieldResult`.`year`=`year` AND `genderId`=`inputGenderId`
+    UNION
+    -- query 1st leg of all relay results
+    SELECT `Competitor`.`athleteid`, `firstname`, `lastname`, `Competitor`.`year`
+	FROM `RelayResult` NATURAL JOIN `Gender` 
+		JOIN `Competitor` ON (`Competitor`.`competitorId`=`competitorId1`) 
+        JOIN `Athlete` ON (`Athlete`.`athleteId`=`Competitor`.`athleteId`) 
+	WHERE `RelayResult`.`year`=`Competitor`.`year` AND `Athlete`.`genderId`=`inputGenderId`
+    UNION
+    -- query 2nd leg of all relay results
+    SELECT `Competitor`.`athleteid`, `firstname`, `lastname`, `Competitor`.`year`
+	FROM `RelayResult` NATURAL JOIN `Gender` 
+		JOIN `Competitor` ON (`Competitor`.`competitorId`=`competitorId2`) 
+        JOIN `Athlete` ON (`Athlete`.`athleteId`=`Competitor`.`athleteId`) 
+	WHERE `RelayResult`.`year`=`Competitor`.`year` AND `Athlete`.`genderId`=`inputGenderId`
+    UNION
+    -- query 3rd leg of all relay results
+    SELECT `Competitor`.`athleteid`, `firstname`, `lastname`, `Competitor`.`year`
+	FROM `RelayResult` NATURAL JOIN `Gender` 
+		JOIN `Competitor` ON (`Competitor`.`competitorId`=`competitorId3`) 
+        JOIN `Athlete` ON (`Athlete`.`athleteId`=`Competitor`.`athleteId`) 
+	WHERE `RelayResult`.`year`=`Competitor`.`year` AND `Athlete`.`genderId`=`inputGenderId`
+    UNION
+    -- query 4th leg of all relay results
+    SELECT `Competitor`.`athleteid`, `firstname`, `lastname`, `Competitor`.`year`
+	FROM `RelayResult` NATURAL JOIN `Gender` 
+		JOIN `Competitor` ON (`Competitor`.`competitorId`=`competitorId4`) 
+        JOIN `Athlete` ON (`Athlete`.`athleteId`=`Competitor`.`athleteId`) 
+	WHERE `RelayResult`.`year`=`Competitor`.`year` AND `Athlete`.`genderId`=`inputGenderId`
+) `t`
+GROUP BY `athleteid`, `firstname`, `lastname`
+ORDER BY `lastname`, `firstname`;
+
+END //
+DELIMITER ;
+
+
+
+DROP PROCEDURE IF EXISTS `GetTrackAthleteResults`;
+
+SET NAMES utf8mb4;
+SET collation_connection = 'utf8mb4_unicode_ci';
+
+DELIMITER //
+CREATE PROCEDURE `GetTrackAthleteResults`(
+	IN `inputAthleteId` INT
+)
+BEGIN
+
+-- query race results
+SELECT `event`, `eventId`, CONCAT(`firstname`, " ", `lastname`) AS `fullName`, 
+	`time` AS `result1`, `raceTimeTypeId` AS `result2`, `grade`, `competitorid`, `year`, `squadName`, `squadId`
+FROM `RaceResult` NATURAL JOIN `Event` NATURAL JOIN `Competitor` 
+	NATURAL JOIN `Athlete` NATURAL JOIN `Squad` 
+WHERE `RaceResult`.`year`=`Competitor`.`year` AND `athleteid`=`inputAthleteId`
+UNION
+-- query field results
+SELECT `event`, `eventId`, CONCAT(`firstname`, " ", `lastname`) AS `fullName`, 
+	`footPartOfDistance` AS `result1`, `inchPartOfDistance` AS `result2`, 
+    `grade`, `competitorid`, `year`, `squadName`, `squadId`
+FROM `FieldResult` NATURAL JOIN `Event` NATURAL JOIN `Competitor` 
+	NATURAL JOIN `Athlete` NATURAL JOIN `Squad` 
+WHERE `FieldResult`.`year`=`Competitor`.`year` AND `athleteid`=`inputAthleteId`
+UNION
+-- query leg 1 of relay results
+SELECT `event`, `eventId`, CONCAT(`firstname`, " ", `lastname`) AS `fullName`, 
+    `RelayResult`.`time` AS `result1`, `raceTimeTypeId` AS `result2`, `grade`, `competitorid`, `RelayResult`.`year`, `squadName`, `squadId`
+FROM `RelayResult` NATURAL JOIN `Event` NATURAL JOIN `Squad` 
+	JOIN `Competitor` ON (`Competitor`.`competitorId`=`competitorId1`) JOIN `Athlete`ON (`Athlete`.`athleteId`=`Competitor`.`athleteId`) 
+WHERE `RelayResult`.`year`=`Competitor`.`year` AND `Athlete`.`athleteid`=`inputAthleteId`
+UNION
+-- query leg 2 of relay results
+SELECT `event`, `eventId`, CONCAT(`firstname`, " ", `lastname`) AS `fullName`, 
+	`RelayResult`.`time` AS `result1`, `raceTimeTypeId` AS `result2`, `grade`, `competitorid`, `RelayResult`.`year`, `squadName`, `squadId`
+FROM `RelayResult` NATURAL JOIN `Event` NATURAL JOIN `Squad` 
+	JOIN `Competitor` ON (`Competitor`.`competitorId`=`competitorId2`) JOIN `Athlete`ON (`Athlete`.`athleteId`=`Competitor`.`athleteId`) 
+WHERE `RelayResult`.`year`=`Competitor`.`year` AND `Athlete`.`athleteid`=`inputAthleteId`
+UNION
+-- query leg 3 of relay results
+SELECT `event`, `eventId`, CONCAT(`firstname`, " ", `lastname`) AS `fullName`, 
+	`RelayResult`.`time` AS `result1`, `raceTimeTypeId` AS `result2`, `grade`, `competitorid`, `RelayResult`.`year`, `squadName`, `squadId`
+FROM `RelayResult` NATURAL JOIN `Event` NATURAL JOIN `Squad` 
+	JOIN `Competitor` ON (`Competitor`.`competitorId`=`competitorId3`) JOIN `Athlete`ON (`Athlete`.`athleteId`=`Competitor`.`athleteId`) 
+WHERE `RelayResult`.`year`=`Competitor`.`year` AND `Athlete`.`athleteid`=`inputAthleteId`
+UNION
+-- query leg 4 of relay results
+SELECT `event`, `eventId`, CONCAT(`firstname`, " ", `lastname`) AS `fullName`, 
+	`RelayResult`.`time` AS `result1`, `raceTimeTypeId` AS `result2`, `grade`, `competitorid`, `RelayResult`.`year`, `squadName`, `squadId`
+FROM `RelayResult` NATURAL JOIN `Event` NATURAL JOIN `Squad` 
+	JOIN `Competitor` ON (`Competitor`.`competitorId`=`competitorId4`) JOIN `Athlete`ON (`Athlete`.`athleteId`=`Competitor`.`athleteId`) 
+WHERE `RelayResult`.`year`=`Competitor`.`year` AND `Athlete`.`athleteid`=`inputAthleteId`
+ORDER BY `year`DESC, `eventId`;
 
 END //
 DELIMITER ;
@@ -1072,8 +1194,8 @@ CALL `GetTrackRaceResults`(1,2,2018);
 CALL `GetTrackFieldResults`(29,1,2018);
 CALL `GetTrackRelayResults`(25,1,2018);
 CALL `GetTrackCompetitorResults`("1000464.12");
-
-
+CALL `GetTrackAthletes`(2);
+CALL `GetTrackAthleteResults`(1000464)
 
 
 -- need to consider if i want to separate by course, ie ccs: Crystal vs Toro

@@ -43,7 +43,7 @@ mydb = mysql.connector.connect(
 track_db_app = Blueprint('track_db_app', __name__, template_folder='templates')
 
 
-@track_db_app.route('/getTrackHallfOfFameRaceResults',methods=['GET'])
+@track_db_app.route('/getTrackHallfOfFameRaceResults', methods=['GET'])
 def get_track_hall_of_fame_race_results():
     try:
         event_id = request.args.get('eventId', default = 1, type = int)
@@ -88,10 +88,10 @@ def get_track_hall_of_fame_race_results():
 
         return json.dumps(top_race_results_dict)
     except Exception as e:
-        return render_template('error.html',error = str(e))
+        return render_template('error.html', error=str(e))
 
 
-@track_db_app.route('/getTrackHallfOfFameRelayResults',methods=['GET'])
+@track_db_app.route('/getTrackHallfOfFameRelayResults', methods=['GET'])
 def get_track_hall_of_fame_relay_results():
     try:
         event_id = request.args.get('eventId', default = 1, type = int)
@@ -144,10 +144,10 @@ def get_track_hall_of_fame_relay_results():
 
         return json.dumps(top_relay_results_dict)
     except Exception as e:
-        return render_template('error.html',error = str(e))
+        return render_template('error.html', error=str(e))
 
 
-@track_db_app.route('/getTrackHallfOfFameFieldResults',methods=['GET'])
+@track_db_app.route('/getTrackHallfOfFameFieldResults', methods=['GET'])
 def get_track_hall_of_fame_field_results():
     try:
         event_id = request.args.get('eventId', default = 29, type = int)
@@ -194,10 +194,10 @@ def get_track_hall_of_fame_field_results():
 
         return json.dumps(top_field_results_dict)
     except Exception as e:
-        return render_template('error.html',error = str(e))
+        return render_template('error.html', error=str(e))
 
 
-@track_db_app.route('/getTrackCompetitorsByYear',methods=['GET'])
+@track_db_app.route('/getTrackCompetitorsByYear', methods=['GET'])
 def get_track_competitors_by_year():
     try:
         year = request.args.get('year', default = 2018, type = int)
@@ -220,10 +220,10 @@ def get_track_competitors_by_year():
 
         return json.dumps(competitors_dict)
     except Exception as e:
-        return render_template('error.html',error = str(e))
+        return render_template('error.html', error=str(e))
 
 
-@track_db_app.route('/getTrackEventsByYear',methods=['GET'])
+@track_db_app.route('/getTrackEventsByYear', methods=['GET'])
 def get_track_events_by_year():
     try:
         year = request.args.get('year', default = 2018, type = int)
@@ -246,10 +246,10 @@ def get_track_events_by_year():
 
         return json.dumps(races_dict)
     except Exception as e:
-        return render_template('error.html',error = str(e))
+        return render_template('error.html', error=str(e))
 
 
-@track_db_app.route('/getTrackRaceResults',methods=['GET'])
+@track_db_app.route('/getTrackRaceResults', methods=['GET'])
 def get_track_race_results():
     try:
         event_id = request.args.get('eventId', default = 1, type = int)
@@ -279,8 +279,8 @@ def get_track_race_results():
             race_results_dict.append({
                 'Rank': current_rank,
                 'Event': str(row[1]),
-                'FirstName': str(row[2]),
-                'LastName': str(row[3]),
+                'FirstName': row[2],
+                'LastName': row[3],
                 'Time': current_time,
                 'RaceTimeTypeId': str(row[5]),
                 'Grade': row[6],
@@ -291,10 +291,10 @@ def get_track_race_results():
 
         return json.dumps(race_results_dict)
     except Exception as e:
-        return render_template('error.html',error = str(e))
+        return render_template('error.html', error=str(e))
 
 
-@track_db_app.route('/getTrackFieldResults',methods=['GET'])
+@track_db_app.route('/getTrackFieldResults', methods=['GET'])
 def get_track_field_results():
     try:
         event_id = request.args.get('eventId', default = 29, type = int)
@@ -326,8 +326,8 @@ def get_track_field_results():
             field_results_dict.append({
                 'Rank': current_rank,
                 'Event': str(row[1]),
-                'FirstName': str(row[2]),
-                'LastName': str(row[3]),
+                'FirstName': row[2],
+                'LastName': row[3],
                 'FootPartOfDistance': foot_part_of_distance,
                 'InchPartOfDistance': inch_part_of_distance,
                 'Grade': row[6],
@@ -338,10 +338,10 @@ def get_track_field_results():
 
         return json.dumps(field_results_dict)
     except Exception as e:
-        return render_template('error.html',error = str(e))
+        return render_template('error.html', error=str(e))
 
 
-@track_db_app.route('/getTrackRelayResults',methods=['GET'])
+@track_db_app.route('/getTrackRelayResults', methods=['GET'])
 def get_track_relay_results():
     try:
         event_id = request.args.get('eventId', default = 25, type = int)
@@ -391,10 +391,10 @@ def get_track_relay_results():
 
         return json.dumps(relay_results_dict)
     except Exception as e:
-        return render_template('error.html',error = str(e))
+        return render_template('error.html', error=str(e))
 
 
-@track_db_app.route('/getTrackCompetitorResults',methods=['GET'])
+@track_db_app.route('/getTrackCompetitorResults', methods=['GET'])
 def get_track_competitor_results():
     try:
         competitor_id = request.args.get('competitorId', default='1000197.12', type=str)
@@ -430,5 +430,69 @@ def get_track_competitor_results():
 
         return json.dumps(competitor_results_dict)
     except Exception as e:
-        return render_template('error.html',error = str(e))
+        return render_template('error.html', error=str(e))
 
+
+@track_db_app.route('/getTrackAthletes', methods=['GET'])
+def get_track_athletes():
+    try:
+        gender_id = request.args.get('genderId', default=2, type=int)
+
+        cursor = mydb.cursor()
+        cursor.callproc('GetTrackAthletes', [gender_id])
+        for result in cursor.stored_results():
+            data = result.fetchall()
+
+        track_athletes_dict = []
+        for row in data:
+            print row
+            track_athletes_dict.append({
+                'AthleteId': row[0],
+                'FirstName': row[1],
+                'LastName': row[2],
+                'Years': str(row[3]),
+            })
+
+        return json.dumps(track_athletes_dict)
+    except Exception as e:
+        return render_template('error.html', error=str(e))
+
+
+@track_db_app.route('/getTrackAthleteResults',methods=['GET'])
+def get_track_athlete_results():
+    try:
+        athlete_id = request.args.get('athleteId', default=1, type=int)
+
+        cursor = mydb.cursor()
+        cursor.callproc('GetTrackAthleteResults', [athlete_id])
+        for result in cursor.stored_results():
+            data = result.fetchall()
+
+        track_athlete_results_dict = []
+        for row in data:
+            event_id = row[1]
+            resultStr = 'Unknown'
+            if event_id >= 1 and event_id <= 28:
+                current_time = row[3]
+                resultStr = '{0}{1}'.format(Utils.format_track_time(row[3]), row[4])
+            elif event_id >= 29 and event_id <= 37:
+                inch_part_of_distance = float(row[4])
+                if str(inch_part_of_distance).endswith('.0'):
+                    inch_part_of_distance = int(inch_part_of_distance)
+                resultStr = '{0}\' {1}"'.format(row[3], inch_part_of_distance)
+
+            track_athlete_results_dict.append({
+                'Event': str(row[0]),
+                'EventId': event_id,
+                'FullName': str(row[2]),
+                'Result': resultStr,
+                'Grade': row[5],
+                'CompetitorId': str(row[6]),
+                'Year': row[7],
+                'Squad': str(row[8]),
+                'SquadId': row[9],
+            })
+
+        return json.dumps(track_athlete_results_dict)
+    except Exception as e:
+        return render_template('error.html',error = str(e))
