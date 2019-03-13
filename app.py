@@ -26,6 +26,9 @@ from bin.apps.shared_db_app import shared_db_app
 from bin.apps.track.track_app import track_app
 from bin.apps.track.track_db_app import track_db_app
 from bin.apps.track.track_hall_of_fame_seo_app import track_hall_of_fame_seo_app
+from bin.apps.track.track_season_seo_app import track_season_seo_app
+from bin.apps.track.track_results_seo_app import track_results_seo_app
+from bin.apps.track.track_competitors_seo_app import track_competitors_seo_app
 
 # workout related apps
 from bin.apps.workouts.workouts_app import workouts_app
@@ -51,6 +54,9 @@ app.register_blueprint(shared_db_app)
 app.register_blueprint(track_app)
 app.register_blueprint(track_db_app)
 app.register_blueprint(track_hall_of_fame_seo_app)
+app.register_blueprint(track_season_seo_app)
+app.register_blueprint(track_results_seo_app)
+app.register_blueprint(track_competitors_seo_app)
 
 app.register_blueprint(workouts_app)
 

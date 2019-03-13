@@ -10,25 +10,26 @@
 
 	  gtag('config', 'UA-109364959-1');
 	</script>
-    <title>SCHS XC Competitor</title>
+    <title>SCHS Track Competitor</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
     <link href="https://getbootstrap.com/docs/3.3/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet">
     <link href="/static/css/signup.css" rel="stylesheet">
     <style>
-    .competitorResults p {
-    	font-size:18px;
-	}
+	    .competitorResults p {
+	    	font-size:18px;
+		}
     </style>
     <script src="/static/js/jquery-1.11.2.js"></script>
     <script src="/static/js/utils.js"></script>
     <script>
     var cId = '{{competitorId}}';
+
     var urlParams = parseURL();
     var competitorId = cId ? cId : urlParams.cId;
         
 	$(function(){
 		$.ajax({
-			url: '/getXcCompetitorResults',
+			url: '/getTrackCompetitorResults',
 			type: 'GET',
 			data: {
 				"competitorId": competitorId
@@ -46,20 +47,26 @@
 				var resultsObj = JSON.parse(res);
 				var results = '';
 				var fullName = '';
+				var gradeStr = '';
 				var titleStr = '';
 				$.each(resultsObj,function(index, value){
-					fullName = value.FirstName + ' ' + value.LastName
-					var gradeStr = value.Grade == 0 ? 'Alumni' : value.Grade + 'th grade'
-				    var timeStr = value.Time + ' (' + value.Pace + ') - ' + gradeStr;
-					titleStr = fullName + ' - ' + gradeStr + ' - ' + value.Year + ' Season'
-					var headerStr = value.Date + ' - ' + value.RaceName + ': ' + value.CourseName + ', ' + value.CourseDistance + 'M'
-					headerStr += value.RaceCondition.localeCompare('unknown') ? ' *' + value.RaceCondition + '*' : ''
-				    var timeStr = value.Time + ' (' + value.Pace + ')'
+					fullName = value.FullName;
+					gradeStr = value.Grade > 12 ? '' : ' - ' + value.Grade + 'th grade';
+					titleStr = fullName + gradeStr + ' - ' + value.Year + ' SCHS Track & Field';
+
 					results = $(div).clone();
-					$(results).find('a').attr('href', '/xcRaceResults?raceId=' + value.RaceId);
-					$(results).find('h4').text(headerStr);
-					$(results).find('p').text(timeStr);
-					$('.competitorResults').append(results);
+					$(results).find('a').attr(
+						'href', '/santa-clara-high-track-and-field/results/' + value.EventId + '/' + value.SquadId + '/' + value.Year + '/'
+					);
+					$(results).find('h4').text(value.Event + ' - ' + value.Result);
+					$(results).find('p').text(value.Squad);
+
+					eventId = value.EventId;
+					if (eventId >= 1 && eventId <= 28) {
+						$('.raceResults').append(results);
+					} else if (eventId >= 29 && eventId <= 37) {
+						$('.fieldResults').append(results);
+					}
 				});
 				$('.text-muted').text(titleStr);
 			},
@@ -76,7 +83,16 @@
 	  <div>
         <h3 class="text-muted"></h3>
       </div>
-      <div class="competitorResults"></div>
+      <div class="row marketing">
+        <div class="col-lg-6">
+        	<h4 class="">Season Best Track Times</h4>
+        	<div class="raceResults"></div>
+		</div>
+        <div class="col-lg-6">
+        	<h4 class="">Season Best Field Times</h4>
+        	<div class="fieldResults"></div>
+		</div>
+      </div>
 {% include "footer.html" %}
     </div>
   </body>

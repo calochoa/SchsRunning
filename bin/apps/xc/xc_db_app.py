@@ -41,6 +41,7 @@ mydb = mysql.connector.connect(
 )
 """
 
+
 @xc_db_app.route('/getTopCourseResults',methods=['GET'])
 def getTopCourseResults():
     try:

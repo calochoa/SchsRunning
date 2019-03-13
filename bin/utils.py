@@ -67,7 +67,12 @@ class Utils(object):
 
     @staticmethod
     def format_track_time(time):
-        time_str = str(time)[:10]
+        time_str = str(time)
+        if time_str.startswith('00:'):
+            time_str = str(time)[1:11]
+        else:
+            time_str = str(time)[:10]
+
         if time_str.startswith('0:'):
             time_str = time_str[2:]
         if time_str.startswith('00:'):
@@ -78,10 +83,10 @@ class Utils(object):
             time_str = time_str[:-1]
         if '.' not in time_str:
             time_str += '.0'
-        # time is a minute+, so we want to keep it in seconds IF its under 100 seconds
+        # time is a minute+, so we want to keep it in seconds IF its under 90 seconds
         if time_str.startswith('1:'):
             seconds = float(time_str[2:])
-            if seconds < 40:
+            if seconds < 30:
                 time_str = str(seconds + 60)
         return time_str
 

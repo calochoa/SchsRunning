@@ -10,7 +10,7 @@
 
 	  gtag('config', 'UA-109364959-1');
 	</script>
-    <title>SCHS Track Hall of Fame Relay Results</title>
+    <title>SCHS Track Relay Results</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
     <link href="https://getbootstrap.com/docs/3.3/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet">
     <link href="/static/css/signup.css" rel="stylesheet">
@@ -31,18 +31,21 @@
 	</style>
     <script>
     var eId = {{eId}};
-    var gId = {{gId}};
+    var sId = {{sId}};
+    var yr = {{yr}};
     var urlParams = parseURL();
     var eventId = eId && eId != 0 ? eId : urlParams.eId;
-    var genderId = gId && gId != 0 ? gId : urlParams.gId;
+    var squadId = sId && sId != 0 ? sId : urlParams.sId;
+    var year = yr && yr != 0 ? yr : urlParams.yr;
             
 	$(function(){
 		$.ajax({
-			url: '/getTrackHallfOfFameRelayResults',
+			url: '/getTrackRelayResults',
 			type: 'GET',
 			data: {
 				"eventId": eventId,
-				"genderId": genderId,
+				"squadId": squadId,
+				"year": year,
 			},
 			success: function(res){
 				var div = $('<div>')
@@ -56,11 +59,12 @@
 							    				
 				var resultsObj = JSON.parse(res);
 				var results = '';
-				limit = resultsObj.length
 				var eventStr = '';
+				var squadStr = '';
 				$.each(resultsObj,function(index, value){
 					eventStr = value.Event;
-				    var resultStr = value.Rank + '. ' + value.Time + value.RaceTimeTypeId + ' (' + value.Year + ')';
+					squadStr = value.Squad;
+				    var resultStr = value.Rank + '. ' + value.Time + value.RaceTimeTypeId;
 				    var nameInfoStr1 = value.FullName1 + (value.Grade1 > 12 ? '' : ' - ' + value.Grade1 + 'th grade') + "</div>";
 				    var nameInfoStr2 = value.FullName2 + (value.Grade2 > 12 ? '' : ' - ' + value.Grade2 + 'th grade') + "</div>";
 				    var nameInfoStr3 = value.FullName3 + (value.Grade3 > 12 ? '' : ' - ' + value.Grade3 + 'th grade') + "</div>";
@@ -76,11 +80,8 @@
 					$(results).find('p').append(teamInfo);
 					$('.jumbotron').append(results);
 				});
-				var genderStr = (genderId && genderId == 3) ? 'Girls' : 'Boys'
-				var hofStr = limit > 0 ? 'Santa Clara Hall of Fame:' : 'No Results for'
-				var titleStr =  hofStr + ' ' + genderStr + ' ' + eventStr
+				var titleStr = resultsObj.length > 0 ? year + ' SCHS ' + squadStr + ' ' + eventStr : 'No Results';
 				$('.text-muted').text(titleStr);
-
 			},
 			error: function(error){
 				console.log(error);

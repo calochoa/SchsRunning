@@ -41,6 +41,7 @@ mydb = mysql.connector.connect(
 )
 """
 
+
 @shared_db_app.route('/getCoachesByYear',methods=['GET'])
 def getCoachesByYear():
     try:

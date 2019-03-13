@@ -376,10 +376,13 @@ CREATE PROCEDURE `GetCoachesByYear`(
 )
 BEGIN
 
-SELECT `firstName`, `lastName`, `coachType`, `year`, `coachId` 
+SELECT `firstName`, `lastName`, GROUP_CONCAT(`coachType` ORDER BY `coachTypeId` ASC SEPARATOR ", ") 
+	AS `coachType`, `year`, `coachId`, MIN(`coachTypeId`) AS `coachTypeId`
 FROM `Coach` NATURAL JOIN `CoachType` NATURAL JOIN `CoachSeason`
 WHERE `year`=`inputYear` AND FIND_IN_SET(`coachTypeId`, `inputCoachTypeIds`) 
+GROUP BY `coachId`
 ORDER BY `coachTypeId` ASC;
+
 
 END //
 DELIMITER ;
@@ -754,21 +757,21 @@ CREATE PROCEDURE `GetTopTrackRelayTeam`(
 )
 BEGIN
 
--- this part is necessary to distinguish between a competitor in xc vs track season:  AND `RaceResult`.`year`=`Competitor`.`year`
+-- this part is necessary to distinguish between a competitor in xc vs track season:  AND `RelayResult`.`year`=`C1`.`year`
 SELECT @`rownum` := @`rownum` + 1 AS `myrank`, `t`.* 
 FROM (
 	SELECT DISTINCT `event`, `RelayResult`.`time`, `raceTimeTypeId`, `RelayResult`.`year`, 
-        `competitorId1`, CONCAT(`A1`.`firstName`, " ", `A1`.`lastName`) AS `fullName1`, `C1`.`grade` AS `grade1`,
-        `competitorId2`, CONCAT(`A2`.`firstName`, " ", `A2`.`lastName`) AS `fullName2`, `C2`.`grade` AS `grade2`,
-        `competitorId3`, CONCAT(`A3`.`firstName`, " ", `A3`.`lastName`) AS `fullName3`, `C3`.`grade` AS `grade3`,
-        `competitorId4`, CONCAT(`A4`.`firstName`, " ", `A4`.`lastName`) AS `fullName4`, `C4`.`grade` AS `grade4`
+        `C1`.`competitorId` AS `competitorId1`, CONCAT(`A1`.`firstName`, " ", `A1`.`lastName`) AS `fullName1`, `C1`.`grade` AS `grade1`,
+        `C2`.`competitorId` AS `competitorId`, CONCAT(`A2`.`firstName`, " ", `A2`.`lastName`) AS `fullName2`, `C2`.`grade` AS `grade2`,
+        `C3`.`competitorId` AS `competitorId3`, CONCAT(`A3`.`firstName`, " ", `A3`.`lastName`) AS `fullName3`, `C3`.`grade` AS `grade3`,
+        `C4`.`competitorId` AS `competitorId4`, CONCAT(`A4`.`firstName`, " ", `A4`.`lastName`) AS `fullName4`, `C4`.`grade` AS `grade4`
 	FROM `RelayResult` NATURAL JOIN `Event` 
 		JOIN `Competitor` AS `C1` ON (`C1`.`competitorId`=`competitorId1`) JOIN `Athlete` AS `A1` ON (`A1`.`athleteId`=`C1`.`athleteId`) 
         JOIN `Competitor` AS `C2` ON (`C2`.`competitorId`=`competitorId2`) JOIN `Athlete` AS `A2` ON (`A2`.`athleteId`=`C2`.`athleteId`) 
         JOIN `Competitor` AS `C3` ON (`C3`.`competitorId`=`competitorId3`) JOIN `Athlete` AS `A3` ON (`A3`.`athleteId`=`C3`.`athleteId`) 
         JOIN `Competitor` AS `C4` ON (`C4`.`competitorId`=`competitorId4`) JOIN `Athlete` AS `A4` ON (`A4`.`athleteId`=`C4`.`athleteId`) 
         JOIN `Gender` ON (`Gender`.`genderId`=`A1`.`genderId`)
-	WHERE `eventId`=`inputEventId` AND `Gender`.`genderid`=`inputGenderId` 
+	WHERE `eventId`=`inputEventId` AND `Gender`.`genderid`=`inputGenderId` AND `RelayResult`.`year`=`C1`.`year`
 	ORDER BY `RelayResult`.`time`, `RelayResult`.`year`
 	LIMIT `inputLimit`
 ) `t`, 
@@ -776,6 +779,259 @@ FROM (
 
 END //
 DELIMITER ;
+
+
+
+DROP PROCEDURE IF EXISTS `GetTrackCompetitorsByYear`;
+
+SET NAMES utf8mb4;
+SET collation_connection = 'utf8mb4_unicode_ci';
+
+DELIMITER //
+CREATE PROCEDURE `GetTrackCompetitorsByYear`(
+	IN `inputYear` INT 
+)
+BEGIN
+
+
+SELECT DISTINCT `competitorid`, `year`, `grade`, `firstname`, `lastname`, `gender` 
+FROM `Competitor` NATURAL JOIN `Athlete` NATURAL JOIN `Gender` NATURAL JOIN `FieldResult` 
+WHERE `Competitor`.`year`=`inputYear` AND `FieldResult`.`year`=`inputYear` AND `grade` != 0 
+UNION
+SELECT DISTINCT `competitorid`, `year`, `grade`, `firstname`, `lastname`, `gender` 
+FROM `Competitor` NATURAL JOIN `Athlete` NATURAL JOIN `Gender` NATURAL JOIN `RaceResult` 
+WHERE `Competitor`.`year`=`inputYear` AND `RaceResult`.`year`=`inputYear` AND `grade` != 0 
+UNION
+SELECT DISTINCT `competitorid`, `RR`.`year`, `grade`, `firstname`, `lastname`, `gender` 
+FROM `RelayResult` AS `RR` 
+	JOIN `Competitor` ON (`Competitor`.`competitorId`=`competitorId1`) 
+    JOIN `Athlete` ON (`Athlete`.`athleteId`=`Competitor`.`athleteId`) 
+    JOIN `Gender` ON (`Gender`.`genderId`=`Athlete`.`genderId`) 
+WHERE `Competitor`.`year`=`inputYear` AND `RR`.`year`=`inputYear` AND `grade` != 0 
+UNION
+SELECT DISTINCT `competitorid`, `RR`.`year`, `grade`, `firstname`, `lastname`, `gender` 
+FROM `RelayResult` AS `RR` 
+	JOIN `Competitor` ON (`Competitor`.`competitorId`=`competitorId2`) 
+    JOIN `Athlete` ON (`Athlete`.`athleteId`=`Competitor`.`athleteId`) 
+    JOIN `Gender` ON (`Gender`.`genderId`=`Athlete`.`genderId`) 
+WHERE `Competitor`.`year`=`inputYear` AND `RR`.`year`=`inputYear` AND `grade` != 0 
+UNION
+SELECT DISTINCT `competitorid`, `RR`.`year`, `grade`, `firstname`, `lastname`, `gender` 
+FROM `RelayResult` AS `RR` 
+	JOIN `Competitor` ON (`Competitor`.`competitorId`=`competitorId3`) 
+    JOIN `Athlete` ON (`Athlete`.`athleteId`=`Competitor`.`athleteId`) 
+    JOIN `Gender` ON (`Gender`.`genderId`=`Athlete`.`genderId`) 
+WHERE `Competitor`.`year`=`inputYear` AND `RR`.`year`=`inputYear` AND `grade` != 0 
+UNION
+SELECT DISTINCT `competitorid`, `RR`.`year`, `grade`, `firstname`, `lastname`, `gender` 
+FROM `RelayResult` AS `RR` 
+	JOIN `Competitor` ON (`Competitor`.`competitorId`=`competitorId4`) 
+    JOIN `Athlete` ON (`Athlete`.`athleteId`=`Competitor`.`athleteId`) 
+    JOIN `Gender` ON (`Gender`.`genderId`=`Athlete`.`genderId`) 
+WHERE `Competitor`.`year`=`inputYear` AND `RR`.`year`=`inputYear` AND `grade` != 0 
+ORDER BY `gender`, `lastname`, `firstname`;
+
+END //
+DELIMITER ;
+
+
+
+
+DROP PROCEDURE IF EXISTS `GetTrackEventsByYear`;
+
+SET NAMES utf8mb4;
+SET collation_connection = 'utf8mb4_unicode_ci';
+
+DELIMITER //
+CREATE PROCEDURE `GetTrackEventsByYear`(
+	IN `inputYear` INT 
+)
+BEGIN
+
+SELECT  ANY_VALUE(`event`) AS `event`, ANY_VALUE(`eventId`) AS `eventId`, 
+	ANY_VALUE(`squadName`) AS `squadName`, ANY_VALUE(`squadId`) AS `squadID`, 
+    CONCAT(`eventId`, ":", `squadId`) AS `eventBySquad`, COUNT(`squadID`) AS `numResults`
+FROM `Event` NATURAL JOIN `RaceResult` NATURAL JOIN `Squad`
+WHERE `year`=`inputYear` AND `raceTimeTypeId` NOT IN ("c", "F")
+GROUP BY `eventBySquad`
+UNION
+SELECT  ANY_VALUE(`event`) AS `event`, ANY_VALUE(`eventId`) AS `eventId`, 
+	ANY_VALUE(`squadName`) AS `squadName`, ANY_VALUE(`squadId`) AS `squadID`, 
+    CONCAT(`eventId`, ":", `squadId`) AS `eventBySquad`, COUNT(`squadID`) AS `numResults`
+FROM `Event` NATURAL JOIN `FieldResult` NATURAL JOIN `Squad`
+WHERE `year`=`inputYear`
+GROUP BY `eventBySquad`
+UNION
+SELECT  ANY_VALUE(`event`) AS `event`, ANY_VALUE(`eventId`) AS `eventId`, 
+	ANY_VALUE(`squadName`) AS `squadName`, ANY_VALUE(`squadId`) AS `squadID`, 
+    CONCAT(`eventId`, ":", `squadId`) AS `eventBySquad`, COUNT(`squadID`) AS `numResults`
+FROM `Event` NATURAL JOIN `RelayResult` NATURAL JOIN `Squad`
+WHERE `year`=`inputYear` AND `raceTimeTypeId` NOT IN ("c", "F")
+GROUP BY `eventBySquad`
+ORDER BY `eventId`, `squadId`;
+
+
+END //
+DELIMITER ;
+
+
+
+DROP PROCEDURE IF EXISTS `GetTrackRaceResults`;
+
+SET NAMES utf8mb4;
+SET collation_connection = 'utf8mb4_unicode_ci';
+
+DELIMITER //
+CREATE PROCEDURE `GetTrackRaceResults`(
+	IN `inputEventId` INT, 
+	IN `inputSquadId` TINYINT,
+	IN `inputYear` INT
+)
+BEGIN
+
+-- this part is necessary to distinguish between a competitor in xc vs track season:  AND `RaceResult`.`year`=`Competitor`.`year`
+SELECT @`rownum` := @`rownum` + 1 AS `myrank`, `t`.* 
+FROM (
+	SELECT DISTINCT `event`, `firstname`, `lastname`, `time`, 
+		`raceTimeTypeId`, `grade`, `competitorid`, `year`, `squadName`
+	FROM `RaceResult` NATURAL JOIN `Event` NATURAL JOIN `Competitor` 
+		NATURAL JOIN `Athlete` NATURAL JOIN `Squad` 
+	WHERE `eventId`=`inputEventId` AND `squadId`=`inputSquadId`
+		AND `RaceResult`.`year`=`inputYear` AND `RaceResult`.`year`=`Competitor`.`year`
+	ORDER BY `RaceResult`.`time`, `lastname`, `firstname`
+) `t`, 
+(SELECT @`rownum` := 0) `r`;
+
+END //
+DELIMITER ;
+
+
+
+DROP PROCEDURE IF EXISTS `GetTrackFieldResults`;
+
+SET NAMES utf8mb4;
+SET collation_connection = 'utf8mb4_unicode_ci';
+
+DELIMITER //
+CREATE PROCEDURE `GetTrackFieldResults`(
+	IN `inputEventId` INT, 
+	IN `inputSquadId` TINYINT,
+	IN `inputYear` INT
+)
+BEGIN
+
+-- this part is necessary to distinguish between a competitor in xc vs track season:  AND `FieldResult`.`year`=`Competitor`.`year`
+SELECT @`rownum` := @`rownum` + 1 AS `myrank`, `t`.* 
+FROM (
+	SELECT DISTINCT `event`, `firstname`, `lastname`, `footPartOfDistance`, `inchPartOfDistance`, 
+        `grade`, `competitorid`, `year`, `squadName`
+	FROM `FieldResult` NATURAL JOIN `Event` NATURAL JOIN `Competitor` 
+		NATURAL JOIN `Athlete` NATURAL JOIN `Squad` 
+	WHERE `eventId`=`inputEventId` AND `squadId`=`inputSquadId`
+		AND `FieldResult`.`year`=`inputYear` AND `FieldResult`.`year`=`Competitor`.`year`
+	ORDER BY `footPartOfDistance` DESC, `inchPartOfDistance` DESC, `lastname`, `firstname`
+) `t`, 
+(SELECT @`rownum` := 0) `r`;
+
+END //
+DELIMITER ;
+
+
+
+DROP PROCEDURE IF EXISTS `GetTrackRelayResults`;
+
+SET NAMES utf8mb4;
+SET collation_connection = 'utf8mb4_unicode_ci';
+
+DELIMITER //
+CREATE PROCEDURE `GetTrackRelayResults`(
+	IN `inputEventId` INT, 
+	IN `inputSquadId` TINYINT,
+	IN `inputYear` INT
+)
+BEGIN
+
+-- this part is necessary to distinguish between a competitor in xc vs track season:  AND `RelayResult`.`year`=`C1`.`year`
+SELECT @`rownum` := @`rownum` + 1 AS `myrank`, `t`.* 
+FROM (
+	SELECT DISTINCT `event`, `RelayResult`.`time`, `raceTimeTypeId`, `RelayResult`.`year`, `squadName`, 
+        `C1`.`competitorId` AS `competitorId1`, CONCAT(`A1`.`firstName`, " ", `A1`.`lastName`) AS `fullName1`, `C1`.`grade` AS `grade1`,
+        `C2`.`competitorId` AS `competitorId`, CONCAT(`A2`.`firstName`, " ", `A2`.`lastName`) AS `fullName2`, `C2`.`grade` AS `grade2`,
+        `C3`.`competitorId` AS `competitorId3`, CONCAT(`A3`.`firstName`, " ", `A3`.`lastName`) AS `fullName3`, `C3`.`grade` AS `grade3`,
+        `C4`.`competitorId` AS `competitorId4`, CONCAT(`A4`.`firstName`, " ", `A4`.`lastName`) AS `fullName4`, `C4`.`grade` AS `grade4`
+	FROM `RelayResult` NATURAL JOIN `Event` NATURAL JOIN `Squad` 
+		JOIN `Competitor` AS `C1` ON (`C1`.`competitorId`=`competitorId1`) JOIN `Athlete` AS `A1` ON (`A1`.`athleteId`=`C1`.`athleteId`) 
+        JOIN `Competitor` AS `C2` ON (`C2`.`competitorId`=`competitorId2`) JOIN `Athlete` AS `A2` ON (`A2`.`athleteId`=`C2`.`athleteId`) 
+        JOIN `Competitor` AS `C3` ON (`C3`.`competitorId`=`competitorId3`) JOIN `Athlete` AS `A3` ON (`A3`.`athleteId`=`C3`.`athleteId`) 
+        JOIN `Competitor` AS `C4` ON (`C4`.`competitorId`=`competitorId4`) JOIN `Athlete` AS `A4` ON (`A4`.`athleteId`=`C4`.`athleteId`) 
+	WHERE `eventId`=`inputEventId` AND `squadId`=`inputSquadId` AND `RelayResult`.`year`=`inputYear` AND `RelayResult`.`year`=`C1`.`year`
+	ORDER BY `RelayResult`.`time`    
+) `t`, 
+(SELECT @`rownum` := 0) `r`;
+
+END //
+DELIMITER ;
+
+
+
+DROP PROCEDURE IF EXISTS `GetTrackCompetitorResults`;
+
+SET NAMES utf8mb4;
+SET collation_connection = 'utf8mb4_unicode_ci';
+
+DELIMITER //
+CREATE PROCEDURE `GetTrackCompetitorResults`(
+	IN `inputCompetitorId` VARCHAR(15)
+)
+BEGIN
+
+-- query race results
+SELECT `event`, `eventId`, CONCAT(`firstname`, " ", `lastname`) AS `fullName`, 
+	`time` AS `result1`, `raceTimeTypeId` AS `result2`, `grade`, `competitorid`, `year`, `squadName`, `squadId`
+FROM `RaceResult` NATURAL JOIN `Event` NATURAL JOIN `Competitor` 
+	NATURAL JOIN `Athlete` NATURAL JOIN `Squad` 
+WHERE `RaceResult`.`year`=`Competitor`.`year` AND `raceTimeTypeId` NOT IN ("c", "F") AND `competitorId`=`inputCompetitorId`
+UNION
+-- query field results
+SELECT `event`, `eventId`, CONCAT(`firstname`, " ", `lastname`) AS `fullName`, 
+	`footPartOfDistance` AS `result1`, `inchPartOfDistance` AS `result2`, 
+    `grade`, `competitorid`, `year`, `squadName`, `squadId`
+FROM `FieldResult` NATURAL JOIN `Event` NATURAL JOIN `Competitor` 
+	NATURAL JOIN `Athlete` NATURAL JOIN `Squad` 
+WHERE `FieldResult`.`year`=`Competitor`.`year` AND `competitorId`=`inputCompetitorId`
+UNION
+-- query leg 1 of relay results
+SELECT `event`, `eventId`, CONCAT(`firstname`, " ", `lastname`) AS `fullName`, 
+    `RelayResult`.`time` AS `result1`, `raceTimeTypeId` AS `result2`, `grade`, `competitorid`, `RelayResult`.`year`, `squadName`, `squadId`
+FROM `RelayResult` NATURAL JOIN `Event` NATURAL JOIN `Squad` 
+	JOIN `Competitor` ON (`Competitor`.`competitorId`=`competitorId1`) JOIN `Athlete`ON (`Athlete`.`athleteId`=`Competitor`.`athleteId`) 
+WHERE `RelayResult`.`year`=`Competitor`.`year` AND `raceTimeTypeId` NOT IN ("c", "F") AND `competitorId`=`inputCompetitorId`
+UNION
+-- query leg 2 of relay results
+SELECT `event`, `eventId`, CONCAT(`firstname`, " ", `lastname`) AS `fullName`, 
+	`RelayResult`.`time` AS `result1`, `raceTimeTypeId` AS `result2`, `grade`, `competitorid`, `RelayResult`.`year`, `squadName`, `squadId`
+FROM `RelayResult` NATURAL JOIN `Event` NATURAL JOIN `Squad` 
+	JOIN `Competitor` ON (`Competitor`.`competitorId`=`competitorId2`) JOIN `Athlete`ON (`Athlete`.`athleteId`=`Competitor`.`athleteId`) 
+WHERE `RelayResult`.`year`=`Competitor`.`year` AND `raceTimeTypeId` NOT IN ("c", "F") AND `competitorId`=`inputCompetitorId`
+UNION
+-- query leg 3 of relay results
+SELECT `event`, `eventId`, CONCAT(`firstname`, " ", `lastname`) AS `fullName`, 
+	`RelayResult`.`time` AS `result1`, `raceTimeTypeId` AS `result2`, `grade`, `competitorid`, `RelayResult`.`year`, `squadName`, `squadId`
+FROM `RelayResult` NATURAL JOIN `Event` NATURAL JOIN `Squad` 
+	JOIN `Competitor` ON (`Competitor`.`competitorId`=`competitorId3`) JOIN `Athlete`ON (`Athlete`.`athleteId`=`Competitor`.`athleteId`) 
+WHERE `RelayResult`.`year`=`Competitor`.`year` AND `raceTimeTypeId` NOT IN ("c", "F") AND `competitorId`=`inputCompetitorId`
+UNION
+-- query leg 4 of relay results
+SELECT `event`, `eventId`, CONCAT(`firstname`, " ", `lastname`) AS `fullName`, 
+	`RelayResult`.`time` AS `result1`, `raceTimeTypeId` AS `result2`, `grade`, `competitorid`, `RelayResult`.`year`, `squadName`, `squadId`
+FROM `RelayResult` NATURAL JOIN `Event` NATURAL JOIN `Squad` 
+	JOIN `Competitor` ON (`Competitor`.`competitorId`=`competitorId4`) JOIN `Athlete`ON (`Athlete`.`athleteId`=`Competitor`.`athleteId`) 
+WHERE `RelayResult`.`year`=`Competitor`.`year` AND `raceTimeTypeId` NOT IN ("c", "F") AND `competitorId`=`inputCompetitorId`
+ORDER BY `eventId`;
+
+END //
+DELIMITER ;
+
 
 
 COMMIT;
@@ -801,15 +1057,23 @@ CALL `GetCoachTimeline`("1,2");
 CALL `GetCoachById`(1,"1,2");
 CALL `GetCoaches`("1,2");
 CALL `GetAwardsByYear`(2017,1);
-CALL `GetAwardsById`('1,2','1,2,3,4',1);
-CALL `GetAwardsTimeline`('2',1);
+CALL `GetAwardsById`("1,2","1,2,3,4",1);
+CALL `GetAwardsTimeline`("2",1);
 CALL `GetXcAlumniResultsByYear`(2017);
 CALL `GetPastXcAlumniChampions`();
-CALL `GetSpecialAchieversById`('1,2,3', 1);
+CALL `GetSpecialAchieversById`("1,2,3", 1);
 -- track specific calls
-CALL `GetTopTrackRaceIndividual`(3,3,15);
+CALL `GetTopTrackRaceIndividual`(1,3,15);
 CALL `GetTopFieldIndividual`(29, 3, 20);
 CALL `GetTopTrackRelayTeam`(25, 2, 20);
+CALL `GetTrackCompetitorsByYear`(2018);
+CALL `GetTrackEventsByYear`(2018);
+CALL `GetTrackRaceResults`(1,2,2018);
+CALL `GetTrackFieldResults`(29,1,2018);
+CALL `GetTrackRelayResults`(25,1,2018);
+CALL `GetTrackCompetitorResults`("1000464.12");
+
+
 
 
 -- need to consider if i want to separate by course, ie ccs: Crystal vs Toro

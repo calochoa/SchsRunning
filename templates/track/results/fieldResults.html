@@ -10,28 +10,29 @@
 
 	  gtag('config', 'UA-109364959-1');
 	</script>
-    <title>SCHS XC Competitor</title>
+    <title>SCHS Track Field Results</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
     <link href="https://getbootstrap.com/docs/3.3/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet">
     <link href="/static/css/signup.css" rel="stylesheet">
-    <style>
-    .competitorResults p {
-    	font-size:18px;
-	}
-    </style>
     <script src="/static/js/jquery-1.11.2.js"></script>
     <script src="/static/js/utils.js"></script>
     <script>
-    var cId = '{{competitorId}}';
+    var eId = {{eId}};
+    var sId = {{sId}};
+    var yr = {{yr}};
     var urlParams = parseURL();
-    var competitorId = cId ? cId : urlParams.cId;
-        
+    var eventId = eId && eId != 0 ? eId : urlParams.eId;
+    var squadId = sId && sId != 0 ? sId : urlParams.sId;
+    var year = yr && yr != 0 ? yr : urlParams.yr;
+            
 	$(function(){
 		$.ajax({
-			url: '/getXcCompetitorResults',
+			url: '/getTrackFieldResults',
 			type: 'GET',
 			data: {
-				"competitorId": competitorId
+				"eventId": eventId,
+				"squadId": squadId,
+				"year": year,
 			},
 			success: function(res){
 				var div = $('<div>')
@@ -45,22 +46,21 @@
 							    				
 				var resultsObj = JSON.parse(res);
 				var results = '';
-				var fullName = '';
-				var titleStr = '';
+				var eventStr = '';
+				var squadStr = '';
 				$.each(resultsObj,function(index, value){
-					fullName = value.FirstName + ' ' + value.LastName
-					var gradeStr = value.Grade == 0 ? 'Alumni' : value.Grade + 'th grade'
-				    var timeStr = value.Time + ' (' + value.Pace + ') - ' + gradeStr;
-					titleStr = fullName + ' - ' + gradeStr + ' - ' + value.Year + ' Season'
-					var headerStr = value.Date + ' - ' + value.RaceName + ': ' + value.CourseName + ', ' + value.CourseDistance + 'M'
-					headerStr += value.RaceCondition.localeCompare('unknown') ? ' *' + value.RaceCondition + '*' : ''
-				    var timeStr = value.Time + ' (' + value.Pace + ')'
+					eventStr = value.Event;
+					squadStr = value.Squad;
+				    var resultStr = value.Rank + '. ' + value.FirstName + ' ' + value.LastName;
+				    var gradeStr = value.Grade > 12 ? '' : ' - ' + value.Grade + 'th grade';
+				    var distanceStr = value.FootPartOfDistance + '\' ' + value.InchPartOfDistance + '"'+ gradeStr;
 					results = $(div).clone();
-					$(results).find('a').attr('href', '/xcRaceResults?raceId=' + value.RaceId);
-					$(results).find('h4').text(headerStr);
-					$(results).find('p').text(timeStr);
-					$('.competitorResults').append(results);
+					$(results).find('a').attr('href', '/trackCompetitor?cId='+ value.CompetitorId);
+					$(results).find('h4').text(resultStr);
+					$(results).find('p').text(distanceStr);
+					$('.jumbotron').append(results);
 				});
+				var titleStr = resultsObj.length > 0 ? year + ' SCHS ' + squadStr + ' ' + eventStr : 'No Results';
 				$('.text-muted').text(titleStr);
 			},
 			error: function(error){
@@ -69,16 +69,12 @@
 		});
 	});
     </script>
+    <style>
+    	.jumbotron p {margin-bottom: 0px;font-size:18px;}
+	</style>
   </head>
   <body>
-    <div class="container">
-{% include "nav.html" %}
-	  <div>
-        <h3 class="text-muted"></h3>
-      </div>
-      <div class="competitorResults"></div>
-{% include "footer.html" %}
-    </div>
+{% include "body.html" %}
   </body>
 </html>
 

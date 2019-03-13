@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-109364959-1"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+
+	  gtag('config', 'UA-109364959-1');
+	</script>
+    <title>SCHS Track Season</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <link href="https://getbootstrap.com/docs/3.3/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet">
+    <link href="/static/css/signup.css" rel="stylesheet">
+    <script src="/static/js/jquery-1.11.2.js"></script>
+    <script src="/static/js/utils.js"></script>
+    <script>
+    var yr = {{yr}};
+    var ctIds = '{{coachTypeIds}}'
+    var urlParams = parseURL();
+    var year = yr && yr != 0 ? yr : urlParams.yr;
+    var coachTypeIds = ctIds ? ctIds : urlParams.ctIds;
+	
+	$(function(){
+		$.ajax({
+			url: '/getCoachesByYear',
+			type: 'GET',
+			data: {
+				"year": year,
+				"coachTypeIds": coachTypeIds,
+			},
+			success: function(res){							    				
+				var resultsObj = JSON.parse(res);
+				var count = resultsObj.length
+				$('.coachesTitle').text('Coaches (' +count + ')');
+
+				$.each(resultsObj,function(index, value){
+				    var nameStr = value.FirstName + ' ' + value.LastName + ' (' + value.CoachType + ')'
+				    var link = "/trackCoach?coachId=" + value.CoachId
+					//$('.coachesNames').append("<div><a href='" + link + "'>" + nameStr + "</a></div>");
+					$('.coachesNames').append("<div>" + nameStr + "</div>");
+				});
+			},
+			error: function(error){
+				console.log(error);
+			}
+		});
+	});
+
+	$(function(){
+		$.ajax({
+			url: '/getTrackCompetitorsByYear',
+			type: 'GET',
+			data: {
+				"year": year,
+			},
+			success: function(res){
+				$('.text-muted').text(year + ' SCHS Track & Field Season');
+
+				var resultsObj = JSON.parse(res);
+				var femaleCount = 0;
+				var maleCount = 0;
+				$.each(resultsObj,function(index, value){
+				    var nameStr = value.LastName + ', ' + value.FirstName;
+				    var link = '/trackCompetitor?cId=' + value.CompetitorId
+					var genderStr = value.Gender;
+					if (genderStr == 'female') {
+						femaleCount++;
+						$('.fAthleteNames').append('<div><a href="' + link + '">' + nameStr + '</a></div>');
+					} else {
+						maleCount++;
+						$('.mAthleteNames').append('<div><a href="' + link + '">' + nameStr + '</a></div>');
+					}
+				});
+				$('.fAthleteTitle').text('Female Athletes (' + femaleCount + ')');
+				$('.mAthleteTitle').text('Male Athletes (' + maleCount + ')');
+			},
+			error: function(error){
+				console.log(error);
+			}
+		});
+	});
+	
+	$(function(){
+		$.ajax({
+			url: '/getTrackEventsByYear',
+			type: 'GET',
+			data: {
+				"year": year,
+			},
+			success: function(res){							    				
+				var resultsObj = JSON.parse(res);
+				var count = resultsObj.length;
+				var eventCount = 0;
+				var lastEventStr = '';
+				var resultsBySquadStr = '';
+				$.each(resultsObj,function(index, value){
+					var eventStr = value.Event;
+					var eventId = value.EventId;
+					var squadStr = value.Squad;
+					var squadId = value.SquadId;
+					var numResults = value.NumResults;
+					// check if the event has changed
+					if (lastEventStr != '' && lastEventStr != eventStr) {
+						eventCount++;
+						// append the last event
+						$('.eventBySquad').append('<div>' + lastEventStr + '</div>' + resultsBySquadStr + '<br/>');
+						resultsBySquadStr = '';
+					}
+					var link = '/santa-clara-high-track-and-field/results/' + eventId + '/' + squadId + '/' + year + '/'; 
+					resultsBySquadStr += '<div>&raquo; <a href="'+link+'">'+ squadStr + ' (' + numResults + ')</a></div>';
+					lastEventStr = eventStr;
+				});
+
+				if (lastEventStr != '') {
+					eventCount++;
+					// append the last event
+					$('.eventBySquad').append('<div>' + lastEventStr + '</div>' + resultsBySquadStr + '<br/>');
+					resultsBySquadStr = '';
+				} else {
+					var link = '/santa-clara-high-track-and-field/results/' + eventId + '/' + squadId + '/' + year + '/'; 
+					resultsBySquadStr += '<div>&raquo; <a href="'+link+'">'+ squadStr + ' (' + numResults + ')</a></div>';
+				}
+				$('.eventTitle').text('Events (' + eventCount + ')');
+			},
+			error: function(error){
+				console.log(error);
+			}
+		});
+	});
+	
+	/*
+	$.get("../../../static/Uploads/track-team/SC_TRACK_"+year+".jpeg")
+    .done(function() { 
+    	$("#team_img").attr("src", "../../../static/Uploads/track-team/SC_TRACK_"+year+".jpeg");
+        $("#team_img_container").show();
+    }).fail(function() { 
+        $("#team_img_container").hide();
+    })
+    */
+    </script>
+  </head>
+  <body>
+    <div class="container">
+{% include "nav.html" %}
+	  <div>
+        <h3 class="text-muted"></h3>
+      </div>
+      <div id="team_img_container" class="jumbotron" style="display: none;">
+        <p><img id="team_img" src="" style="width: 100%;"></p>
+      </div>
+      <div class="row marketing">
+        <div class="col-lg-6">
+          <h4 class="coachesTitle"></h4>
+          <p class="coachesNames"></p>
+          <h4 class="fAthleteTitle"></h4>
+          <p class="fAthleteNames"></p>
+          <h4 class="mAthleteTitle"></h4>
+          <p class="mAthleteNames"></p>
+          <br/>
+        </div>
+        <div class="col-lg-6">
+          <h4 class="eventTitle"></h4>
+          <p class="eventBySquad"></p>
+        </div>
+      </div>        
+{% include "footer.html" %}
+    </div>
+  </body>
+</html>
+
