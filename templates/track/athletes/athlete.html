@@ -62,7 +62,7 @@
 						$(prResults).find('p').text(value.Year + ' Season' + gradeStr);
 						$('.personalRecords').append(prResults);						
 					} else {
-						$(results).find('p').append($(rankDiv).clone().text(value.Squad));
+						$(results).find('p').append($(rankDiv).clone().text(value.Squad + ' Rank: ' + value.Rank));
 						if (lastYear != value.Year) {
 							lastYear = value.Year;
 							$('.seasonRecords').append($(headerDiv).clone().find('h4').text(value.Year + ' Season Records' + gradeStr));

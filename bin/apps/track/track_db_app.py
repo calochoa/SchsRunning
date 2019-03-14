@@ -463,55 +463,54 @@ def get_track_athlete_results():
     try:
         athlete_id = request.args.get('athleteId', default=1, type=int)
 
+        track_athlete_results = []
+        personal_record_dict = {}
         cursor = mydb.cursor()
         cursor.callproc('GetTrackAthleteResults', [athlete_id])
         for result in cursor.stored_results():
-            data = result.fetchall()
-
-        track_athlete_results = []
-        personal_record_dict = {}
-        for row in data:
-            event_id = row[1]
-            resultStr = 'Unknown'
-            pr_measurement = ''
-            if event_id >= 1 and event_id <= 28:
-                pr_measurement = row[3]
-                resultStr = '{0}{1}'.format(Utils.format_track_time(row[3]), row[4])
-            elif event_id >= 29 and event_id <= 37:
-                foot_part_of_distance = int(row[3])
-                inch_part_of_distance = float(row[4])
-                pr_measurement = (12 * foot_part_of_distance) + inch_part_of_distance
-                if str(inch_part_of_distance).endswith('.0'):
-                    inch_part_of_distance = int(inch_part_of_distance)
-                resultStr = '{0}\' {1}"'.format(row[3], inch_part_of_distance)
-
-            result_dict = {
-                'Event': str(row[0]),
-                'EventId': event_id,
-                'FullName': str(row[2]),
-                'Result': resultStr,
-                'Grade': row[5],
-                'CompetitorId': str(row[6]),
-                'Year': row[7],
-                'Squad': str(row[8]),
-                'SquadId': row[9],
-                'PRMeasurement': pr_measurement,
-                'PR': False,
-            }
-            track_athlete_results.append(result_dict)
-
-            pr_result_dict = personal_record_dict.get(event_id)
-            update_pr = True if pr_result_dict is None else False
-            if pr_result_dict is not None:
+            for row in result.fetchall():
+                event_id = row[1]
+                resultStr = 'Unknown'
+                pr_measurement = ''
                 if event_id >= 1 and event_id <= 28:
-                    if result_dict['PRMeasurement'] <= pr_result_dict['PRMeasurement']:
-                        update_pr = True
+                    pr_measurement = row[3]
+                    resultStr = '{0}{1}'.format(Utils.format_track_time(row[3]), row[4])
                 elif event_id >= 29 and event_id <= 37:
-                    if result_dict['PRMeasurement'] >= pr_result_dict['PRMeasurement']:
-                        update_pr = True
-            if update_pr:
-                personal_record_dict[event_id] = result_dict.copy()
-                personal_record_dict[event_id]['PR'] = True
+                    foot_part_of_distance = int(row[3])
+                    inch_part_of_distance = float(row[4])
+                    pr_measurement = (12 * foot_part_of_distance) + inch_part_of_distance
+                    if str(inch_part_of_distance).endswith('.0'):
+                        inch_part_of_distance = int(inch_part_of_distance)
+                    resultStr = '{0}\' {1}"'.format(row[3], inch_part_of_distance)
+
+                result_dict = {
+                    'Event': str(row[0]),
+                    'EventId': event_id,
+                    'FullName': str(row[2]),
+                    'Result': resultStr,
+                    'Grade': row[5],
+                    'CompetitorId': str(row[6]),
+                    'Year': row[7],
+                    'Squad': str(row[8]),
+                    'SquadId': row[9],
+                    'Rank': row[10],
+                    'PRMeasurement': pr_measurement,
+                    'PR': False,
+                }
+                track_athlete_results.append(result_dict)
+
+                pr_result_dict = personal_record_dict.get(event_id)
+                update_pr = True if pr_result_dict is None else False
+                if pr_result_dict is not None:
+                    if event_id >= 1 and event_id <= 28:
+                        if result_dict['PRMeasurement'] <= pr_result_dict['PRMeasurement']:
+                            update_pr = True
+                    elif event_id >= 29 and event_id <= 37:
+                        if result_dict['PRMeasurement'] >= pr_result_dict['PRMeasurement']:
+                            update_pr = True
+                if update_pr:
+                    personal_record_dict[event_id] = result_dict.copy()
+                    personal_record_dict[event_id]['PR'] = True
 
         for event_id in collections.OrderedDict(sorted(personal_record_dict.items())):
             track_athlete_results.append(personal_record_dict.get(event_id))
