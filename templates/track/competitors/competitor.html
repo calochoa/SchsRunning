@@ -59,7 +59,7 @@
 						'href', '/santa-clara-high-track-and-field/results/' + value.EventId + '/' + value.SquadId + '/' + value.Year + '/'
 					);
 					$(results).find('h4').text(value.Event + ' - ' + value.Result);
-					$(results).find('p').text(value.Squad);
+					$(results).find('p').text(value.Squad + ' Rank: ' + value.Rank);
 
 					eventId = value.EventId;
 					if (eventId >= 1 && eventId <= 28) {

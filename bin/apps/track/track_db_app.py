@@ -401,33 +401,33 @@ def get_track_competitor_results():
         competitor_id = request.args.get('competitorId', default='1000197.12', type=str)
         cursor = mydb.cursor()
         cursor.callproc('GetTrackCompetitorResults', [competitor_id])
-        for result in cursor.stored_results():
-            data = result.fetchall()
 
         competitor_results_dict = []
-        for row in data:
-            event_id = row[1]
-            resultStr = 'Unknown'
-            if event_id >= 1 and event_id <= 28:
-                current_time = row[3]
-                resultStr = '{0}{1}'.format(Utils.format_track_time(row[3]), row[4])
-            elif event_id >= 29 and event_id <= 37:
-                inch_part_of_distance = float(row[4])
-                if str(inch_part_of_distance).endswith('.0'):
-                    inch_part_of_distance = int(inch_part_of_distance)
-                resultStr = '{0}\' {1}"'.format(row[3], inch_part_of_distance)
+        for result in cursor.stored_results():
+            for row in result.fetchall():
+                event_id = row[1]
+                resultStr = 'Unknown'
+                if event_id >= 1 and event_id <= 28:
+                    current_time = row[3]
+                    resultStr = '{0}{1}'.format(Utils.format_track_time(row[3]), row[4])
+                elif event_id >= 29 and event_id <= 37:
+                    inch_part_of_distance = float(row[4])
+                    if str(inch_part_of_distance).endswith('.0'):
+                        inch_part_of_distance = int(inch_part_of_distance)
+                    resultStr = '{0}\' {1}"'.format(row[3], inch_part_of_distance)
 
-            competitor_results_dict.append({
-                'Event': str(row[0]),
-                'EventId': event_id,
-                'FullName': str(row[2]),
-                'Result': resultStr,
-                'Grade': row[5],
-                'CompetitorId': str(row[6]),
-                'Year': row[7],
-                'Squad': str(row[8]),
-                'SquadId': row[9],
-            })
+                competitor_results_dict.append({
+                    'Event': str(row[0]),
+                    'EventId': event_id,
+                    'FullName': str(row[2]),
+                    'Result': resultStr,
+                    'Grade': row[5],
+                    'CompetitorId': str(row[6]),
+                    'Year': row[7],
+                    'Squad': str(row[8]),
+                    'SquadId': row[9],
+                    'Rank': row[10],
+                })
 
         return json.dumps(competitor_results_dict)
     except Exception as e:
