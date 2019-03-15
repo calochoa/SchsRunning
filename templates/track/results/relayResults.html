@@ -80,8 +80,12 @@
 					$(results).find('p').append(teamInfo);
 					$('.jumbotron').append(results);
 				});
-				var titleStr = resultsObj.length > 0 ? year + ' SCHS ' + squadStr + ' ' + eventStr : 'No Results';
-				$('.text-muted').text(titleStr);
+				var titleStr = resultsObj.length > 0 ? ' - ' + squadStr + ' ' + eventStr : 'No Results';
+				var titleDiv = $('<div>').append($('<a>'));
+				$(titleDiv).find('a').attr('href', '/santa-clara-high-track-and-field/season/'+ year);
+				$(titleDiv).find('a').text(year + ' SCHS Season');
+				$(titleDiv).append(titleStr)
+				$('.text-muted').append(titleDiv);
 			},
 			error: function(error){
 				console.log(error);
