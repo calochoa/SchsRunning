@@ -404,30 +404,48 @@ def get_track_competitor_results():
 
         competitor_results_dict = []
         for result in cursor.stored_results():
+            last_rank = 0
+            last_measurement = 0
+            current_measurement = 0
             for row in result.fetchall():
+                result_competitor_id = str(row[6])
+                current_rank = row[10]
                 event_id = row[1]
                 resultStr = 'Unknown'
                 if event_id >= 1 and event_id <= 28:
-                    current_time = row[3]
-                    resultStr = '{0}{1}'.format(Utils.format_track_time(row[3]), row[4])
+                    current_measurement = Utils.format_track_time(row[3])
+                    resultStr = '{0}{1}'.format(current_measurement, row[4])
                 elif event_id >= 29 and event_id <= 37:
+                    foot_part_of_distance = int(row[3])
                     inch_part_of_distance = float(row[4])
+                    current_measurement = (12 * foot_part_of_distance) + inch_part_of_distance
                     if str(inch_part_of_distance).endswith('.0'):
                         inch_part_of_distance = int(inch_part_of_distance)
-                    resultStr = '{0}\' {1}"'.format(row[3], inch_part_of_distance)
+                    resultStr = '{0}\' {1}"'.format(foot_part_of_distance, inch_part_of_distance)
 
-                competitor_results_dict.append({
-                    'Event': str(row[0]),
-                    'EventId': event_id,
-                    'FullName': str(row[2]),
-                    'Result': resultStr,
-                    'Grade': row[5],
-                    'CompetitorId': str(row[6]),
-                    'Year': row[7],
-                    'Squad': str(row[8]),
-                    'SquadId': row[9],
-                    'Rank': row[10],
-                })
+                if last_rank > 0:
+                    if current_measurement == last_measurement:
+                        current_rank = last_rank
+                    else:
+                        last_rank = current_rank
+                        last_measurement = current_measurement
+                else:
+                    last_rank = current_rank
+                    last_measurement = current_measurement
+
+                if competitor_id == result_competitor_id:
+                    competitor_results_dict.append({
+                        'Event': str(row[0]),
+                        'EventId': event_id,
+                        'FullName': str(row[2]),
+                        'Result': resultStr,
+                        'Grade': row[5],
+                        'CompetitorId': str(row[6]),
+                        'Year': row[7],
+                        'Squad': str(row[8]),
+                        'SquadId': row[9],
+                        'Rank': current_rank,
+                    })
 
         return json.dumps(competitor_results_dict)
     except Exception as e:
