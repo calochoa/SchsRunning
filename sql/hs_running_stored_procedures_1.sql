@@ -1328,6 +1328,7 @@ FROM (
 			NATURAL JOIN `Athlete` NATURAL JOIN `Squad` 
 		WHERE `eventId`=`inputEventId` AND `squadId`=`inputSquadId`
 			AND `FieldResult`.`year`=`inputYear` AND `FieldResult`.`year`=`Competitor`.`year` 
+		ORDER BY `footPartOfDistance` DESC, `inchPartOfDistance` DESC, `year`, `lastname`, `firstname`
 	) `t1`, (SELECT @`rownum` := 0) `r`
 ) `t2`
 WHERE `competitorid`=`inputCompetitorId`
@@ -1344,6 +1345,7 @@ FROM (
             JOIN `Athlete`ON (`Athlete`.`athleteId`=`Competitor`.`athleteId`) 
 		WHERE `eventId`=`inputEventId` AND `squadId`=`inputSquadId` AND `competitorid`=`inputCompetitorId`
 			AND `RelayResult`.`year`=`inputYear` AND `RelayResult`.`year`=`Competitor`.`year`
+		ORDER BY `RelayResult`.`time`, `lastname`, `firstname`
 	) `t1`, (SELECT @`rownum` := 0) `r`
 ) `t2`
 UNION
@@ -1359,6 +1361,7 @@ FROM (
             JOIN `Athlete`ON (`Athlete`.`athleteId`=`Competitor`.`athleteId`) 
 		WHERE `eventId`=`inputEventId` AND `squadId`=`inputSquadId` AND `competitorid`=`inputCompetitorId`
 			AND `RelayResult`.`year`=`inputYear` AND `RelayResult`.`year`=`Competitor`.`year`
+		ORDER BY `RelayResult`.`time`, `lastname`, `firstname`
 	) `t1`, (SELECT @`rownum` := 0) `r`
 ) `t2`
 UNION
@@ -1374,6 +1377,7 @@ FROM (
             JOIN `Athlete`ON (`Athlete`.`athleteId`=`Competitor`.`athleteId`) 
 		WHERE `eventId`=`inputEventId` AND `squadId`=`inputSquadId` AND `competitorid`=`inputCompetitorId`
 			AND `RelayResult`.`year`=`inputYear` AND `RelayResult`.`year`=`Competitor`.`year`
+		ORDER BY `RelayResult`.`time`, `lastname`, `firstname`
 	) `t1`, (SELECT @`rownum` := 0) `r`
 ) `t2`
 UNION
@@ -1389,6 +1393,7 @@ FROM (
             JOIN `Athlete`ON (`Athlete`.`athleteId`=`Competitor`.`athleteId`) 
 		WHERE `eventId`=`inputEventId` AND `squadId`=`inputSquadId` AND `competitorid`=`inputCompetitorId`
 			AND `RelayResult`.`year`=`inputYear` AND `RelayResult`.`year`=`Competitor`.`year`
+		ORDER BY `RelayResult`.`time`, `lastname`, `firstname`
 	) `t1`, (SELECT @`rownum` := 0) `r`
 ) `t2`;
 
