@@ -21,6 +21,16 @@
     var ctIds = '{{coachTypeIds}}'
     var urlParams = parseURL();
     var year = yr && yr != 0 ? yr : urlParams.yr;
+	var yearStr = year.toString();
+	if (yearStr.length == 2) {
+		if (year > 60) {
+			year = parseInt('19' + yearStr);
+		} else {
+			year = parseInt('20' + yearStr);
+		}
+	} else if (yearStr.length == 1) {
+		year = parseInt('200' + yearStr);
+	}
     var coachTypeIds = ctIds ? ctIds : urlParams.ctIds;
 	
 	$(function(){
