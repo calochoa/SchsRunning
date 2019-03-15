@@ -10,13 +10,17 @@ track_athletes_seo_app = Blueprint(
 )    
 
 
+@track_athletes_seo_app.route('/', methods=['GET'])
+def track_athletes():
+    return render_template('track/athletes/athletes.html', gId='2,3')
+
 @track_athletes_seo_app.route('/boys', methods=['GET'])
 def track_boy_athletes():
-    return render_template('track/athletes/athletes.html', gId=2)
+    return render_template('track/athletes/athletes.html', gId='2')
 
 @track_athletes_seo_app.route('/girls', methods=['GET'])
 def track_girl_athletes():
-    return render_template('track/athletes/athletes.html', gId=3)
+    return render_template('track/athletes/athletes.html', gId='3')
 
 def get_track_athlete_data(athlete_id):
     return render_template('track/athletes/athlete.html', aId=athlete_id)

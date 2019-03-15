@@ -47,12 +47,16 @@
 				var resultsObj = JSON.parse(res);
 				var results = '';
 				var fullName = '';
-				var gradeStr = '';
 				var titleStr = '';
 				var year = '';
+				var athleteId = '';
+				var raceResults = '';
+				var fieldResults = '';
 				$.each(resultsObj,function(index, value){
-					titleStr = value.FullName + (value.Grade > 12 ? '' : ' - ' + value.Grade + 'th grade') + ' - ';
+					fullName = value.FullName
+					titleStr = fullName + (value.Grade > 12 ? '' : ' (' + value.Grade + 'th grade)');
 					year = value.Year;
+					athleteId = value.AthleteId;
 
 					results = $(div).clone();
 					$(results).find('a').attr(
@@ -63,16 +67,33 @@
 
 					eventId = value.EventId;
 					if (eventId >= 1 && eventId <= 28) {
+						if (raceResults == '') {
+							// remove placeholder text bc a race result will be appended
+							$('.raceResults').text('');
+							raceResults = 'yay!'
+						}
 						$('.raceResults').append(results);
 					} else if (eventId >= 29 && eventId <= 37) {
+						if (fieldResults == '') {
+							// remove placeholder text bc a field result will be appended
+							$('.fieldResults').text('');
+							fieldResults = 'yay!'
+						}
 						$('.fieldResults').append(results);
 					}
 				});
-				var titleDiv = $('<div>').append($('<a>'));
-				$(titleDiv).find('a').attr('href', '/santa-clara-high-track-and-field/season/'+ year);
-				$(titleDiv).find('a').text(year + ' SCHS Track & Field');
-				$(titleDiv).prepend(titleStr)
-				$('.text-muted').append(titleDiv);
+				var seasonLink = $('<span>').append($('<a>'));
+				$(seasonLink).find('a').attr('href', '/santa-clara-high-track-and-field/season/' + year);
+				$(seasonLink).find('a').text(year + ' SCHS Track & Field Season');
+				$(seasonLink).append(' / ' + titleStr);
+				$('.breadcrumb').append(seasonLink);
+				var athleteLink = $('<span>').append($('<a>'));
+				$(athleteLink).find('a').attr('href', '/santa-clara-high-track-and-field/athletes/' + athleteId);
+				$(athleteLink).find('a').text(fullName + ' (All Records)');
+				$('.career').append(athleteLink);
+				$('.text-muted').append(titleStr);
+				$('.raceHeader').text(year + ' Season Best Track Times');
+				$('.fieldHeader').text(year + ' Season Best Field Marks');
 			},
 			error: function(error){
 				console.log(error);
@@ -85,16 +106,22 @@
     <div class="container">
 {% include "nav.html" %}
 	  <div>
+        <p class="breadcrumb"></p>
+      </div>
+	  <div>
         <h3 class="text-muted"></h3>
+      </div>
+      <div>
+        <p class="career"></p>
       </div>
       <div class="row marketing">
         <div class="col-lg-6">
-        	<h4 class="">Season Best Track Times</h4>
-        	<div class="raceResults"></div>
+        	<h4 class="raceHeader"></h4>
+        	<div class="raceResults">No Track Times</div>
 		</div>
         <div class="col-lg-6">
-        	<h4 class="">Season Best Field Times</h4>
-        	<div class="fieldResults"></div>
+        	<h4 class="fieldHeader"></h4>
+        	<div class="fieldResults">No Field Marks</div>
 		</div>
       </div>
 {% include "footer.html" %}

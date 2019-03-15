@@ -16,7 +16,7 @@
     <link href="/static/css/signup.css" rel="stylesheet">
     <script src="/static/js/jquery-1.11.2.js"></script>
     <script>
-    var genderId = {{gId}};
+    var genderId = '{{gId}}';
         
 	$(function(){
 		$.ajax({
@@ -28,13 +28,32 @@
 			success: function(res){							    				
 				var resultsObj = JSON.parse(res);
 				var count = resultsObj.length;
-				var genderStr = (genderId && genderId == 3) ? 'Female' : 'Male';
-				$('.text-muted').text('SCHS ' + genderStr + ' Track Athletes (' + count + ')');
+				var titleStr = (genderId && genderId == '3') ? 'Girls ' : ((genderId && genderId == '2') ? 'Boys ': 'SCHS Track & Field Athletes');
+				$('.text-muted').text(titleStr + ' (' + count + ')');
 				$.each(resultsObj,function(index, value){
 				    var nameStr = value.LastName + ', ' + value.FirstName + ' ... ' + value.Years;
 				    var link = "/santa-clara-high-track-and-field/athletes/" + value.AthleteId;
 					$('.athletes').append("<div><a href='" + link + "'>" + nameStr + "</a></div>");
 				});
+				if (genderId == '2' || genderId == '3') {
+					var breadcrumb = $('<p>').attr('class', 'breadcrumb');
+					var athletesLink = $('<span>').append($('<a>'));
+					$(athletesLink).find('a').attr('href', '/santa-clara-high-track-and-field/athletes/');
+					$(athletesLink).find('a').text('SCHS Track & Field Athletes');
+					$(athletesLink).append(' / ' + titleStr);
+					$(breadcrumb).append(athletesLink);
+					$('.breadcrumb-placeholder').append(breadcrumb);
+				} else {
+					var girlsLink = $('<span>').append($('<a>'));
+					$(girlsLink).find('a').attr('href', '/santa-clara-high-track-and-field/athletes/girls');
+					$(girlsLink).find('a').text('Girls');
+					$('.filter').append(girlsLink);
+					$('.filter').append(' | ');
+					var boysLink = $('<span>').append($('<a>'));
+					$(boysLink).find('a').attr('href', '/santa-clara-high-track-and-field/athletes/boys');
+					$(boysLink).find('a').text('Boys');
+					$('.filter').append(boysLink);
+				}
 			},
 			error: function(error){
 				console.log(error);
@@ -46,8 +65,13 @@
   <body>
     <div class="container">
 {% include "nav.html" %}
+	  <div class="breadcrumb-placeholder">
+      </div>
 	  <div>
         <h3 class="text-muted"></h3>
+      </div>
+      <div>
+        <p class="filter"></p>
       </div>
       <div class="row marketing">
         <div class="col-lg-6">

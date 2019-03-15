@@ -48,8 +48,13 @@
 				var results = '';
 				var prResults = '';
 				var titleStr = '';
+				var genderStr = '';
+				var genderLinkStr = '';
 				var resultsObj = JSON.parse(res);
 				$.each(resultsObj,function(index, value){
+					genderStr = value.GenderId == 2 ? 'Boys' : 'Girls';
+					genderLinkStr = value.GenderId == 2 ? 'boys' : 'girls';
+
 					var gradeStr = value.Grade > 12 ? '' : ' - ' + value.Grade + 'th grade';
 					results = $(div).clone();
 					$(results).find('a').attr(
@@ -65,12 +70,28 @@
 						$(results).find('p').append($(rankDiv).clone().text(value.Squad + ' Rank: ' + value.Rank));
 						if (lastYear != value.Year) {
 							lastYear = value.Year;
-							$('.seasonRecords').append($(headerDiv).clone().find('h4').text(value.Year + ' Season Records' + gradeStr));
+							var seasonLink = $('<span>').append($('<a>'));
+							$(seasonLink).find('a').attr('href', '/santa-clara-high-track-and-field/season/' + value.Year);
+							$(seasonLink).find('a').text(value.Year + ' Season');
+							$(seasonLink).append(' Records' + gradeStr);
+							$('.seasonRecords').append($(headerDiv).clone().find('h4').append(seasonLink));
 						}
 						$('.seasonRecords').append(results);
 					}
-					titleStr = value.FullName + ' - SCHS Track & Field';
+					titleStr = value.FullName;
 				});
+				var athletesLink = $('<span>').append($('<a>'));
+				$(athletesLink).find('a').attr('href', '/santa-clara-high-track-and-field/athletes/');
+				$(athletesLink).find('a').text('SCHS Track & Field Athletes');
+				$(athletesLink).append(' / ');
+				$('.breadcrumb').append(athletesLink);
+				var genderLink = $('<span>').append($('<a>'));
+				$(genderLink).find('a').attr('href', '/santa-clara-high-track-and-field/athletes/' + genderLinkStr);
+				$(genderLink).find('a').text(genderStr);
+				$(genderLink).append(' / ' + titleStr);
+				$('.breadcrumb').append(genderLink);
+
+
 				$('.text-muted').text(titleStr);
 			},
 			error: function(error){
@@ -83,6 +104,9 @@
   <body>
     <div class="container">
 {% include "nav.html" %}
+	  <div>
+        <p class="breadcrumb"></p>
+      </div>
       <div>
         <h3 class="text-muted"></h3>
       </div>

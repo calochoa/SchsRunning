@@ -14,7 +14,7 @@ track_season_seo_app = Blueprint(
 def trackSeasonDNE(year=None):
     return render_template('error.html', error='No data for {0} season'.format(year))
 
-@track_season_seo_app.route('/2018',methods=['GET'])
-def trackSeason2018():
-    return render_template('track/season/season.html', yr=2018, coachTypeIds="3,4,5,6,7,8")
+@track_season_seo_app.route('/<int:year>',methods=['GET'])
+def trackSeasons(year):
+    return render_template('track/season/season.html', yr=year, coachTypeIds="3,4,5,6,7,8")
 

@@ -409,7 +409,7 @@ def get_track_competitor_results():
             current_measurement = 0
             for row in result.fetchall():
                 result_competitor_id = str(row[6])
-                current_rank = row[10]
+                current_rank = row[11]
                 event_id = row[1]
                 resultStr = 'Unknown'
                 if event_id >= 1 and event_id <= 28:
@@ -444,6 +444,7 @@ def get_track_competitor_results():
                         'Year': row[7],
                         'Squad': str(row[8]),
                         'SquadId': row[9],
+                        'AthleteId': row[10],
                         'Rank': current_rank,
                     })
 
@@ -455,10 +456,10 @@ def get_track_competitor_results():
 @track_db_app.route('/getTrackAthletes', methods=['GET'])
 def get_track_athletes():
     try:
-        gender_id = request.args.get('genderId', default=2, type=int)
+        gender_id_str = request.args.get('genderId', default='2,3', type=str)
 
         cursor = mydb.cursor()
-        cursor.callproc('GetTrackAthletes', [gender_id])
+        cursor.callproc('GetTrackAthletes', [gender_id_str])
         for result in cursor.stored_results():
             data = result.fetchall()
 
@@ -491,7 +492,7 @@ def get_track_athlete_results():
             current_measurement = 0
             for row in result.fetchall():
                 result_competitor_id = str(row[6])
-                current_rank = row[11]
+                current_rank = row[12]
                 event_id = row[1]
                 resultStr = 'Unknown'
                 pr_measurement = ''
@@ -530,6 +531,7 @@ def get_track_athlete_results():
                         'Year': row[7],
                         'Squad': str(row[8]),
                         'SquadId': row[9],
+                        'GenderId': row[11],
                         'Rank': current_rank,
                         'PRMeasurement': pr_measurement,
                         'PR': False,

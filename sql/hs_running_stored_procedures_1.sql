@@ -1056,7 +1056,8 @@ BEGIN
 SELECT `t1`.*,@`rownum` := @`rownum` + 1 AS `myrank`
 FROM (
 	SELECT `event`, `eventId`, CONCAT(`firstname`, " ", `lastname`) AS `fullName`,
-	`time` AS `result1`, `raceTimeTypeId` AS `result2`, `grade`, `competitorid`, `year`, `squadName`, `squadId`
+	`time` AS `result1`, `raceTimeTypeId` AS `result2`, `grade`, `competitorid`, `year`, 
+    `squadName`, `squadId`, `Athlete`.`athleteId`
 	FROM `RaceResult` NATURAL JOIN `Event` NATURAL JOIN `Competitor` 
 		NATURAL JOIN `Athlete` NATURAL JOIN `Squad` 
 	WHERE `eventId`=`inputEventId` AND `squadId`=`inputSquadId`
@@ -1068,7 +1069,7 @@ SELECT `t1`.*,@`rownum` := @`rownum` + 1 AS `myrank`
 FROM (
 	SELECT `event`, `eventId`, CONCAT(`firstname`, " ", `lastname`) AS `fullName`, 
 		`footPartOfDistance` AS `result1`, `inchPartOfDistance` AS `result2`, 
-		`grade`, `competitorid`, `year`, `squadName`, `squadId`
+		`grade`, `competitorid`, `year`, `squadName`, `squadId`, `Athlete`.`athleteId`
 	FROM `FieldResult` NATURAL JOIN `Event` NATURAL JOIN `Competitor` 
 		NATURAL JOIN `Athlete` NATURAL JOIN `Squad` 
 	WHERE `eventId`=`inputEventId` AND `squadId`=`inputSquadId`
@@ -1080,7 +1081,7 @@ SELECT `t1`.*,@`rownum` := @`rownum` + 1 AS `myrank`
 FROM (
 	SELECT `event`, `eventId`, CONCAT(`firstname`, " ", `lastname`) AS `fullName`, 
 		`RelayResult`.`time` AS `result1`, `raceTimeTypeId` AS `result2`, 
-		`grade`, `competitorid`, `RelayResult`.`year`, `squadName`, `squadId`
+		`grade`, `competitorid`, `RelayResult`.`year`, `squadName`, `squadId`, `Athlete`.`athleteId`
 	FROM `RelayResult` NATURAL JOIN `Event` NATURAL JOIN `Squad` 
 		JOIN `Competitor` ON (`Competitor`.`competitorId`=`competitorId1`) 
 		JOIN `Athlete`ON (`Athlete`.`athleteId`=`Competitor`.`athleteId`) 
@@ -1093,7 +1094,7 @@ SELECT `t1`.*,@`rownum` := @`rownum` + 1 AS `myrank`
 FROM (
 	SELECT `event`, `eventId`, CONCAT(`firstname`, " ", `lastname`) AS `fullName`, 
 		`RelayResult`.`time` AS `result1`, `raceTimeTypeId` AS `result2`, 
-		`grade`, `competitorid`, `RelayResult`.`year`, `squadName`, `squadId`
+		`grade`, `competitorid`, `RelayResult`.`year`, `squadName`, `squadId`, `Athlete`.`athleteId`
 	FROM `RelayResult` NATURAL JOIN `Event` NATURAL JOIN `Squad` 
 		JOIN `Competitor` ON (`Competitor`.`competitorId`=`competitorId2`) 
 		JOIN `Athlete`ON (`Athlete`.`athleteId`=`Competitor`.`athleteId`) 
@@ -1106,7 +1107,7 @@ SELECT `t1`.*,@`rownum` := @`rownum` + 1 AS `myrank`
 FROM (
 	SELECT `event`, `eventId`, CONCAT(`firstname`, " ", `lastname`) AS `fullName`, 
 		`RelayResult`.`time` AS `result1`, `raceTimeTypeId` AS `result2`, 
-		`grade`, `competitorid`, `RelayResult`.`year`, `squadName`, `squadId`
+		`grade`, `competitorid`, `RelayResult`.`year`, `squadName`, `squadId`, `Athlete`.`athleteId`
 	FROM `RelayResult` NATURAL JOIN `Event` NATURAL JOIN `Squad` 
 		JOIN `Competitor` ON (`Competitor`.`competitorId`=`competitorId3`) 
 		JOIN `Athlete`ON (`Athlete`.`athleteId`=`Competitor`.`athleteId`) 
@@ -1119,7 +1120,7 @@ SELECT `t1`.*,@`rownum` := @`rownum` + 1 AS `myrank`
 FROM (
 	SELECT `event`, `eventId`, CONCAT(`firstname`, " ", `lastname`) AS `fullName`, 
 		`RelayResult`.`time` AS `result1`, `raceTimeTypeId` AS `result2`, 
-		`grade`, `competitorid`, `RelayResult`.`year`, `squadName`, `squadId`
+		`grade`, `competitorid`, `RelayResult`.`year`, `squadName`, `squadId`, `Athlete`.`athleteId`
 	FROM `RelayResult` NATURAL JOIN `Event` NATURAL JOIN `Squad` 
 		JOIN `Competitor` ON (`Competitor`.`competitorId`=`competitorId4`) 
 		JOIN `Athlete`ON (`Athlete`.`athleteId`=`Competitor`.`athleteId`) 
@@ -1291,7 +1292,7 @@ SELECT `t1`.*,@`rownum` := @`rownum` + 1 AS `myrank`
 FROM (
 	SELECT `event`, `eventId`, CONCAT(`firstname`, " ", `lastname`) AS `fullName`, 
 		`time` AS `result1`, `raceTimeTypeId` AS `result2`, `grade`, `competitorid`, `year`, 
-		`squadName`, `squadId`, `Athlete`.`athleteId`
+		`squadName`, `squadId`, `Athlete`.`athleteId`, `genderId`
 	FROM `RaceResult` NATURAL JOIN `Event` NATURAL JOIN `Competitor` 
 		NATURAL JOIN `Athlete` NATURAL JOIN `Squad` 
 	WHERE `eventId`=`inputEventId` AND `squadId`=`inputSquadId`
@@ -1303,7 +1304,7 @@ SELECT `t1`.*,@`rownum` := @`rownum` + 1 AS `myrank`
 FROM (
 	SELECT `event`, `eventId`, CONCAT(`firstname`, " ", `lastname`) AS `fullName`, 
 		`footPartOfDistance` AS `result1`, `inchPartOfDistance` AS `result2`, 
-		`grade`, `competitorid`, `year`, `squadName`, `squadId`, `Athlete`.`athleteId`
+		`grade`, `competitorid`, `year`, `squadName`, `squadId`, `Athlete`.`athleteId`, `genderId`
 	FROM `FieldResult` NATURAL JOIN `Event` NATURAL JOIN `Competitor` 
 		NATURAL JOIN `Athlete` NATURAL JOIN `Squad` 
 	WHERE `eventId`=`inputEventId` AND `squadId`=`inputSquadId`
@@ -1315,7 +1316,7 @@ SELECT `t1`.*,@`rownum` := @`rownum` + 1 AS `myrank`
 FROM (
 	SELECT `event`, `eventId`, CONCAT(`firstname`, " ", `lastname`) AS `fullName`, 
 		`RelayResult`.`time` AS `result1`, `raceTimeTypeId` AS `result2`, 
-		`grade`, `competitorid`, `RelayResult`.`year`, `squadName`, `squadId`, `Athlete`.`athleteId`
+		`grade`, `competitorid`, `RelayResult`.`year`, `squadName`, `squadId`, `Athlete`.`athleteId`, `genderId`
 	FROM `RelayResult` NATURAL JOIN `Event` NATURAL JOIN `Squad` 
 		JOIN `Competitor` ON (`Competitor`.`competitorId`=`competitorId1`) 
 		JOIN `Athlete`ON (`Athlete`.`athleteId`=`Competitor`.`athleteId`) 
@@ -1328,7 +1329,7 @@ SELECT `t1`.*,@`rownum` := @`rownum` + 1 AS `myrank`
 FROM (
 	SELECT `event`, `eventId`, CONCAT(`firstname`, " ", `lastname`) AS `fullName`, 
 		`RelayResult`.`time` AS `result1`, `raceTimeTypeId` AS `result2`, 
-		`grade`, `competitorid`, `RelayResult`.`year`, `squadName`, `squadId`, `Athlete`.`athleteId`
+		`grade`, `competitorid`, `RelayResult`.`year`, `squadName`, `squadId`, `Athlete`.`athleteId`, `genderId`
 	FROM `RelayResult` NATURAL JOIN `Event` NATURAL JOIN `Squad` 
 		JOIN `Competitor` ON (`Competitor`.`competitorId`=`competitorId2`) 
 		JOIN `Athlete`ON (`Athlete`.`athleteId`=`Competitor`.`athleteId`) 
@@ -1341,7 +1342,7 @@ SELECT `t1`.*,@`rownum` := @`rownum` + 1 AS `myrank`
 FROM (
 	SELECT `event`, `eventId`, CONCAT(`firstname`, " ", `lastname`) AS `fullName`, 
 		`RelayResult`.`time` AS `result1`, `raceTimeTypeId` AS `result2`, 
-		`grade`, `competitorid`, `RelayResult`.`year`, `squadName`, `squadId`, `Athlete`.`athleteId`
+		`grade`, `competitorid`, `RelayResult`.`year`, `squadName`, `squadId`, `Athlete`.`athleteId`, `genderId`
 	FROM `RelayResult` NATURAL JOIN `Event` NATURAL JOIN `Squad` 
 		JOIN `Competitor` ON (`Competitor`.`competitorId`=`competitorId3`) 
 		JOIN `Athlete`ON (`Athlete`.`athleteId`=`Competitor`.`athleteId`) 
@@ -1354,7 +1355,7 @@ SELECT `t1`.*,@`rownum` := @`rownum` + 1 AS `myrank`
 FROM (
 	SELECT `event`, `eventId`, CONCAT(`firstname`, " ", `lastname`) AS `fullName`, 
 		`RelayResult`.`time` AS `result1`, `raceTimeTypeId` AS `result2`, 
-		`grade`, `competitorid`, `RelayResult`.`year`, `squadName`, `squadId`, `Athlete`.`athleteId`
+		`grade`, `competitorid`, `RelayResult`.`year`, `squadName`, `squadId`, `Athlete`.`athleteId`, `genderId`
 	FROM `RelayResult` NATURAL JOIN `Event` NATURAL JOIN `Squad` 
 		JOIN `Competitor` ON (`Competitor`.`competitorId`=`competitorId4`) 
 		JOIN `Athlete`ON (`Athlete`.`athleteId`=`Competitor`.`athleteId`) 
