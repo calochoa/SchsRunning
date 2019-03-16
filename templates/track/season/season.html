@@ -18,9 +18,10 @@
     <script src="/static/js/utils.js"></script>
     <script>
     var yr = {{yr}};
-    var ctIds = '{{coachTypeIds}}'
+    var ctIds = '{{coachTypeIds}}';
     var urlParams = parseURL();
-    var year = yr && yr != 0 ? yr : urlParams.yr;
+    var coachTypeIds = ctIds ? ctIds : urlParams.ctIds;
+    var year = yr || yr == 0 ? yr : urlParams.yr;
 	var yearStr = year.toString();
 	if (yearStr.length == 2) {
 		if (year > 60) {
@@ -31,7 +32,6 @@
 	} else if (yearStr.length == 1) {
 		year = parseInt('200' + yearStr);
 	}
-    var coachTypeIds = ctIds ? ctIds : urlParams.ctIds;
 	
 	$(function(){
 		$.ajax({
