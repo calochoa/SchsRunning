@@ -836,7 +836,6 @@ DELIMITER ;
 
 
 
-
 DROP PROCEDURE IF EXISTS `GetTrackEventsByYear`;
 
 SET NAMES utf8mb4;
@@ -850,22 +849,25 @@ BEGIN
 
 SELECT  ANY_VALUE(`event`) AS `event`, ANY_VALUE(`eventId`) AS `eventId`, 
 	ANY_VALUE(`squadName`) AS `squadName`, ANY_VALUE(`squadId`) AS `squadID`, 
-    CONCAT(`eventId`, ":", `squadId`) AS `eventBySquad`, COUNT(`squadID`) AS `numResults`
-FROM `Event` NATURAL JOIN `RaceResult` NATURAL JOIN `Squad`
+    CONCAT(`eventId`, ":", `squadId`) AS `eventBySquad`, COUNT(`squadID`) AS `numResults`,
+    ANY_VALUE(`eventSubType`) AS `eventSubType`
+FROM `Event` NATURAL JOIN `RaceResult` NATURAL JOIN `Squad` NATURAL JOIN `EventSubType`
 WHERE `year`=`inputYear` AND `raceTimeTypeId` NOT IN ("c", "F")
 GROUP BY `eventBySquad`
 UNION
 SELECT  ANY_VALUE(`event`) AS `event`, ANY_VALUE(`eventId`) AS `eventId`, 
 	ANY_VALUE(`squadName`) AS `squadName`, ANY_VALUE(`squadId`) AS `squadID`, 
-    CONCAT(`eventId`, ":", `squadId`) AS `eventBySquad`, COUNT(`squadID`) AS `numResults`
-FROM `Event` NATURAL JOIN `FieldResult` NATURAL JOIN `Squad`
+    CONCAT(`eventId`, ":", `squadId`) AS `eventBySquad`, COUNT(`squadID`) AS `numResults`,
+    ANY_VALUE(`eventSubType`) AS `eventSubType`
+FROM `Event` NATURAL JOIN `FieldResult` NATURAL JOIN `Squad` NATURAL JOIN `EventSubType`
 WHERE `year`=`inputYear`
 GROUP BY `eventBySquad`
 UNION
 SELECT  ANY_VALUE(`event`) AS `event`, ANY_VALUE(`eventId`) AS `eventId`, 
 	ANY_VALUE(`squadName`) AS `squadName`, ANY_VALUE(`squadId`) AS `squadID`, 
-    CONCAT(`eventId`, ":", `squadId`) AS `eventBySquad`, COUNT(`squadID`) AS `numResults`
-FROM `Event` NATURAL JOIN `RelayResult` NATURAL JOIN `Squad`
+    CONCAT(`eventId`, ":", `squadId`) AS `eventBySquad`, COUNT(`squadID`) AS `numResults`,
+    ANY_VALUE(`eventSubType`) AS `eventSubType`
+FROM `Event` NATURAL JOIN `RelayResult` NATURAL JOIN `Squad` NATURAL JOIN `EventSubType`
 WHERE `year`=`inputYear` AND `raceTimeTypeId` NOT IN ("c", "F")
 GROUP BY `eventBySquad`
 ORDER BY `eventId`, `squadId`;

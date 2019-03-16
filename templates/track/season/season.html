@@ -106,18 +106,32 @@
 				var eventCount = 0;
 				var lastEventStr = '';
 				var resultsBySquadStr = '';
+				var lastEventSubTypeStr = '';
 				$.each(resultsObj,function(index, value){
 					var eventStr = value.Event;
 					var eventId = value.EventId;
 					var squadStr = value.Squad;
 					var squadId = value.SquadId;
 					var numResults = value.NumResults;
+					var eventSubTypeStr = value.EventSubType;
 					// check if the event has changed
 					if (lastEventStr != '' && lastEventStr != eventStr) {
+						// check if the event subtype is first one
+						if (lastEventSubTypeStr == '') {
+							lastEventSubTypeStr = eventSubTypeStr;
+							$('.eventBySquad').append('<h5>' + eventSubTypeStr + '</h5>');
+						}
+
 						eventCount++;
 						// append the last event
 						$('.eventBySquad').append('<div>' + lastEventStr + '</div>' + resultsBySquadStr + '<br/>');
 						resultsBySquadStr = '';
+
+						// check if the event subtype has changed
+						if (lastEventSubTypeStr != eventSubTypeStr) {
+							lastEventSubTypeStr = eventSubTypeStr;
+							$('.eventBySquad').append('<h5>' + eventSubTypeStr + '</h5>');
+						}
 					}
 					var link = '/santa-clara-high-track-and-field/results/' + eventId + '/' + squadId + '/' + year + '/'; 
 					resultsBySquadStr += '<div>&raquo; <a href="'+link+'">'+ squadStr + ' (' + numResults + ')</a></div>';

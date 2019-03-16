@@ -243,6 +243,7 @@ def get_track_events_by_year():
                 'SquadId': row[3],
                 'EventBySquad': str(row[4]),
                 'NumResults': row[5],
+                'EventSubType': str(row[6]),
             })
 
         return json.dumps(races_dict)
