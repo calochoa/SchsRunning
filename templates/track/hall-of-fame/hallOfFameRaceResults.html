@@ -57,11 +57,14 @@
 					$(results).find('p').text(timeStr);
 					$('.jumbotron').append(results);
 				});
-				var genderStr = (genderId && genderId == 3) ? 'Girls' : 'Boys'
-				var hofStr = limit > 0 ? 'Santa Clara Hall of Fame:' : 'No Results for'
-				var titleStr =  hofStr + ' ' + genderStr + ' ' + eventStr
+				var titleStr =  ((genderId && genderId == 3) ? 'Girls' : 'Boys') + ' ' + eventStr;
 				$('.text-muted').text(titleStr);
 
+				var hallOfFameLink = $('<span>').append($('<a>'));
+				$(hallOfFameLink).find('a').attr('href', '/santa-clara-high-track-and-field/hall-of-fame/');
+				$(hallOfFameLink).find('a').text('SCHS Track & Field Hall of Fame All-Time Top 10');
+				$(hallOfFameLink).append(' / ' + titleStr);
+				$('.breadcrumb').append(hallOfFameLink);
 			},
 			error: function(error){
 				console.log(error);

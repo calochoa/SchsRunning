@@ -21,6 +21,10 @@ def get_track_hof_field_results(event_id, gender_id):
 
 
 
+@track_hall_of_fame_seo_app.route('/',methods=['GET'])
+def track_hof_home():
+    return render_template('track/hall-of-fame/hallOfFame.html')
+
 # Sprints
 @track_hall_of_fame_seo_app.route('/boys-100m-dash/',methods=['GET'])
 def track_boys_100m_dash():
