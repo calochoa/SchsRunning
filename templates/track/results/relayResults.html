@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
     <link href="https://getbootstrap.com/docs/3.3/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet">
     <link href="/static/css/signup.css" rel="stylesheet">
+    <link href="/static/css/dropdown.css" rel="stylesheet">
     <script src="/static/js/jquery-1.11.2.js"></script>
     <script src="/static/js/utils.js"></script>
     <style>
@@ -94,13 +95,66 @@
 			}
 		});
 	});
+
+	$(function(){
+		$.ajax({
+			url: '/getTrackEventsByYear',
+			type: 'GET',
+			data: {
+				"year": year,
+			},
+			success: function(res){
+				var dropdownDiv = $('<div>')
+				    .attr('class', 'dropdown')
+				    .attr('onclick', 'void(0)')
+				    .append($('<span>')
+				        .attr('class', 'dropbtn'),
+				        $('<div>')
+				        .attr('class', 'dropdown-content'));
+
+				var resultsObj = JSON.parse(res);
+				var dropdownMenu = '';
+				var lastEventStr = '';
+				var lastEventSubTypeStr = '';
+				var currentEvent = '';
+				$.each(resultsObj,function(index, value){
+					var eventStr = value.Event;
+					var eventId = value.EventId;
+					var squadId = value.SquadId;
+					var eventSubTypeStr = value.EventSubType;
+
+					// check if the event subtype has changed
+					if (lastEventSubTypeStr != eventSubTypeStr) {
+						// create a new dropdown menu
+						dropdownMenu = $(dropdownDiv).clone();
+						$(dropdownMenu).find('span').append(eventSubTypeStr + ' &#9660;');
+						$('.dropdown-list').append(dropdownMenu);
+						lastEventSubTypeStr = eventSubTypeStr;
+					}
+
+					// check if the event has changed
+					if (lastEventStr != eventStr) {
+						// add the event to the dropdown menu
+						currentEvent = $('<div>').attr('class', 'dropdown-indent').text(eventStr);
+						$(dropdownMenu).find('.dropdown-content').append(currentEvent);
+						lastEventStr = eventStr;
+					}
+					var link = '/santa-clara-high-track-and-field/results/' + eventId + '/' + squadId + '/' + year + '/';
+					$(currentEvent).append($('<br/>')).append($('<a>').attr('href', link).text(value.Squad));
+				});
+			},
+			error: function(error){
+				console.log(error);
+			}
+		});
+	});
     </script>
     <style>
     	.jumbotron p {margin-bottom: 0px;font-size:18px;}
 	</style>
   </head>
   <body>
-{% include "bread-crumb-body.html" %}
+{% include "bread-crumb-dropdown-body.html" %}
   </body>
 </html>
 

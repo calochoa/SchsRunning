@@ -71,13 +71,17 @@
 			}
 		});
 	});
+
+	$.get("/santa-clara-high-track-and-field/hall-of-fame/drop-down-menus", function(data){
+	    $(".dropdown-list").append(data);
+	});
     </script>
     <style>
     	.jumbotron p {margin-bottom: 0px;font-size:18px;}
 	</style>
   </head>
   <body>
-{% include "track/hall-of-fame/body.html" %}
+{% include "bread-crumb-dropdown-body.html" %}
   </body>
 </html>
 
