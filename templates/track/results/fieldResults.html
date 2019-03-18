@@ -25,7 +25,21 @@
     var eventId = eId && eId != 0 ? eId : urlParams.eId;
     var squadId = sId && sId != 0 ? sId : urlParams.sId;
     var year = yr && yr != 0 ? yr : urlParams.yr;
-            
+
+	$(function(){
+		var trackHomeLink = $('<a>');
+		$(trackHomeLink).attr('href', '/santa-clara-high-track-and-field');
+		$(trackHomeLink).text('SCHS Track & Field');
+		$('.breadcrumb').append(trackHomeLink);
+		$('.breadcrumb').append(' / ');
+
+		var seasonLink = $('<a>');
+		$(seasonLink).attr('href', '/santa-clara-high-track-and-field/season/' + year);
+		$(seasonLink).text(year + ' Season');
+		$('.breadcrumb').append(seasonLink);
+		$('.breadcrumb').append(' / ');
+	})
+	
 	$(function(){
 		$.ajax({
 			url: '/getTrackFieldResults',
@@ -61,12 +75,7 @@
 					$('.jumbotron').append(results);
 				});
 				var titleStr = resultsObj.length > 0 ? squadStr + ' ' + eventStr : 'No Results';
-				var seasonLink = $('<span>').append($('<a>'));
-				$(seasonLink).find('a').attr('href', '/santa-clara-high-track-and-field/season/' + year);
-				$(seasonLink).find('a').text(year + ' SCHS Track & Field Season');
-				$(seasonLink).append(' / ');
-				$(seasonLink).append(titleStr);
-				$('.breadcrumb').append(seasonLink);
+				$('.breadcrumb').append(titleStr);
 				$('.text-muted').append(titleStr);
 			},
 			error: function(error){
@@ -133,7 +142,7 @@
 	</style>
   </head>
   <body>
-{% include "bread-crumb-dropdown-body.html" %}
+{% include "breadcrumb-dropdown-body.html" %}
   </body>
 </html>
 

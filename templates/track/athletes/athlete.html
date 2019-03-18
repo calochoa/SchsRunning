@@ -25,7 +25,20 @@
     var aId = {{aId}};
     var urlParams = parseURL();
     var athleteId = aId ? aId : urlParams.aId
-        
+
+	$(function(){
+		var trackHomeLink = $('<a>');
+		$(trackHomeLink).attr('href', '/santa-clara-high-track-and-field');
+		$(trackHomeLink).text('SCHS Track & Field');
+		$('.breadcrumb').append(trackHomeLink);
+		$('.breadcrumb').append(' / ');
+		var athletesLink = $('<a>');
+		$(athletesLink).attr('href', '/santa-clara-high-track-and-field/athletes/');
+		$(athletesLink).text('Athletes');
+		$('.breadcrumb').append(athletesLink);
+		$('.breadcrumb').append(' / ');
+	})
+
 	$(function(){
 		$.ajax({
 			url: '/getTrackAthleteResults',
@@ -80,18 +93,11 @@
 					}
 					titleStr = value.FullName;
 				});
-				var athletesLink = $('<span>').append($('<a>'));
-				$(athletesLink).find('a').attr('href', '/santa-clara-high-track-and-field/athletes/');
-				$(athletesLink).find('a').text('SCHS Track & Field Athletes');
-				$(athletesLink).append(' / ');
-				$('.breadcrumb').append(athletesLink);
-				var genderLink = $('<span>').append($('<a>'));
-				$(genderLink).find('a').attr('href', '/santa-clara-high-track-and-field/athletes/' + genderLinkStr);
-				$(genderLink).find('a').text(genderStr);
-				$(genderLink).append(' / ' + titleStr);
+				var genderLink = $('<a>');
+				$(genderLink).attr('href', '/santa-clara-high-track-and-field/athletes/' + genderLinkStr);
+				$(genderLink).text(genderStr);
 				$('.breadcrumb').append(genderLink);
-
-
+				$('.breadcrumb').append(' / ' + titleStr);
 				$('.text-muted').text(titleStr);
 			},
 			error: function(error){
@@ -104,12 +110,7 @@
   <body>
     <div class="container">
 {% include "nav.html" %}
-	  <div>
-        <p class="breadcrumb"></p>
-      </div>
-      <div>
-        <h3 class="text-muted"></h3>
-      </div>
+{% include "breadcrumb-title.html" %}
       <div class="row marketing">
         <div class="col-lg-6">
         	<h4>Personal Records</h4>

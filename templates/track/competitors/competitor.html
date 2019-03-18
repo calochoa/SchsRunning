@@ -23,10 +23,17 @@
     <script src="/static/js/utils.js"></script>
     <script>
     var cId = '{{competitorId}}';
-
     var urlParams = parseURL();
     var competitorId = cId ? cId : urlParams.cId;
-        
+
+	$(function(){
+		var trackHomeLink = $('<a>');
+		$(trackHomeLink).attr('href', '/santa-clara-high-track-and-field');
+		$(trackHomeLink).text('SCHS Track & Field');
+		$('.breadcrumb').append(trackHomeLink);
+		$('.breadcrumb').append(' / ');
+	})
+
 	$(function(){
 		$.ajax({
 			url: '/getTrackCompetitorResults',
@@ -82,16 +89,17 @@
 						$('.fieldResults').append(results);
 					}
 				});
-				var seasonLink = $('<span>').append($('<a>'));
-				$(seasonLink).find('a').attr('href', '/santa-clara-high-track-and-field/season/' + year);
-				$(seasonLink).find('a').text(year + ' SCHS Track & Field Season');
-				$(seasonLink).append(' / ' + titleStr);
+				var seasonLink = $('<a>');
+				$(seasonLink).attr('href', '/santa-clara-high-track-and-field/season/' + year);
+				$(seasonLink).text(year + ' Season');
 				$('.breadcrumb').append(seasonLink);
-				var athleteLink = $('<span>').append($('<a>'));
-				$(athleteLink).find('a').attr('href', '/santa-clara-high-track-and-field/athletes/' + athleteId);
-				$(athleteLink).find('a').text(fullName + ' (All Records)');
-				$('.career').append(athleteLink);
+				$('.breadcrumb').append(' / ' + titleStr);
 				$('.text-muted').append(titleStr);
+
+				var athleteLink = $('<a>');
+				$(athleteLink).attr('href', '/santa-clara-high-track-and-field/athletes/' + athleteId);
+				$(athleteLink).text(fullName + ' (All Records)');
+				$('.career').append(athleteLink);
 				$('.raceHeader').text(year + ' Season Best Track Times');
 				$('.fieldHeader').text(year + ' Season Best Field Marks');
 			},
@@ -105,15 +113,8 @@
   <body>
     <div class="container">
 {% include "nav.html" %}
-	  <div>
-        <p class="breadcrumb"></p>
-      </div>
-	  <div>
-        <h3 class="text-muted"></h3>
-      </div>
-      <div>
-        <p class="career"></p>
-      </div>
+{% include "breadcrumb-title.html" %}
+      <div><p class="career"></p></div>
       <div class="row marketing">
         <div class="col-lg-6">
         	<h4 class="raceHeader"></h4>

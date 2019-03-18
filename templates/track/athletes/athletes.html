@@ -17,7 +17,14 @@
     <script src="/static/js/jquery-1.11.2.js"></script>
     <script>
     var genderId = '{{gId}}';
-        
+
+	$(function(){
+		var trackHomeLink = $('<a>');
+		$(trackHomeLink).attr('href', '/santa-clara-high-track-and-field');
+		$(trackHomeLink).text('SCHS Track & Field');
+		$('.breadcrumb').append(trackHomeLink);
+	})
+
 	$(function(){
 		$.ajax({
 			url: '/getTrackAthletes',
@@ -28,7 +35,7 @@
 			success: function(res){							    				
 				var resultsObj = JSON.parse(res);
 				var count = resultsObj.length;
-				var titleStr = (genderId && genderId == '3') ? 'Girls ' : ((genderId && genderId == '2') ? 'Boys ': 'SCHS Track & Field Athletes');
+				var titleStr = (genderId && genderId == '3') ? 'Girls ' : ((genderId && genderId == '2') ? 'Boys ': 'Athletes');
 				$('.text-muted').text(titleStr + ' (' + count + ')');
 				$.each(resultsObj,function(index, value){
 				    var nameStr = value.LastName + ', ' + value.FirstName + ' ... ' + value.Years;
@@ -36,24 +43,23 @@
 					$('.athletes').append("<div><a href='" + link + "'>" + nameStr + "</a></div>");
 				});
 				if (genderId == '2' || genderId == '3') {
-					var breadcrumb = $('<p>').attr('class', 'breadcrumb');
-					var athletesLink = $('<span>').append($('<a>'));
-					$(athletesLink).find('a').attr('href', '/santa-clara-high-track-and-field/athletes/');
-					$(athletesLink).find('a').text('SCHS Track & Field Athletes');
-					$(athletesLink).append(' / ' + titleStr);
-					$(breadcrumb).append(athletesLink);
-					$('.breadcrumb-placeholder').append(breadcrumb);
+					$('.breadcrumb').append(' / ');
+					var athletesLink = $('<a>');
+					$(athletesLink).attr('href', '/santa-clara-high-track-and-field/athletes/');
+					$(athletesLink).text('Athletes');
+					$('.breadcrumb').append(athletesLink);
 				} else {
-					var girlsLink = $('<span>').append($('<a>'));
-					$(girlsLink).find('a').attr('href', '/santa-clara-high-track-and-field/athletes/girls');
-					$(girlsLink).find('a').text('Girls');
+					var girlsLink = $('<a>');
+					$(girlsLink).attr('href', '/santa-clara-high-track-and-field/athletes/girls');
+					$(girlsLink).text('Girls');
 					$('.filter').append(girlsLink);
 					$('.filter').append(' | ');
-					var boysLink = $('<span>').append($('<a>'));
-					$(boysLink).find('a').attr('href', '/santa-clara-high-track-and-field/athletes/boys');
-					$(boysLink).find('a').text('Boys');
+					var boysLink = $('<a>');
+					$(boysLink).attr('href', '/santa-clara-high-track-and-field/athletes/boys');
+					$(boysLink).text('Boys');
 					$('.filter').append(boysLink);
 				}
+				$('.breadcrumb').append(' / ' + titleStr);
 			},
 			error: function(error){
 				console.log(error);
@@ -65,18 +71,11 @@
   <body>
     <div class="container">
 {% include "nav.html" %}
-	  <div class="breadcrumb-placeholder">
-      </div>
-	  <div>
-        <h3 class="text-muted"></h3>
-      </div>
-      <div>
-        <p class="filter"></p>
-      </div>
+{% include "breadcrumb-title.html" %}
+{% include "filter.html" %}
       <div class="row marketing">
         <div class="col-lg-6">
-          <p class=athletes>
-          </p>
+          <p class=athletes></p>
         </div>
       </div>
 {% include "footer.html" %}

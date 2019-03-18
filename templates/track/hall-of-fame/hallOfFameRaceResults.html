@@ -23,7 +23,20 @@
     var urlParams = parseURL();
     var eventId = eId && eId != 0 ? eId : urlParams.eId;
     var genderId = gId && gId != 0 ? gId : urlParams.gId;
-            
+
+	$(function(){
+		var trackHomeLink = $('<a>');
+		$(trackHomeLink).attr('href', '/santa-clara-high-track-and-field');
+		$(trackHomeLink).text('SCHS Track & Field');
+		$('.breadcrumb').append(trackHomeLink);
+		$('.breadcrumb').append(' / ');
+		var hallOfFameLink = $('<a>');
+		$(hallOfFameLink).attr('href', '/santa-clara-high-track-and-field/hall-of-fame/');
+		$(hallOfFameLink).text('Hall of Fame All-Time Top 10');
+		$('.breadcrumb').append(hallOfFameLink);
+		$('.breadcrumb').append(' / ');
+	})
+
 	$(function(){
 		$.ajax({
 			url: '/getTrackHallfOfFameRaceResults',
@@ -59,12 +72,7 @@
 				});
 				var titleStr =  ((genderId && genderId == 3) ? 'Girls' : 'Boys') + ' ' + eventStr;
 				$('.text-muted').text(titleStr);
-
-				var hallOfFameLink = $('<span>').append($('<a>'));
-				$(hallOfFameLink).find('a').attr('href', '/santa-clara-high-track-and-field/hall-of-fame/');
-				$(hallOfFameLink).find('a').text('SCHS Track & Field Hall of Fame All-Time Top 10');
-				$(hallOfFameLink).append(' / ' + titleStr);
-				$('.breadcrumb').append(hallOfFameLink);
+				$('.breadcrumb').append(titleStr);
 			},
 			error: function(error){
 				console.log(error);
@@ -81,7 +89,7 @@
 	</style>
   </head>
   <body>
-{% include "bread-crumb-dropdown-body.html" %}
+{% include "breadcrumb-dropdown-body.html" %}
   </body>
 </html>
 

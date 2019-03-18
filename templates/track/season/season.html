@@ -17,6 +17,7 @@
     <script src="/static/js/jquery-1.11.2.js"></script>
     <script src="/static/js/utils.js"></script>
     <script>
+
     var yr = {{yr}};
     var ctIds = '{{coachTypeIds}}';
     var urlParams = parseURL();
@@ -32,7 +33,17 @@
 	} else if (yearStr.length == 1) {
 		year = parseInt('200' + yearStr);
 	}
-	
+
+	$(function(){
+		var trackHomeLink = $('<a>');
+		$(trackHomeLink).attr('href', '/santa-clara-high-track-and-field');
+		$(trackHomeLink).text('SCHS Track & Field');
+		$('.breadcrumb').append(trackHomeLink);
+		var titleStr = year + ' Season';
+		$('.breadcrumb').append(' / ' + titleStr);
+		$('.text-muted').text(titleStr);
+	})
+
 	$(function(){
 		$.ajax({
 			url: '/getCoachesByYear',
@@ -67,8 +78,6 @@
 				"year": year,
 			},
 			success: function(res){
-				$('.text-muted').text(year + ' SCHS Track & Field Season');
-
 				var resultsObj = JSON.parse(res);
 				var femaleCount = 0;
 				var maleCount = 0;
@@ -101,52 +110,36 @@
 				"year": year,
 			},
 			success: function(res){							    				
-				var resultsObj = JSON.parse(res);
-				var count = resultsObj.length;
 				var eventCount = 0;
 				var lastEventStr = '';
-				var resultsBySquadStr = '';
 				var lastEventSubTypeStr = '';
-				$.each(resultsObj,function(index, value){
-					var eventStr = value.Event;
-					var eventId = value.EventId;
-					var squadStr = value.Squad;
-					var squadId = value.SquadId;
-					var numResults = value.NumResults;
+				var firstEventInSubType = false;
+				$.each(JSON.parse(res),function(index, value){
+					firstEventInSubType = false;
+					// check if the event subtype has changed
 					var eventSubTypeStr = value.EventSubType;
-					// check if the event has changed
-					if (lastEventStr != '' && lastEventStr != eventStr) {
-						// check if the event subtype is first one
-						if (lastEventSubTypeStr == '') {
-							lastEventSubTypeStr = eventSubTypeStr;
-							$('.eventBySquad').append('<h5>' + eventSubTypeStr + '</h5>');
+					if (lastEventSubTypeStr != eventSubTypeStr) {
+						firstEventInSubType = true;
+						if (lastEventSubTypeStr != '') {
+							$('.eventBySquad').append('<br/>');
 						}
-
-						eventCount++;
-						// append the last event
-						$('.eventBySquad').append('<div>' + lastEventStr + '</div>' + resultsBySquadStr + '<br/>');
-						resultsBySquadStr = '';
-
-						// check if the event subtype has changed
-						if (lastEventSubTypeStr != eventSubTypeStr) {
-							lastEventSubTypeStr = eventSubTypeStr;
-							$('.eventBySquad').append('<h5>' + eventSubTypeStr + '</h5>');
-						}
+						$('.eventBySquad').append('<h5>' + eventSubTypeStr + '</h5>');
+						lastEventSubTypeStr = eventSubTypeStr;
 					}
-					var link = '/santa-clara-high-track-and-field/results/' + eventId + '/' + squadId + '/' + year + '/'; 
-					resultsBySquadStr += '<div>&raquo; <a href="'+link+'">'+ squadStr + ' (' + numResults + ')</a></div>';
-					lastEventStr = eventStr;
+					// check if the event has changed
+					var eventStr = value.Event;
+					if (lastEventStr != eventStr) {
+						if (!firstEventInSubType) {
+							$('.eventBySquad').append('<br/>');
+						}
+						$('.eventBySquad').append('<div>' + eventStr + '</div>');
+						lastEventStr = eventStr;
+						eventCount++;
+					}
+					var link = '/santa-clara-high-track-and-field/results/' + value.EventId + '/' + value.SquadId + '/' + year + '/'; 
+					var resultsBySquadStr = '<div>&raquo; <a href="'+link+'">'+ value.Squad + ' (' + value.NumResults + ')</a></div>';
+					$('.eventBySquad').append(resultsBySquadStr);
 				});
-
-				if (lastEventStr != '') {
-					eventCount++;
-					// append the last event
-					$('.eventBySquad').append('<div>' + lastEventStr + '</div>' + resultsBySquadStr + '<br/>');
-					resultsBySquadStr = '';
-				} else {
-					var link = '/santa-clara-high-track-and-field/results/' + eventId + '/' + squadId + '/' + year + '/'; 
-					resultsBySquadStr += '<div>&raquo; <a href="'+link+'">'+ squadStr + ' (' + numResults + ')</a></div>';
-				}
 				$('.eventTitle').text('Events (' + eventCount + ')');
 			},
 			error: function(error){
@@ -169,9 +162,7 @@
   <body>
     <div class="container">
 {% include "nav.html" %}
-	  <div>
-        <h3 class="text-muted"></h3>
-      </div>
+{% include "breadcrumb-title.html" %}
       <div id="team_img_container" class="jumbotron" style="display: none;">
         <p><img id="team_img" src="" style="width: 100%;"></p>
       </div>
