@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-109364959-1"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+
+	  gtag('config', 'UA-109364959-1');
+	</script>
+    <title>SCHS Track Coaches</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <link href="https://getbootstrap.com/docs/3.3/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet">
+    <link href="/static/css/signup.css" rel="stylesheet">
+    <script src="/static/js/jquery-1.11.2.js"></script>
+    <script>
+    var ctIds = '{{coachTypeIds}}';
+    var coachTypeIds = ctIds ? ctIds : urlParams.coachTypeIds;
+
+	$(function(){
+		var trackHomeLink = $('<a>');
+		$(trackHomeLink).attr('href', '/santa-clara-high-track-and-field');
+		$(trackHomeLink).text('SCHS Track & Field');
+		$('.breadcrumb').append(trackHomeLink);
+		$('.breadcrumb').append(' / Coaches');
+
+		var coachesPhoto = $('<img>');
+		$(coachesPhoto).attr('src', '/static/Uploads/schs_xc_2018_coaches_cropped.jpg');
+		$(coachesPhoto).attr('width', '550');
+		$(coachesPhoto).attr('alt', 'SCHS Track Coaches');
+		$('.jumbotron').append(coachesPhoto)
+
+		var link = "/santa-clara-high-track-and-field/coaches/timeline";
+	    var coachTimelineLinkDiv = $('<div>').append($('<a>').attr('href', link).text('Coaches Timeline'));
+		$('.coaches').append(coachTimelineLinkDiv).append($('<br>'));
+	})
+
+	$(function(){
+		$.ajax({
+			url: '/getCoaches',
+			type: 'GET',
+			data: {
+				"coachTypeIds": coachTypeIds,
+			},
+			success: function(res){							    				
+				var resultsObj = JSON.parse(res);
+				var count = resultsObj.length;
+				$('.text-muted').text('Coaches (' + count + ')');
+				$.each(resultsObj,function(index, value){
+				    var nameStr = value.FirstName + ' ' + value.LastName;
+				    var numSeasons = value.NumSeasons;
+				    var seasonStr = ' (' + numSeasons + (numSeasons > 1 ? ' seasons' : ' season') + ')';
+				    var displayStr = nameStr + seasonStr + ' ... ' + value.Years;
+				    var link = "/santa-clara-high-track-and-field/coaches/" + value.CoachId;
+				    var coachLinkDiv = $('<div>').append($('<a>').attr('href', link).text(displayStr));
+					$('.coaches').append(coachLinkDiv).append($('<br>'));
+				});
+			},
+			error: function(error){
+				console.log(error);
+			}
+		});
+	});
+    </script>
+  </head>
+  <body>
+    <div class="container">
+{% include "nav.html" %}
+{% include "breadcrumb-title.html" %}
+{% include "main.html" %}
+      <div class="row marketing">
+        <p class=coaches></p>
+      </div>
+{% include "footer.html" %}
+    </div>
+  </body>
+</html>
+

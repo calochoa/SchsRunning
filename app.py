@@ -30,6 +30,7 @@ from bin.apps.track.track_season_seo_app import track_season_seo_app
 from bin.apps.track.track_results_seo_app import track_results_seo_app
 from bin.apps.track.track_competitors_seo_app import track_competitors_seo_app
 from bin.apps.track.track_athletes_seo_app import track_athletes_seo_app
+from bin.apps.track.track_coaches_seo_app import track_coaches_seo_app
 
 # workout related apps
 from bin.apps.workouts.workouts_app import workouts_app
@@ -59,6 +60,7 @@ app.register_blueprint(track_season_seo_app)
 app.register_blueprint(track_results_seo_app)
 app.register_blueprint(track_competitors_seo_app)
 app.register_blueprint(track_athletes_seo_app)
+app.register_blueprint(track_coaches_seo_app)
 
 app.register_blueprint(workouts_app)
 
@@ -79,6 +81,6 @@ def relatedSites():
 
 
 if __name__ == "__main__":
-    app.run(port=5002)
+    app.run()
     # https://code.tutsplus.com/tutorials/creating-a-web-app-from-scratch-using-python-flask-and-mysql-part-3--cms-23120
 

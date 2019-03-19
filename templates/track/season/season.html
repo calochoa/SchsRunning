@@ -59,9 +59,9 @@
 
 				$.each(resultsObj,function(index, value){
 				    var nameStr = value.FirstName + ' ' + value.LastName + ' (' + value.CoachType + ')'
-				    var link = "/trackCoach?coachId=" + value.CoachId
-					//$('.coachesNames').append("<div><a href='" + link + "'>" + nameStr + "</a></div>");
-					$('.coachesNames').append("<div>" + nameStr + "</div>");
+				    var link = "/santa-clara-high-track-and-field/coaches/" + value.CoachId
+				    var coachLinkDiv = $('<div>').append($('<a>').attr('href', link).text(nameStr));
+				    $('.coachesNames').append(coachLinkDiv);
 				});
 			},
 			error: function(error){
@@ -83,14 +83,15 @@
 				var maleCount = 0;
 				$.each(resultsObj,function(index, value){
 				    var nameStr = value.LastName + ', ' + value.FirstName;
-				    var link = '/trackCompetitor?cId=' + value.CompetitorId
+				    var link = '/trackCompetitor?cId=' + value.CompetitorId;
+				    var athleteLinkDiv = $('<div>').append($('<a>').attr('href', link).text(nameStr));
 					var genderStr = value.Gender;
 					if (genderStr == 'female') {
 						femaleCount++;
-						$('.fAthleteNames').append('<div><a href="' + link + '">' + nameStr + '</a></div>');
+						$('.fAthleteNames').append(athleteLinkDiv);
 					} else {
 						maleCount++;
-						$('.mAthleteNames').append('<div><a href="' + link + '">' + nameStr + '</a></div>');
+						$('.mAthleteNames').append(athleteLinkDiv);
 					}
 				});
 				$('.fAthleteTitle').text('Female Athletes (' + femaleCount + ')');
@@ -123,7 +124,7 @@
 						if (lastEventSubTypeStr != '') {
 							$('.eventBySquad').append('<br/>');
 						}
-						$('.eventBySquad').append('<h5>' + eventSubTypeStr + '</h5>');
+						$('.eventBySquad').append($('<h5>').text(eventSubTypeStr));
 						lastEventSubTypeStr = eventSubTypeStr;
 					}
 					// check if the event has changed
@@ -132,13 +133,14 @@
 						if (!firstEventInSubType) {
 							$('.eventBySquad').append('<br/>');
 						}
-						$('.eventBySquad').append('<div>' + eventStr + '</div>');
+						$('.eventBySquad').append($('<div>').text(eventStr));
 						lastEventStr = eventStr;
 						eventCount++;
 					}
 					var link = '/santa-clara-high-track-and-field/results/' + value.EventId + '/' + value.SquadId + '/' + year + '/'; 
-					var resultsBySquadStr = '<div>&raquo; <a href="'+link+'">'+ value.Squad + ' (' + value.NumResults + ')</a></div>';
-					$('.eventBySquad').append(resultsBySquadStr);
+					var nameStr = value.Squad + ' (' + value.NumResults + ')';
+					var resultsBySquadDiv = $('<div>').append('&raquo; ').append($('<a>').attr('href', link).text(nameStr));
+					$('.eventBySquad').append(resultsBySquadDiv);
 				});
 				$('.eventTitle').text('Events (' + eventCount + ')');
 			},

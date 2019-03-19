@@ -12,7 +12,7 @@ track_season_seo_app = Blueprint(
 
 @track_season_seo_app.route('/<int:year>',methods=['GET'])
 def track_seasons(year):
-	return render_template('track/season/season.html', yr=year, coachTypeIds='3,4,5,6,7,8')
+	return render_template('track/season/season.html', yr=year, coachTypeIds='3,4,5,6,7,8,9')
 
 @track_season_seo_app.route('/',methods=['GET'])
 def track_season_page_not_found():

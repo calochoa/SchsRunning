@@ -400,12 +400,18 @@ CREATE PROCEDURE `GetCoachTimeline`(
 )
 BEGIN
 
-SELECT `year`, GROUP_CONCAT(
-	CONCAT(`firstName`, " ", `lastName`, " (", `coachType`, ")") 
-	ORDER BY `coachTypeId` ASC, `firstName` ASC SEPARATOR ", ") AS "Coaches" 
-FROM `Coach` NATURAL JOIN `CoachType` NATURAL JOIN `CoachSeason` 
-WHERE FIND_IN_SET(`coachTypeId`, `inputCoachTypeIds`) 
-GROUP BY `year` 
+SELECT `year`, GROUP_CONCAT(`coaches` ORDER BY `coachTypeId` ASC, `coachId` ASC SEPARATOR ", ") AS `coaches`
+FROM (
+	SELECT `year`, `coachId`, MIN(`coachTypeId`) AS `coachTypeId`, 
+		CONCAT(
+			`firstName`, " ", `lastName`, " (", 
+            GROUP_CONCAT(`coachType` ORDER BY `coachTypeId` ASC SEPARATOR ", "), ")"
+		) AS `coaches` 
+	FROM `Coach` NATURAL JOIN `CoachType` NATURAL JOIN `CoachSeason` 
+	WHERE FIND_IN_SET(`coachTypeId`, `inputCoachTypeIds`) 
+	GROUP BY `year`, `coachId` 
+) AS `t`
+GROUP BY `year`
 ORDER BY `year` DESC;
 
 END //
@@ -425,10 +431,13 @@ CREATE PROCEDURE `GetCoachById`(
 )
 BEGIN
 
-SELECT `firstName`, `lastName`, `coachType`, `year` 
+SELECT `firstName`, `lastName`, 
+	GROUP_CONCAT(`coachType` ORDER BY `coachTypeId` ASC SEPARATOR ", ") AS `coachType`, `year` 
 FROM `Coach` NATURAL JOIN `CoachType` NATURAL JOIN `CoachSeason`
 WHERE `coachId`=`inputCoachId` AND FIND_IN_SET(`coachTypeId`, `inputCoachTypeIds`) 
+GROUP BY `year`
 ORDER BY year DESC;
+
 
 END //
 DELIMITER ;
@@ -446,8 +455,8 @@ CREATE PROCEDURE `GetCoaches`(
 )
 BEGIN
 
-SELECT `coachId`, `firstName`, `lastName`, COUNT(`year`) AS `numSeasons`, 
-	GROUP_CONCAT(`year` ORDER BY `year` DESC SEPARATOR ", ") `years`
+SELECT `coachId`, `firstName`, `lastName`, COUNT(DISTINCT `year`) AS `numSeasons`, 
+	GROUP_CONCAT(DISTINCT `year` ORDER BY `year` DESC SEPARATOR ", ") `years`
 FROM `Coach` NATURAL JOIN `CoachType` NATURAL JOIN `CoachSeason`
 WHERE FIND_IN_SET(`coachTypeId`, `inputCoachTypeIds`) 
 GROUP BY `coachId`
