@@ -16,6 +16,7 @@ DROP TABLE IF EXISTS `OfTheDay`;
 DROP TABLE IF EXISTS `Quickies`;
 DROP TABLE IF EXISTS `QuickieTypes`;
 DROP TABLE IF EXISTS `Exercises`;
+DROP TABLE IF EXISTS `Videos`;
 DROP TABLE IF EXISTS `ExerciseTypes`;
 DROP TABLE IF EXISTS `BodySplits`;
 
@@ -28,9 +29,9 @@ CREATE TABLE IF NOT EXISTS `BodySplits` (
     `order` INT,
     
 	PRIMARY KEY (`bsId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE utf8mb4_unicode_ci;
 
-INSERT INTO `BodySplits` VALUES
+INSERT INTO `BodySplits` (`bsId`, `bsName`, `bsDescription`, `order`) VALUES
     ('bs0000','All','One stop shop for all the quickies.',0),
     ('bs0001','Core','These quickies are intended to target your core and get you closer to attaining that 6 pack or toned tummy.',2),
     ('bs0002','Lower Body','Perform these quickies to focus on strengthening your lower body.',1),
@@ -46,12 +47,24 @@ CREATE TABLE IF NOT EXISTS `ExerciseTypes` (
     `order` INT,
     
 	PRIMARY KEY (`etId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE utf8mb4_unicode_ci;
 
-INSERT INTO `ExerciseTypes` VALUES
+INSERT INTO `ExerciseTypes` (`etId`, `etName`, `etDescription`, `order`) VALUES
     ('et0000','All','These exercises require you to use your entire bodyweight.',1),
     ('et0001','Bar','These exercises require you to use your entire bodyweight.',2),
     ('et0002','Stretch','These are dynamic stretches to help loosen the body and get the blood flowing',3);
+
+
+
+CREATE TABLE IF NOT EXISTS `Videos` (
+    `vId` VARCHAR(7) UNIQUE NOT NULL,
+    `youtubeId` VARCHAR(12) DEFAULT NULL,
+    
+	PRIMARY KEY (`vId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE utf8mb4_unicode_ci;
+
+INSERT INTO `Videos` (`vId`, `youtubeId`) VALUES ("v000001", "ek4YOOlVamk"), ("v000002", "m5rnCuzJqaE"), ("v000003", "s7f7alfiuU8"), ("v000004", "f29xFGVjKA8"), ("v000005", "mj25D73_TmA"), ("v000006", "gXsTuiUer48"), ("v000007", "P2FRHzgYbuo"), ("v000008", "d7pLCFa-omY"), ("v000009", "ogGX5PJ1gY8"), ("v000010", "TjxDtCzJQkg"), ("v000011", NULL), ("v000012", "JIfaAlksmTQ"), ("v000013", "XSGZon-Owjw"), ("v000014", "Dy8WNMPDj5Y"), ("v000015", "jixPu5GPhic"), ("v000016", "ujj6IuL3zOM"), ("v000017", "Jd2zRTtGNCk"), ("v000018", "7nHfRFiltcA"), ("v000019", "UdUT9SZIgB0"), ("v000020", "U73FFFpin8s"), ("v000021", "PO5yfLjUDbE"), ("v000022", "EJKnEMur0OA"), ("v000023", "ncg7iWv4VFY"), ("v000024", "7JsXmM2zKoc"), ("v000025", "f8wHShJMSmw"), ("v000026", "vQEneqVKCcc"), ("v000027", "vdXgfYot7Rc"), ("v000028", "iP-Om5uAYVo"), ("v000029", "Ab2usUky0WA"), ("v000030", "7H7t_idCDK8"), ("v000031", "4EttxHPj1dQ"), ("v000032", "ovVHOfT35eo"), ("v000033", "Odx8QeE634I"), ("v000034", "GZRj5HJqK-I"), ("v000035", "1K5DreFND0M"), ("v000036", "N0UVekBvpWA"), ("v000037", "B7XDCe5ayA8"), ("v000038", "p2frQGA7xaQ"), ("v000039", "1uVMRGEl4y4"), ("v000040", "e02t73peL8c"), ("v000041", "W9DKM3tjOkk"), ("v000042", "oAu-Xc-OKxo"), ("v000043", "mrWTxAXr3LA"), ("v000044", "5XSiNXX8vOw"), ("v000045", "GPlp3d2F4H8"), ("v000046", "i3gcPC0Tm0c"), ("v000047", "xYvGLOEyn_g"), ("v000048", "rDtBVY3DBNg"), ("v000049", NULL), ("v000050", "55fd5RV4JV4"), ("v000051", "mLm_H9SaXJ4"), ("v000052", "alLrecBkCvU"), ("v000053", "Exh-xo2Plbs"), ("v000054", "9cwskL0_-9Q"), ("v000055", "2WtR_OdkSV8"), ("v000056", "34dA6YPwjEQ"), ("v000057", "v0_dlmFvnL4"), ("v000058", "JUtwYOZQ9ms"), ("v000059", "4YedNMNlI80"), ("v000060", "2qM8IDT2e1Q"), ("v000061", "T3dJdB3exHI"), ("v000062", "XwOHycBa3uY"), ("v000063", "MCmLRa6ZDfA"), ("v000064", "BK0MNOfDal4"), ("v000065", NULL), ("v000066", NULL), ("v000067", NULL), ("v000068", NULL), ("v100001", NULL), ("v100002", NULL), ("v100003", NULL), ("v100004", NULL), ("v100005", NULL), ("v100006", NULL), ("v100007", NULL), ("v100008", NULL), ("v100009", NULL), ("v100010", NULL), ("v100011", NULL), ("v100012", NULL), ("v100013", NULL), ("v100014", NULL), ("v100015", NULL), ("v100016", NULL), ("v100017", NULL), ("v100018", NULL), ("v100019", NULL), ("v100020", NULL), ("v100021", NULL), ("v100022", NULL), ("v100023", NULL), ("v100024", NULL);
+
 
 
 
@@ -64,11 +77,12 @@ CREATE TABLE IF NOT EXISTS `Exercises` (
     `etId` VARCHAR(6),
     
 	PRIMARY KEY (`eId`),
+    FOREIGN KEY (`vId`) REFERENCES `Videos` (`vId`),
 	FOREIGN KEY (`bsId`) REFERENCES `BodySplits` (`bsId`),
 	FOREIGN KEY (`etId`) REFERENCES `ExerciseTypes` (`etId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE utf8mb4_unicode_ci;
 
-INSERT INTO `Exercises` VALUES
+INSERT INTO `Exercises` (`eId`, `eName`, `eLevel`, `vId`, `bsId`, `etId`) VALUES
     ('e000001','front lever swings',6,'v000001','bs0001','et0001'),
     ('e000002','L sit pull-ups',5,'v000002','bs0004','et0001'),
     ('e000003','shoot-ups',2,'v000003','bs0001','et0000'),
@@ -171,9 +185,9 @@ CREATE TABLE IF NOT EXISTS `QuickieTypes` (
     `order` INT,
     
 	PRIMARY KEY (`qtId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE utf8mb4_unicode_ci;
 
-INSERT INTO `QuickieTypes` VALUES
+INSERT INTO `QuickieTypes` (`qtId`, `qtName`, `qtDescription`, `order`) VALUES
     ('qt0001','Basic','Get in great shape by doing a combination of some or all of these quickies.',3),
     ('qt0002','Cardio','These quickies are the best way to get your feet moving and heart pumping.',4),
     ('qt0003','Junior','Try these beginner level quickies if you are just starting to work out.',2),
@@ -206,9 +220,9 @@ CREATE TABLE IF NOT EXISTS `Quickies` (
 	FOREIGN KEY (`eId2`) REFERENCES `Exercises` (`eId`),
 	FOREIGN KEY (`eId3`) REFERENCES `Exercises` (`eId`),
 	FOREIGN KEY (`eId4`) REFERENCES `Exercises` (`eId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE utf8mb4_unicode_ci;
 
-INSERT INTO `Quickies` VALUES
+INSERT INTO `Quickies` (`qId`, `qtId`, `qDifficulty`, `bsId`, `qName`, `reps1`, `eId1`, `reps2`, `eId2`, `reps3`, `eId3`, `reps4`, `eId4`) VALUES
     ('q00001','qt0003',1,'bs0001','Quick Core',10,'e000043',10,'e000021',10,'e000053',10,'e000028'),
     ('q00002','qt0003',1,'bs0001','Quick Pack',5,'e000054',10,'e000055',5,'e000053',10,'e000057'),
     ('q00003','qt0003',1,'bs0004','Quick Easy',5,'e000024',10,'e000029',15,'e000043',20,'e000040'),

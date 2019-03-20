@@ -15,33 +15,85 @@
     <link href="https://getbootstrap.com/docs/3.3/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet">
     <link href="/static/css/signup.css" rel="stylesheet">
     <link href="/static/css/videos.css" rel="stylesheet">
+    <link href="/static/css/dropdown.css" rel="stylesheet">
     <script src="/static/js/jquery-1.11.2.js"></script>
     <script>
-    //var genderId = '{{gId}}';
+    var bodySplitId = '{{bsId}}';
+    var exerciseLevels = '{{eLevels}}';
+    var title = '{{title}}';
 
 	$(function(){
 		var workoutsHomeLink = $('<a>');
 		$(workoutsHomeLink).attr('href', '/workouts');
 		$(workoutsHomeLink).text('Workouts');
 		$('.breadcrumb').append(workoutsHomeLink);
-		var titleStr = 'Bodyweight Exercises'
-		$('.breadcrumb').append(' / ' + titleStr);
-		$('.text-muted').append(titleStr);
+		$('.breadcrumb').append(' / ');
 	})
 
 	$(function(){
-		var videoLeft1 = $.fn.createVideo('mj25D73_TmA', 'Clapping Push-Ups', 5, 'Upper Body');
-		var videoRight1 = $.fn.createVideo('T3dJdB3exHI', 'Hanging Open Close Scissors', 4, 'Core');
-		var videoLeft2 = $.fn.createVideo('ek4YOOlVamk', 'Front Lever Swings', 6, 'Total Body');
-		var videoRight2 = $.fn.createVideo('GZRj5HJqK', 'Clapping Pull-Ups', 6, 'Upper Body');
-		var videoLeft3 = $.fn.createVideo('MCmLRa6ZDfA', 'Burpee Tuck Jumps', 5, 'Total Body');
-		var videoRight3 = $.fn.createVideo('7JsXmM2zKoc', 'Lunges', 2, 'Lower Body');
-		var videoLeft4 = $.fn.createVideo('i3gcPC0Tm0c', 'Squat Jumps', 3, 'Lower Body');
-		$.fn.addVideos(videoLeft1, videoRight1);
-		$.fn.addVideos(videoLeft2, videoRight2);
-		$.fn.addVideos(videoLeft3, videoRight3);
-		$.fn.addVideos(videoLeft4, null);
-	})
+		$.ajax({
+			url: '/getExercises',
+			type: 'GET',
+			data: {
+				"bodySplitId": bodySplitId,
+				"exerciseLevels": exerciseLevels,
+			},
+			success: function(res){							    				
+				var resultsObj = JSON.parse(res);
+				var videoLeft = null;
+				var videoRight = null;
+				var allExercises = true;
+				$.each(resultsObj,function(index, value){
+					allExercises = value.All;
+					if (videoLeft != null && videoRight != null) {
+						$.fn.addVideos(videoLeft, videoRight);
+						videoLeft = null;
+						videoRight = null;
+					}
+					var youTubeId = value.YouTubeId;
+					var exerciseName = value.ExerciseName;
+					var dificulty = $.fn.getDifficulty(value.ExerciseLevel);
+					var bodySplit = value.BodySplit;
+					if (videoLeft == null) {
+						videoLeft = $.fn.createVideo(youTubeId, exerciseName, dificulty, bodySplit);
+					} else if (videoRight == null) {
+						videoRight = $.fn.createVideo(youTubeId, exerciseName, dificulty, bodySplit);
+					}
+				});
+				if (videoLeft != null) {
+					$.fn.addVideos(videoLeft, videoRight);
+				}
+				var titleStr = 'Bodyweight Exercises'
+				if (allExercises) {
+					$('.breadcrumb').append(titleStr);
+					$('.text-muted').append(title + ' (' +resultsObj.length + ')');
+				} else {
+					$('.breadcrumb').append($('<a>').attr('href', '/workouts/bodyweight-exercises/').text(titleStr));
+					$('.breadcrumb').append(' / ' + title);
+					$('.text-muted').append(title + ' (' +resultsObj.length + ')');
+				}
+			},
+			error: function(error){
+				console.log(error);
+			}
+		});
+	});
+
+	$.fn.getDifficulty = function(exerciseLevel) {
+		var difficulty = 'Unknown';
+		if (exerciseLevel == 1) {
+			difficulty = 'Beginner';
+		} else if (exerciseLevel == 2) {
+			difficulty = 'Intermediate'
+		} else if (exerciseLevel == 3) {
+			difficulty = 'Advanced';
+		} else if (exerciseLevel == 4) {
+			difficulty = 'Expert';
+		} else if (exerciseLevel == 5 || exerciseLevel == 6) {
+			difficulty = 'Master';
+		}
+		return difficulty;
+	}
 
 	$.fn.createVideo = function(videoId, bwExerciseName, difficulty, bodySplit) {
 		return $('<div>').attr('class', 'videoContainer')
@@ -52,8 +104,8 @@
 					.attr('width', '315').attr('height', '315').attr('frameborder', '0')
 					.attr('allowfullscreen', 'true'))
 				.append($('<div>')
+					.append($('<span>').attr('class', 'difficulty').text(difficulty))
 					.append($('<span>').attr('class', 'bodySplit').text(bodySplit))
-					.append($('<span>').attr('class', 'difficulty').text('Level: ' + difficulty))
 					)
 				);
 	}
@@ -65,14 +117,18 @@
 		}
 		$('.bodyweight-exercises').append($('<div>').attr('style', 'clear: both'));
 	}
+
+	$.get("/workouts/bodyweight-exercises/dropdown-menus", function(data){
+	    $(".dropdown-list").append(data);
+	});
     </script>
   </head>
   <body>
     <div class="container">
 {% include "nav.html" %}
 {% include "breadcrumb-title.html" %}
-{% include "filter.html" %}
-	  <div class="bodyweight-exercises"></div>
+{% include "dropdown.html" %}
+	  <div class="bodyweight-exercises" style="margin-top:20px"></div>
 {% include "footer.html" %}
     </div>
   </body>
