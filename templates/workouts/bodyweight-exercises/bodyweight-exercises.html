@@ -18,9 +18,8 @@
     <link href="/static/css/dropdown.css" rel="stylesheet">
     <script src="/static/js/jquery-1.11.2.js"></script>
     <script>
-    var bodySplitId = '{{bsId}}';
+    var bodySplitIds = '{{bsIds}}';
     var exerciseLevels = '{{eLevels}}';
-    var title = '{{title}}';
 
 	$(function(){
 		var workoutsHomeLink = $('<a>');
@@ -35,7 +34,7 @@
 			url: '/getExercises',
 			type: 'GET',
 			data: {
-				"bodySplitId": bodySplitId,
+				"bodySplitIds": bodySplitIds,
 				"exerciseLevels": exerciseLevels,
 			},
 			success: function(res){							    				
@@ -43,6 +42,8 @@
 				var videoLeft = null;
 				var videoRight = null;
 				var allExercises = true;
+				var bodySplit = '';
+				var difficulty = '';
 				$.each(resultsObj,function(index, value){
 					allExercises = value.All;
 					if (videoLeft != null && videoRight != null) {
@@ -52,26 +53,18 @@
 					}
 					var youTubeId = value.YouTubeId;
 					var exerciseName = value.ExerciseName;
-					var dificulty = $.fn.getDifficulty(value.ExerciseLevel);
-					var bodySplit = value.BodySplit;
+					difficulty = $.fn.getDifficulty(value.ExerciseLevel);
+					bodySplit = value.BodySplit;
 					if (videoLeft == null) {
-						videoLeft = $.fn.createVideo(youTubeId, exerciseName, dificulty, bodySplit);
+						videoLeft = $.fn.createVideo(youTubeId, exerciseName, difficulty, bodySplit);
 					} else if (videoRight == null) {
-						videoRight = $.fn.createVideo(youTubeId, exerciseName, dificulty, bodySplit);
+						videoRight = $.fn.createVideo(youTubeId, exerciseName, difficulty, bodySplit);
 					}
 				});
 				if (videoLeft != null) {
 					$.fn.addVideos(videoLeft, videoRight);
 				}
-				var titleStr = 'Bodyweight Exercises'
-				if (allExercises) {
-					$('.breadcrumb').append(titleStr);
-					$('.text-muted').append(title + ' (' +resultsObj.length + ')');
-				} else {
-					$('.breadcrumb').append($('<a>').attr('href', '/workouts/bodyweight-exercises/').text(titleStr));
-					$('.breadcrumb').append(' / ' + title);
-					$('.text-muted').append(title + ' (' +resultsObj.length + ')');
-				}
+				$.fn.setTitle(allExercises, difficulty, bodySplit, resultsObj.length)
 			},
 			error: function(error){
 				console.log(error);
@@ -121,6 +114,30 @@
 	$.get("/workouts/bodyweight-exercises/dropdown-menus", function(data){
 	    $(".dropdown-list").append(data);
 	});
+
+	$.fn.setTitle = function(allExercises, difficulty, bodySplit, numResults) {
+		var titleStr = 'Bodyweight Exercises';
+		if (allExercises) {
+			$('.breadcrumb').append(titleStr);
+		} else {
+			$('.breadcrumb').append($('<a>').attr('href', '/workouts/bodyweight-exercises/').text(titleStr));
+			if (exerciseLevels != 'all') {
+				if (bodySplitIds != 'all') {
+					$('.breadcrumb').append(' / ');
+					var bodySplitLink = bodySplit.toLowerCase().replace(' ', '-');
+					$('.breadcrumb').append($('<a>').attr('href', '/workouts/bodyweight-exercises/'+bodySplitLink).text(bodySplit));
+					titleStr = difficulty + ' ' + bodySplit + ' ' + titleStr;
+				} else {
+					titleStr = difficulty + ' ' + titleStr;
+				}
+				$('.breadcrumb').append(' / ' + difficulty);
+			} else {
+				$('.breadcrumb').append(' / ' + bodySplit);
+				titleStr = bodySplit + ' ' + titleStr;
+			}
+		}
+		$('.text-muted').append(titleStr + ' (' + numResults + ')');
+	}
     </script>
   </head>
   <body>

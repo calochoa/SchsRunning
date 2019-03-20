@@ -35,12 +35,16 @@ mydb = mysql.connector.connect(
 @workouts_db_app.route('/getExercises',methods=['GET'])
 def get_exercises():
     try:
-        body_split_id = request.args.get('bodySplitId', default=None, type=str)
-        exercise_levels = request.args.get('exerciseLevels', default='1,2,3,4,5,6', type=str)
+        body_split_ids = request.args.get('bodySplitIds', default='all', type=str)
+        exercise_levels = request.args.get('exerciseLevels', default='all', type=str)
+        if exercise_levels == 'all':
+            exercise_levels = '1,2,3,4,5,6'
+        if body_split_ids == 'all':
+            body_split_ids = 'bs0001,bs0002,bs0003,bs0004'
 
         cursor = mydb.cursor()
-        if body_split_id:
-            cursor.callproc('GetExercises', (exercise_levels, body_split_id))
+        if body_split_ids:
+            cursor.callproc('GetExercises', (exercise_levels, body_split_ids))
             all_exercises = False
         else:
             cursor.callproc('GetAllExercises')
