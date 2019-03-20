@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-109364959-1"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+
+	  gtag('config', 'UA-109364959-1');
+	</script>
+    <title>SCHS Running: Bodyweight Exercises</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <link href="https://getbootstrap.com/docs/3.3/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet">
+    <link href="/static/css/signup.css" rel="stylesheet">
+    <link href="/static/css/videos.css" rel="stylesheet">
+    <script src="/static/js/jquery-1.11.2.js"></script>
+    <script>
+    //var genderId = '{{gId}}';
+
+	$(function(){
+		var workoutsHomeLink = $('<a>');
+		$(workoutsHomeLink).attr('href', '/workouts');
+		$(workoutsHomeLink).text('Workouts');
+		$('.breadcrumb').append(workoutsHomeLink);
+		var titleStr = 'Bodyweight Exercises'
+		$('.breadcrumb').append(' / ' + titleStr);
+		$('.text-muted').append(titleStr);
+	})
+
+	$(function(){
+		var videoLeft = $.fn.testFunction('mj25D73_TmA', 'Clapping <br/>Push-Ups', 5, 'Upper Body');
+		var videoRight = $.fn.testFunction('T3dJdB3exHI', 'hanging open <br/>close scissors', 4, 'Core');
+		var videoCenter = $.fn.testFunction('ek4YOOlVamk', 'front lever <br/>swings', 6, 'Total Body');
+
+		var videoRowContainer = $('<div>').attr('class', 'videoRowContainer')
+			.append($('<div>').attr('class', 'leftVideo').append($(videoLeft)))
+			.append($('<div>').attr('class', 'rightVideo').append($(videoRight)))
+			.append($('<div>').attr('class', 'centerVideo').append($(videoCenter)));
+		
+		$('.videoListContainer').append($(videoRowContainer).clone());
+		$('.videoListContainer').append($(videoRowContainer).clone());
+		$('.videoListContainer').append($(videoRowContainer).clone());
+	})
+
+	$.fn.testFunction = function(videoId, bwExerciseName, difficulty, bodySplit) {
+		return $('<div>').attr('class', 'videoContainer')
+			.append($('<div>').attr('class', 'video')
+				.append($('<h4>').append(bwExerciseName))
+				.append($('<iframe>')
+					.attr('src', 'https://www.youtube.com/embed/' + videoId + '?rel=0&mute=1')
+					.attr('width', '200').attr('height', '200').attr('frameborder', '0')
+					.attr('allowfullscreen', 'true'))
+				.append($('<div>')
+					.append($('<span>').attr('class', 'bodySplit').text(bodySplit))
+					.append($('<span>').attr('class', 'difficulty').text('Level: ' + difficulty))
+					)
+				);
+	}
+    </script>
+  </head>
+  <body>
+    <div class="container">
+{% include "nav.html" %}
+{% include "breadcrumb-title.html" %}
+{% include "filter.html" %}
+	  <div class="videoListContainer"></div>
+{% include "footer.html" %}
+    </div>
+  </body>
+</html>
+

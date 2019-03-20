@@ -34,6 +34,8 @@ from bin.apps.track.track_coaches_seo_app import track_coaches_seo_app
 
 # workout related apps
 from bin.apps.workouts.workouts_app import workouts_app
+from bin.apps.workouts.bodyweight_exercises_seo_app import bodyweight_exercises_seo_app
+from bin.apps.workouts.quickies_seo_app import quickies_seo_app
 
 
 app = Flask(__name__)
@@ -63,6 +65,8 @@ app.register_blueprint(track_athletes_seo_app)
 app.register_blueprint(track_coaches_seo_app)
 
 app.register_blueprint(workouts_app)
+app.register_blueprint(bodyweight_exercises_seo_app)
+app.register_blueprint(quickies_seo_app)
 
 app.config.update(
     PROPAGATE_EXCEPTIONS = True

@@ -1,3 +1,14 @@
+DROP DATABASE IF EXISTS `quickies`;
+
+-- CREATING DATABASE
+CREATE DATABASE IF NOT EXISTS `quickies`
+    DEFAULT CHARACTER SET utf8mb4
+    DEFAULT COLLATE utf8mb4_unicode_ci
+;
+
+
+USE `quickies`;
+
 DROP TABLE IF EXISTS `WorkoutOfTheDay`;
 DROP TABLE IF EXISTS `Workouts`;
 DROP TABLE IF EXISTS `QuickieOfTheDay`;
@@ -39,7 +50,8 @@ CREATE TABLE IF NOT EXISTS `ExerciseTypes` (
 
 INSERT INTO `ExerciseTypes` VALUES
     ('et0000','All','These exercises require you to use your entire bodyweight.',1),
-    ('et0001','Bar','These exercises require you to use your entire bodyweight.',2);
+    ('et0001','Bar','These exercises require you to use your entire bodyweight.',2),
+    ('et0002','Stretch','These are dynamic stretches to help loosen the body and get the blood flowing',3);
 
 
 
@@ -58,7 +70,7 @@ CREATE TABLE IF NOT EXISTS `Exercises` (
 
 INSERT INTO `Exercises` VALUES
     ('e000001','front lever swings',6,'v000001','bs0001','et0001'),
-    ('e000002','L sit pull-ups',5,'v000002','bs0000','et0001'),
+    ('e000002','L sit pull-ups',5,'v000002','bs0004','et0001'),
     ('e000003','shoot-ups',2,'v000003','bs0001','et0000'),
     ('e000004','Spiderman push-ups',4,'v000004','bs0003','et0000'),
     ('e000005','clapping push-ups',5,'v000005','bs0003','et0000'),
@@ -125,30 +137,30 @@ INSERT INTO `Exercises` VALUES
     ('e000066','hanging wipers',6,'v000066','bs0001','et0001'),
     ('e000067','decline push-ups',3,'v000067','bs0003','et0000'),
     ('e000068','plank jacks',2,'v000068','bs0004','et0000'),
-    ('e100001','small arm circles',0,'v100001','bs0003','et0000'),
-    ('e100002','reverse small arm circles',0,'v100002','bs0003','et0000'),
-    ('e100003','large arm circles',0,'v100003','bs0003','et0000'),
-    ('e100004','reverse large arm circles',0,'v100004','bs0003','et0000'),
-    ('e100005','lateral arm raises',0,'v100005','bs0003','et0000'),
-    ('e100006','front arm raises',0,'v100006','bs0003','et0000'),
-    ('e100007','lateral rotator cuffs',0,'v100007','bs0003','et0000'),
-    ('e100008','front rotator cuffs',0,'v100008','bs0003','et0000'),
-    ('e100009','low arm criss crosses',0,'v100009','bs0003','et0000'),
-    ('e100010','arm criss crosses',0,'v100010','bs0003','et0000'),
-    ('e100011','high arm criss crosses',0,'v100011','bs0003','et0000'),
-    ('e100012','running arm swings',0,'v100012','bs0003','et0000'),
-    ('e100013','neck up-downs',0,'v100013','bs0003','et0000'),
-    ('e100014','neck side-to-sides',0,'v100014','bs0003','et0000'),
-    ('e100015','neck leans',0,'v100015','bs0003','et0000'),
-    ('e100016','neck rotations',0,'v100016','bs0003','et0000'),
-    ('e100017','heel-to-glutes',0,'v100017','bs0002','et0000'),
-    ('e100018','knee hugs',0,'v100018','bs0002','et0000'),
-    ('e100019','ankle hugs',0,'v100019','bs0002','et0000'),
-    ('e100020','toe touches',0,'v100020','bs0002','et0000'),
-    ('e100021','lateral leg swings',0,'v100021','bs0002','et0000'),
-    ('e100022','front leg swings',0,'v100022','bs0002','et0000'),
-    ('e100023','high hurdles',0,'v100023','bs0002','et0000'),
-    ('e100024','reverse high hurdles',0,'v100024','bs0002','et0000');
+    ('e100001','small arm circles',0,'v100001','bs0003','et0002'),
+    ('e100002','reverse small arm circles',0,'v100002','bs0003','et0002'),
+    ('e100003','large arm circles',0,'v100003','bs0003','et0002'),
+    ('e100004','reverse large arm circles',0,'v100004','bs0003','et0002'),
+    ('e100005','lateral arm raises',0,'v100005','bs0003','et0002'),
+    ('e100006','front arm raises',0,'v100006','bs0003','et0002'),
+    ('e100007','lateral rotator cuffs',0,'v100007','bs0003','et0002'),
+    ('e100008','front rotator cuffs',0,'v100008','bs0003','et0002'),
+    ('e100009','low arm criss crosses',0,'v100009','bs0003','et0002'),
+    ('e100010','arm criss crosses',0,'v100010','bs0003','et0002'),
+    ('e100011','high arm criss crosses',0,'v100011','bs0003','et0002'),
+    ('e100012','running arm swings',0,'v100012','bs0003','et0002'),
+    ('e100013','neck up-downs',0,'v100013','bs0003','et0002'),
+    ('e100014','neck side-to-sides',0,'v100014','bs0003','et0002'),
+    ('e100015','neck leans',0,'v100015','bs0003','et0002'),
+    ('e100016','neck rotations',0,'v100016','bs0003','et0002'),
+    ('e100017','heel-to-glutes',0,'v100017','bs0002','et0002'),
+    ('e100018','knee hugs',0,'v100018','bs0002','et0002'),
+    ('e100019','ankle hugs',0,'v100019','bs0002','et0002'),
+    ('e100020','toe touches',0,'v100020','bs0002','et0002'),
+    ('e100021','lateral leg swings',0,'v100021','bs0002','et0002'),
+    ('e100022','front leg swings',0,'v100022','bs0002','et0002'),
+    ('e100023','high hurdles',0,'v100023','bs0002','et0002'),
+    ('e100024','reverse high hurdles',0,'v100024','bs0002','et0002');
 
 
 
@@ -277,6 +289,12 @@ INSERT INTO `Quickies` VALUES
     ('q06004','qt0008',0,'bs0003','Upper Stretchie #4',10,'e100013',10,'e100014',10,'e100015',10,'e100016'),
     ('q06005','qt0008',0,'bs0002','Lower Stretchie #1',10,'e100017',10,'e100018',10,'e100019',10,'e100020'),
     ('q06006','qt0008',0,'bs0002','Lower Stretchie #2',10,'e100021',10,'e100022',10,'e100023',10,'e100024');
+
+
+
+/*
+ * Will stop here because I don't know if I want to include these type of features online... save for mobile?
+*/
 
 
 

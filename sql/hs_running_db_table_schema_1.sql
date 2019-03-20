@@ -277,6 +277,7 @@ INSERT INTO `CoachType` (`coachTypeId`, `coachType`) VALUES (1, "Head XC"), (2, 
 INSERT INTO `CoachType` (`coachTypeId`, `coachType`) VALUES (3, "Head Track & Field"), (4, "Sprints"), (5, "Distance"), (6, "Hurdles"), (7, "Jumps"), (8, "Throws"), (9, "Pole Vault");
 
 
+
 -- shared
 CREATE TABLE `CoachSeason` (
 	`coachId` TINYINT NOT NULL,
