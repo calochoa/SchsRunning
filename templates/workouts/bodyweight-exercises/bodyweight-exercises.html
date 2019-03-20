@@ -30,33 +30,40 @@
 	})
 
 	$(function(){
-		var videoLeft = $.fn.testFunction('mj25D73_TmA', 'Clapping <br/>Push-Ups', 5, 'Upper Body');
-		var videoRight = $.fn.testFunction('T3dJdB3exHI', 'hanging open <br/>close scissors', 4, 'Core');
-		var videoCenter = $.fn.testFunction('ek4YOOlVamk', 'front lever <br/>swings', 6, 'Total Body');
-
-		var videoRowContainer = $('<div>').attr('class', 'videoRowContainer')
-			.append($('<div>').attr('class', 'leftVideo').append($(videoLeft)))
-			.append($('<div>').attr('class', 'rightVideo').append($(videoRight)))
-			.append($('<div>').attr('class', 'centerVideo').append($(videoCenter)));
-		
-		$('.videoListContainer').append($(videoRowContainer).clone());
-		$('.videoListContainer').append($(videoRowContainer).clone());
-		$('.videoListContainer').append($(videoRowContainer).clone());
+		var videoLeft1 = $.fn.createVideo('mj25D73_TmA', 'Clapping Push-Ups', 5, 'Upper Body');
+		var videoRight1 = $.fn.createVideo('T3dJdB3exHI', 'Hanging Open Close Scissors', 4, 'Core');
+		var videoLeft2 = $.fn.createVideo('ek4YOOlVamk', 'Front Lever Swings', 6, 'Total Body');
+		var videoRight2 = $.fn.createVideo('GZRj5HJqK', 'Clapping Pull-Ups', 6, 'Upper Body');
+		var videoLeft3 = $.fn.createVideo('MCmLRa6ZDfA', 'Burpee Tuck Jumps', 5, 'Total Body');
+		var videoRight3 = $.fn.createVideo('7JsXmM2zKoc', 'Lunges', 2, 'Lower Body');
+		var videoLeft4 = $.fn.createVideo('i3gcPC0Tm0c', 'Squat Jumps', 3, 'Lower Body');
+		$.fn.addVideos(videoLeft1, videoRight1);
+		$.fn.addVideos(videoLeft2, videoRight2);
+		$.fn.addVideos(videoLeft3, videoRight3);
+		$.fn.addVideos(videoLeft4, null);
 	})
 
-	$.fn.testFunction = function(videoId, bwExerciseName, difficulty, bodySplit) {
+	$.fn.createVideo = function(videoId, bwExerciseName, difficulty, bodySplit) {
 		return $('<div>').attr('class', 'videoContainer')
 			.append($('<div>').attr('class', 'video')
 				.append($('<h4>').append(bwExerciseName))
 				.append($('<iframe>')
 					.attr('src', 'https://www.youtube.com/embed/' + videoId + '?rel=0&mute=1')
-					.attr('width', '200').attr('height', '200').attr('frameborder', '0')
+					.attr('width', '315').attr('height', '315').attr('frameborder', '0')
 					.attr('allowfullscreen', 'true'))
 				.append($('<div>')
 					.append($('<span>').attr('class', 'bodySplit').text(bodySplit))
 					.append($('<span>').attr('class', 'difficulty').text('Level: ' + difficulty))
 					)
 				);
+	}
+
+	$.fn.addVideos = function(videoLeft, videoRight) {
+		$('.bodyweight-exercises').append($('<div>').attr('class', 'leftVideo').append($(videoLeft)));
+		if (videoRight != null) {
+			$('.bodyweight-exercises').append($('<div>').attr('class', 'rightVideo').append($(videoRight)));
+		}
+		$('.bodyweight-exercises').append($('<div>').attr('style', 'clear: both'));
 	}
     </script>
   </head>
@@ -65,7 +72,7 @@
 {% include "nav.html" %}
 {% include "breadcrumb-title.html" %}
 {% include "filter.html" %}
-	  <div class="videoListContainer"></div>
+	  <div class="bodyweight-exercises"></div>
 {% include "footer.html" %}
     </div>
   </body>

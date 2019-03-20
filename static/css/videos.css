@@ -1,21 +1,9 @@
-.videoListContainer {
-  position: relative;
-}
-
-.videoRowContainer {
-  width: 100%;
-}
-
 .leftVideo {
   float: left;
 }
 
 .rightVideo {
   float: right;
-}
-
-.centerVideo {
-  margin: 0 auto;
 }
 
 .videoContainer {
