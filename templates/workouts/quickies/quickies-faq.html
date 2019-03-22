@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-109364959-1"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+
+	  gtag('config', 'UA-109364959-1');
+	</script>
+    <title>SCHS Running: Quickies FAQ</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <link href="https://getbootstrap.com/docs/3.3/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet">
+    <link href="/static/css/signup.css" rel="stylesheet">
+    <link href="/static/css/dropdown.css" rel="stylesheet">
+    <link href="/static/css/quickies.css" rel="stylesheet">
+    <script src="/static/js/jquery-1.11.2.js"></script>
+    <script>
+	$(function(){
+		var workoutsHomeLink = $('<a>');
+		$(workoutsHomeLink).attr('href', '/workouts');
+		$(workoutsHomeLink).text('Workouts');
+		$('.breadcrumb').append(workoutsHomeLink);
+		$('.breadcrumb').append(' / ');
+
+		var quickiesHomeLink = $('<a>');
+		$(quickiesHomeLink).attr('href', '/workouts/quickies/');
+		$(quickiesHomeLink).text('Quickies');
+		$('.breadcrumb').append(quickiesHomeLink);
+		$('.breadcrumb').append(' / FAQ');
+
+		$('.text-muted').append('Quickies - Frequently Asked Questions');
+	})
+    </script>
+    <style>
+    .quickiesFaq {
+    	margin: 20px 0px 20px 0px;
+    }
+
+    .quickiesFaqList {
+    	font-size: 18px;
+    }
+
+    .quickiesQuestion {
+    	font-size: 22px;
+    	font-weight: bold;
+    	text-decoration: underline;
+    	margin: 20px 0px 10px 0px;
+    }
+    
+    .quickiesAnswer {
+    	font-size: 18px;
+    }
+	</style>
+  </head>
+  <body>
+    <div class="container">
+{% include "nav.html" %}
+{% include "breadcrumb-title.html" %}
+{% include "dropdown.html" %}
+	  <div class="quickiesFaq">
+	  	<div class="quickiesFaqList">
+	  		<div><a href="/workouts/quickies/faq#1">What are Quickies?</a></div>
+	  		<div><a href="/workouts/quickies/faq#2">Why should I do Quickies?</a></div>
+	  		<div><a href="/workouts/quickies/faq#3">How long do Quickies take?</a></div>
+	  		<div><a href="/workouts/quickies/faq#4">How much rest should I take between Quickies?</a></div>
+	  		<div><a href="/workouts/quickies/faq#5">Who invented Quickies?</a></div>
+	  	</div>
+	  	<div class="quickiesQuestion" id="1">What are Quickies?</div>
+	  	<div class="quickiesAnswer">Quickies are designed as high intensity, short duration workouts that can serve as a warm up, or when performed in quantity, a workout in themselves.</div>
+	  	<div class="quickiesQuestion" id="2">Why should I do Quickies?</div>
+	  	<div class="quickiesAnswer">Quickies are QUICK and can be done almost anywhere! Individually, they may not prove that difficult, but are intended to be done in groups of two or more, depending on time or fitness level.</div>
+	  	<div class="quickiesQuestion" id="3">How long do Quickies take?</div>
+	  	<div class="quickiesAnswer">Depending on your fitness level, each quickie can take anywhere between 1 to 5 minutes.</div>
+	  	<div class="quickiesQuestion" id="4">How much rest should I take between Quickies?</div>
+	  	<div class="quickiesAnswer">Equal recovery in between quickies is ideal, but if any prove too difficult, you should increase rest times or lower the repetitions of each exercise.  Remember that quickies are designed to be high-intensity.  You should push yourself to complete them and feel some burn after their completion.</div>
+	  	<div class="quickiesQuestion" id="5">Who invented Quickies?</div>
+	  	<div class="quickiesAnswer">Cal Ochoa and Scott Robinson are the inventors of Quickies!  Patrick Davis was also a major contributor.</div>
+	  </div>
+{% include "footer.html" %}
+    </div>
+  </body>
+</html>
+

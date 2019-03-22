@@ -18,9 +18,12 @@ def get_quickies(body_split_ids, quickie_levels):
     return render_template('workouts/quickies/quickies.html', bsIds=body_split_ids, qLevels=quickie_levels)
 
 
+@quickies_seo_app.route('/faq', methods=['GET'])
+def faq():
+    return render_template('workouts/quickies/quickies-faq.html')
 
 @quickies_seo_app.route('/', methods=['GET'])
-def bodyweight_exercises():
+def quickies():
     return get_quickies('', '')
 
 
