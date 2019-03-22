@@ -43,7 +43,7 @@
 				var videoRight = null;
 				var allExercises = true;
 				var bodySplit = '';
-				var difficulty = '';
+				var levelName = '';
 				$.each(resultsObj,function(index, value){
 					allExercises = value.All;
 					if (videoLeft != null && videoRight != null) {
@@ -53,18 +53,18 @@
 					}
 					var youTubeId = value.YouTubeId;
 					var exerciseName = value.ExerciseName;
-					difficulty = $.fn.getDifficulty(value.ExerciseLevel);
+					levelName = $.fn.getLevelName(value.ExerciseLevel);
 					bodySplit = value.BodySplit;
 					if (videoLeft == null) {
-						videoLeft = $.fn.createVideo(youTubeId, exerciseName, difficulty, bodySplit);
+						videoLeft = $.fn.createVideo(youTubeId, exerciseName, levelName, bodySplit);
 					} else if (videoRight == null) {
-						videoRight = $.fn.createVideo(youTubeId, exerciseName, difficulty, bodySplit);
+						videoRight = $.fn.createVideo(youTubeId, exerciseName, levelName, bodySplit);
 					}
 				});
 				if (videoLeft != null) {
 					$.fn.addVideos(videoLeft, videoRight);
 				}
-				$.fn.setTitle(allExercises, difficulty, bodySplit, resultsObj.length)
+				$.fn.setTitle(allExercises, levelName, bodySplit, resultsObj.length)
 			},
 			error: function(error){
 				console.log(error);
@@ -72,23 +72,23 @@
 		});
 	});
 
-	$.fn.getDifficulty = function(exerciseLevel) {
-		var difficulty = 'Unknown';
+	$.fn.getLevelName = function(exerciseLevel) {
+		var levelName = 'Unknown';
 		if (exerciseLevel == 1) {
-			difficulty = 'Beginner';
+			levelName = 'Beginner';
 		} else if (exerciseLevel == 2) {
-			difficulty = 'Intermediate'
+			levelName = 'Intermediate'
 		} else if (exerciseLevel == 3) {
-			difficulty = 'Advanced';
+			levelName = 'Advanced';
 		} else if (exerciseLevel == 4) {
-			difficulty = 'Expert';
+			levelName = 'Expert';
 		} else if (exerciseLevel == 5 || exerciseLevel == 6) {
-			difficulty = 'Master';
+			levelName = 'Master';
 		}
-		return difficulty;
+		return levelName;
 	}
 
-	$.fn.createVideo = function(videoId, bwExerciseName, difficulty, bodySplit) {
+	$.fn.createVideo = function(videoId, bwExerciseName, levelName, bodySplit) {
 		return $('<div>').attr('class', 'videoContainer')
 			.append($('<div>').attr('class', 'video')
 				.append($('<h4>').append(bwExerciseName))
@@ -97,7 +97,7 @@
 					.attr('width', '315').attr('height', '315').attr('frameborder', '0')
 					.attr('allowfullscreen', 'true'))
 				.append($('<div>')
-					.append($('<span>').attr('class', 'info').text(difficulty + ' | ' + bodySplit))
+					.append($('<span>').attr('class', 'info').text(levelName + ' | ' + bodySplit))
 					)
 				);
 	}
@@ -114,7 +114,7 @@
 	    $(".dropdown-list").append(data);
 	});
 
-	$.fn.setTitle = function(allExercises, difficulty, bodySplit, numResults) {
+	$.fn.setTitle = function(allExercises, levelName, bodySplit, numResults) {
 		var titleStr = 'Bodyweight Exercises';
 		if (allExercises) {
 			$('.breadcrumb').append(titleStr);
@@ -125,11 +125,11 @@
 					$('.breadcrumb').append(' / ');
 					var bodySplitLink = bodySplit.toLowerCase().replace(' ', '-');
 					$('.breadcrumb').append($('<a>').attr('href', '/workouts/bodyweight-exercises/'+bodySplitLink).text(bodySplit));
-					titleStr = difficulty + ' | ' + bodySplit + ' ' + titleStr;
+					titleStr = levelName + ' | ' + bodySplit + ' ' + titleStr;
 				} else {
-					titleStr = difficulty + ' ' + titleStr;
+					titleStr = levelName + ' ' + titleStr;
 				}
-				$('.breadcrumb').append(' / ' + difficulty);
+				$('.breadcrumb').append(' / ' + levelName);
 			} else {
 				$('.breadcrumb').append(' / ' + bodySplit);
 				titleStr = bodySplit + ' ' + titleStr;

@@ -45,11 +45,11 @@
 				var resultsObj = JSON.parse(res);
 				var allQuickies = true;
 				var bodySplit = '';
-				var difficulty = '';
+				var levelName = '';
 				$.each(resultsObj,function(index, value){
 	                allQuickies = value.All;
 	                bodySplit = value.BodySplit;
-	                difficulty = $.fn.getDifficulty(value.QuickieLevel);
+	                levelName = $.fn.getLevelName(value.QuickieLevel);
 	                var quickieName = value.QuickieName;	                
 	                var reps1 = value.Reps1;
 	                var exerciseName1 = value.ExerciseName1;
@@ -65,10 +65,10 @@
 	                var youTubeId4 = value.YouTubeId4;
                 	$.fn.addQuickie($.fn.createQuickie(
                 		quickieName, reps1, exerciseName1, youTubeId1, reps2, exerciseName2, youTubeId2,
-                		reps3, exerciseName3, youTubeId3, reps4, exerciseName4, youTubeId4, difficulty, bodySplit
+                		reps3, exerciseName3, youTubeId3, reps4, exerciseName4, youTubeId4, levelName, bodySplit
                 	));
 				});
-				$.fn.setTitle(allQuickies, difficulty, bodySplit, resultsObj.length)
+				$.fn.setTitle(allQuickies, levelName, bodySplit, resultsObj.length)
 			},
 			error: function(error){
 				console.log(error);
@@ -78,7 +78,7 @@
 
 	$.fn.createQuickie = function(
 		quickieName, reps1, exerciseName1, youTubeId1, reps2, exerciseName2, youTubeId2,
-		reps3, exerciseName3, youTubeId3, reps4, exerciseName4, youTubeId4, difficulty, bodySplit
+		reps3, exerciseName3, youTubeId3, reps4, exerciseName4, youTubeId4, levelName, bodySplit
 	) {
 		return $('<div>').attr('class', 'quickieContainer')
 			.append($('<div>').attr('class', 'quickie')
@@ -89,7 +89,7 @@
 				.append($.fn.leftQuickieVideo(3, reps3, exerciseName3, youTubeId3))
 				.append($.fn.rightQuickieVideo(4, reps4, exerciseName4, youTubeId4))
 				.append($.fn.createClearDiv())
-				.append($.fn.createQuickieInfo(difficulty, bodySplit)));
+				.append($.fn.createQuickieInfo(levelName, bodySplit)));
 	}
 
 	$.fn.leftQuickieVideo = function(stepNo, reps, exerciseName, youTubeId) {
@@ -123,31 +123,31 @@
 		return $('<div>').attr('style', 'clear:both');
 	}
 
-	$.fn.createQuickieInfo = function(difficulty, bodySplit) {
-		return $('<div>').attr('class', 'quickieInfo').text(difficulty + ' | ' + bodySplit);
+	$.fn.createQuickieInfo = function(levelName, bodySplit) {
+		return $('<div>').attr('class', 'quickieInfo').text(levelName + ' | ' + bodySplit);
 	}
 
-	$.fn.getDifficulty = function(quickieLevel) {
-		var difficulty = 'Unknown';
+	$.fn.getLevelName = function(quickieLevel) {
+		var levelName = 'Unknown';
 		if (quickieLevel == 1) {
-			difficulty = 'Beginner';
+			levelName = 'Beginner';
 		} else if (quickieLevel == 2) {
-			difficulty = 'Intermediate'
+			levelName = 'Intermediate'
 		} else if (quickieLevel == 3) {
-			difficulty = 'Advanced';
+			levelName = 'Advanced';
 		} else if (quickieLevel == 4) {
-			difficulty = 'Expert';
+			levelName = 'Expert';
 		} else if (quickieLevel == 5 || quickieLevel == 6) {
-			difficulty = 'Master';
+			levelName = 'Master';
 		}
-		return difficulty;
+		return levelName;
 	}
 
 	$.fn.addQuickie = function(quickie) {
 		$('.quickies').append(quickie);
 	}
 
-	$.fn.setTitle = function(allQuickies, difficulty, bodySplit, numResults) {
+	$.fn.setTitle = function(allQuickies, levelName, bodySplit, numResults) {
 		var titleStr = 'Quickies';
 		if (allQuickies) {
 			$('.breadcrumb').append(titleStr);
@@ -158,11 +158,11 @@
 					$('.breadcrumb').append(' / ');
 					var bodySplitLink = bodySplit.toLowerCase().replace(' ', '-');
 					$('.breadcrumb').append($('<a>').attr('href', '/workouts/quickies/'+bodySplitLink).text(bodySplit));
-					titleStr = difficulty + ' | ' + bodySplit + ' ' + titleStr;
+					titleStr = levelName + ' | ' + bodySplit + ' ' + titleStr;
 				} else {
-					titleStr = difficulty + ' ' + titleStr;
+					titleStr = levelName + ' ' + titleStr;
 				}
-				$('.breadcrumb').append(' / ' + difficulty);
+				$('.breadcrumb').append(' / ' + levelName);
 			} else {
 				$('.breadcrumb').append(' / ' + bodySplit);
 				titleStr = bodySplit + ' ' + titleStr;
