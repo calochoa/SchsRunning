@@ -52,9 +52,9 @@ def get_exercises():
         for result in cursor.stored_results():
             data = result.fetchall()
 
-        all_exercises_dict_list = []
+        exercises_dict_list = []
         for row in data:
-            all_exercises_dict_list.append({
+            exercises_dict_list.append({
                 'ExerciseId': str(row[0]),
                 'ExerciseName': str(row[1]).title(),
                 'ExerciseLevel': row[2],
@@ -64,7 +64,55 @@ def get_exercises():
                 'All': all_exercises
             })
 
-        return json.dumps(all_exercises_dict_list)
+        return json.dumps(exercises_dict_list)
+    except Exception as e:
+        return render_template('error.html',error = str(e))
+
+
+@workouts_db_app.route('/getQuickies',methods=['GET'])
+def get_quickies():
+    try:
+        body_split_ids = request.args.get('bodySplitIds', default='all', type=str)
+        quickieLevels = request.args.get('quickieLevels', default='all', type=str)
+        if quickieLevels == 'all':
+            quickieLevels = '1,2,3,4,5'
+        if body_split_ids == 'all':
+            body_split_ids = 'bs0001,bs0002,bs0003,bs0004'
+
+        cursor = mydb.cursor()
+        if body_split_ids:
+            cursor.callproc('GetQuickies', (quickieLevels, body_split_ids))
+            all_quickies = False
+        else:
+            cursor.callproc('GetAllQuickies')
+            all_quickies = True
+        for result in cursor.stored_results():
+            data = result.fetchall()
+
+        quickies_dict_list = []
+        for row in data:
+            quickies_dict_list.append({
+                'QuickieId': str(row[0]),
+                'QuickieName': str(row[1]).title(),
+                'QuickieLevel': row[2],
+                'QuickieType': str(row[3]),
+                'BodySplit': str(row[4]),
+                'Reps1': row[5],
+                'ExerciseName1': str(row[6]).title(),
+                'YouTubeId1': str(row[7]),
+                'Reps2': row[8],
+                'ExerciseName2': str(row[9]).title(),
+                'YouTubeId2': str(row[10]),
+                'Reps3': row[11],
+                'ExerciseName3': str(row[12]).title(),
+                'YouTubeId3': str(row[13]),
+                'Reps4': row[14],
+                'ExerciseName4': str(row[15]).title(),
+                'YouTubeId4': str(row[16]),
+                'All': all_quickies
+            })
+
+        return json.dumps(quickies_dict_list)
     except Exception as e:
         return render_template('error.html',error = str(e))
 

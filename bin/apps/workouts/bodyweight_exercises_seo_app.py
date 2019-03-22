@@ -12,14 +12,17 @@ bodyweight_exercises_seo_app = Blueprint(
 
 @bodyweight_exercises_seo_app.route('/dropdown-menus/',methods=['GET'])
 def dropdown_menus():
-    return render_template('workouts/bodyweight-exercises/bodyweight-dropdown-menus.html')
+    return render_template('workouts/bodyweight-exercises/bodyweight-exercises-dropdown-menus.html')
 
 def get_exercises(body_split_ids, exercise_levels):
     return render_template('workouts/bodyweight-exercises/bodyweight-exercises.html', bsIds=body_split_ids, eLevels=exercise_levels)
 
+
+
 @bodyweight_exercises_seo_app.route('/', methods=['GET'])
 def bodyweight_exercises():
-    return render_template('workouts/bodyweight-exercises/bodyweight-exercises.html')
+    return get_exercises('', '')
+
 
 
 @bodyweight_exercises_seo_app.route('/beginner/', methods=['GET'])

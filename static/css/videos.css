@@ -21,12 +21,11 @@
   border-radius: 4px;
 }
 
-.difficulty {
+.info {
   float: left;
   margin-left: 10px;
 }
 
-.bodySplit {
-  float: right;
-  margin-right: 10px;
+.bodyweight-exercises {
+  margin-top: 20px
 }

@@ -97,8 +97,7 @@
 					.attr('width', '315').attr('height', '315').attr('frameborder', '0')
 					.attr('allowfullscreen', 'true'))
 				.append($('<div>')
-					.append($('<span>').attr('class', 'difficulty').text(difficulty))
-					.append($('<span>').attr('class', 'bodySplit').text(bodySplit))
+					.append($('<span>').attr('class', 'info').text(difficulty + ' | ' + bodySplit))
 					)
 				);
 	}
@@ -126,7 +125,7 @@
 					$('.breadcrumb').append(' / ');
 					var bodySplitLink = bodySplit.toLowerCase().replace(' ', '-');
 					$('.breadcrumb').append($('<a>').attr('href', '/workouts/bodyweight-exercises/'+bodySplitLink).text(bodySplit));
-					titleStr = difficulty + ' ' + bodySplit + ' ' + titleStr;
+					titleStr = difficulty + ' | ' + bodySplit + ' ' + titleStr;
 				} else {
 					titleStr = difficulty + ' ' + titleStr;
 				}
@@ -145,7 +144,7 @@
 {% include "nav.html" %}
 {% include "breadcrumb-title.html" %}
 {% include "dropdown.html" %}
-	  <div class="bodyweight-exercises" style="margin-top:20px"></div>
+	  <div class="bodyweight-exercises"></div>
 {% include "footer.html" %}
     </div>
   </body>

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-109364959-1"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+
+	  gtag('config', 'UA-109364959-1');
+	</script>
+    <title>SCHS Running: Quickies</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <link href="https://getbootstrap.com/docs/3.3/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet">
+    <link href="/static/css/signup.css" rel="stylesheet">
+    <link href="/static/css/dropdown.css" rel="stylesheet">
+    <link href="/static/css/quickies.css" rel="stylesheet">
+    <script src="/static/js/jquery-1.11.2.js"></script>
+    <script>
+    var bodySplitIds = '{{bsIds}}';
+    var quickieLevels = '{{qLevels}}';
+
+	$(function(){
+		var workoutsHomeLink = $('<a>');
+		$(workoutsHomeLink).attr('href', '/workouts');
+		$(workoutsHomeLink).text('Workouts');
+		$('.breadcrumb').append(workoutsHomeLink);
+		$('.breadcrumb').append(' / ');
+	})
+
+	$.get("/workouts/quickies/dropdown-menus", function(data){
+	    $(".dropdown-list").append(data);
+	});
+
+	$(function(){
+		$.ajax({
+			url: '/getQuickies',
+			type: 'GET',
+			data: {
+				"bodySplitIds": bodySplitIds,
+				"quickieLevels": quickieLevels,
+			},
+			success: function(res){							    				
+				var resultsObj = JSON.parse(res);
+				var allQuickies = true;
+				var bodySplit = '';
+				var difficulty = '';
+				$.each(resultsObj,function(index, value){
+	                allQuickies = value.All;
+	                bodySplit = value.BodySplit;
+	                difficulty = $.fn.getDifficulty(value.QuickieLevel);
+	                var quickieName = value.QuickieName;	                
+	                var reps1 = value.Reps1;
+	                var exerciseName1 = value.ExerciseName1;
+	                var youTubeId1 = value.YouTubeId1;
+	                var reps2 = value.Reps2;
+	                var exerciseName2 = value.ExerciseName2;
+	                var youTubeId2 = value.YouTubeId2;
+	                var reps3 = value.Reps3;
+	                var exerciseName3 = value.ExerciseName3;
+	                var youTubeId3 = value.YouTubeId3;
+	                var reps4 = value.Reps4;
+	                var exerciseName4 = value.ExerciseName4;
+	                var youTubeId4 = value.YouTubeId4;
+                	$.fn.addQuickie($.fn.createQuickie(
+                		quickieName, reps1, exerciseName1, youTubeId1, reps2, exerciseName2, youTubeId2,
+                		reps3, exerciseName3, youTubeId3, reps4, exerciseName4, youTubeId4, difficulty, bodySplit
+                	));
+				});
+				$.fn.setTitle(allQuickies, difficulty, bodySplit, resultsObj.length)
+			},
+			error: function(error){
+				console.log(error);
+			}
+		});
+	});
+
+	$.fn.createQuickie = function(
+		quickieName, reps1, exerciseName1, youTubeId1, reps2, exerciseName2, youTubeId2,
+		reps3, exerciseName3, youTubeId3, reps4, exerciseName4, youTubeId4, difficulty, bodySplit
+	) {
+		return $('<div>').attr('class', 'quickieContainer')
+			.append($('<div>').attr('class', 'quickie')
+				.append($('<div>').attr('class', 'quickiesTitle').text(quickieName.toUpperCase()))
+				.append($.fn.leftQuickieVideo(1, reps1, exerciseName1, youTubeId1))
+				.append($.fn.rightQuickieVideo(2, reps2, exerciseName2, youTubeId2))
+				.append($.fn.createClearDiv())
+				.append($.fn.leftQuickieVideo(3, reps3, exerciseName3, youTubeId3))
+				.append($.fn.rightQuickieVideo(4, reps4, exerciseName4, youTubeId4))
+				.append($.fn.createClearDiv())
+				.append($.fn.createQuickieInfo(difficulty, bodySplit)));
+	}
+
+	$.fn.leftQuickieVideo = function(stepNo, reps, exerciseName, youTubeId) {
+		return $('<div>').attr('class', 'leftQuickieVideo')
+			.append($.fn.createStep(stepNo))
+			.append($.fn.createRepExerciseName(reps, exerciseName))
+			.append($.fn.createYouTubeVideo(youTubeId));
+	}
+
+	$.fn.rightQuickieVideo = function(stepNo, reps, exerciseName, youTubeId) {
+		return $('<div>').attr('class', 'rightQuickieVideo')
+			.append($.fn.createStep(stepNo))
+			.append($.fn.createRepExerciseName(reps, exerciseName))
+			.append($.fn.createYouTubeVideo(youTubeId));
+	}
+
+	$.fn.createStep = function(stepNo, repsExerciseName) {
+		return $('<div>').attr('class', 'stepText').text('Step ' + stepNo);
+	}
+
+	$.fn.createRepExerciseName = function(reps, exerciseName) {
+		return $('<div>').attr('class', 'repsExerciseName').text(reps + ' ' + exerciseName);
+	}
+
+	$.fn.createYouTubeVideo = function(youTubeId) {
+		return $('<iframe>').attr('src', 'https://www.youtube.com/embed/' + youTubeId + '?rel=0&mute=1')
+			.attr('width', '315').attr('height', '315').attr('frameborder', '0').attr('allowfullscreen', 'true');
+	}
+
+	$.fn.createClearDiv = function() {
+		return $('<div>').attr('style', 'clear:both');
+	}
+
+	$.fn.createQuickieInfo = function(difficulty, bodySplit) {
+		return $('<div>').attr('class', 'quickieInfo').text(difficulty + ' | ' + bodySplit);
+	}
+
+	$.fn.getDifficulty = function(quickieLevel) {
+		var difficulty = 'Unknown';
+		if (quickieLevel == 1) {
+			difficulty = 'Beginner';
+		} else if (quickieLevel == 2) {
+			difficulty = 'Intermediate'
+		} else if (quickieLevel == 3) {
+			difficulty = 'Advanced';
+		} else if (quickieLevel == 4) {
+			difficulty = 'Expert';
+		} else if (quickieLevel == 5 || quickieLevel == 6) {
+			difficulty = 'Master';
+		}
+		return difficulty;
+	}
+
+	$.fn.addQuickie = function(quickie) {
+		$('.quickies').append(quickie);
+	}
+
+	$.fn.setTitle = function(allQuickies, difficulty, bodySplit, numResults) {
+		var titleStr = 'Quickies';
+		if (allQuickies) {
+			$('.breadcrumb').append(titleStr);
+		} else {
+			$('.breadcrumb').append($('<a>').attr('href', '/workouts/quickies/').text(titleStr));
+			if (quickieLevels != 'all') {
+				if (bodySplitIds != 'all') {
+					$('.breadcrumb').append(' / ');
+					var bodySplitLink = bodySplit.toLowerCase().replace(' ', '-');
+					$('.breadcrumb').append($('<a>').attr('href', '/workouts/quickies/'+bodySplitLink).text(bodySplit));
+					titleStr = difficulty + ' | ' + bodySplit + ' ' + titleStr;
+				} else {
+					titleStr = difficulty + ' ' + titleStr;
+				}
+				$('.breadcrumb').append(' / ' + difficulty);
+			} else {
+				$('.breadcrumb').append(' / ' + bodySplit);
+				titleStr = bodySplit + ' ' + titleStr;
+			}
+		}
+		$('.text-muted').append(titleStr + ' (' + numResults + ')');
+	}
+    </script>
+  </head>
+  <body>
+    <div class="container">
+{% include "nav.html" %}
+{% include "breadcrumb-title.html" %}
+{% include "dropdown.html" %}
+	  <div class="quickies"></div>
+{% include "footer.html" %}
+    </div>
+  </body>
+</html>
+
