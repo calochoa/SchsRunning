@@ -73,15 +73,15 @@ def get_exercises():
 def get_quickies():
     try:
         body_split_ids = request.args.get('bodySplitIds', default='all', type=str)
-        quickieLevels = request.args.get('quickieLevels', default='all', type=str)
-        if quickieLevels == 'all':
-            quickieLevels = '1,2,3,4,5'
+        quickie_levels = request.args.get('quickieLevels', default='all', type=str)
+        if quickie_levels == 'all':
+            quickie_levels = '1,2,3,4,5'
         if body_split_ids == 'all':
             body_split_ids = 'bs0001,bs0002,bs0003,bs0004'
 
         cursor = mydb.cursor()
         if body_split_ids:
-            cursor.callproc('GetQuickies', (quickieLevels, body_split_ids))
+            cursor.callproc('GetQuickies', (quickie_levels, body_split_ids))
             all_quickies = False
         else:
             cursor.callproc('GetAllQuickies')
@@ -93,7 +93,7 @@ def get_quickies():
         for row in data:
             quickies_dict_list.append({
                 'QuickieId': str(row[0]),
-                'QuickieName': str(row[1]).title(),
+                'QuickieName': str(row[1]),
                 'QuickieLevel': row[2],
                 'QuickieType': str(row[3]),
                 'BodySplit': str(row[4]),
@@ -113,6 +113,76 @@ def get_quickies():
             })
 
         return json.dumps(quickies_dict_list)
+    except Exception as e:
+        return render_template('error.html',error = str(e))
+
+
+@workouts_db_app.route('/getQuickieWorkouts',methods=['GET'])
+def get_quickie_workouts():
+    try:
+        body_split_ids = request.args.get('bodySplitIds', default='all', type=str)
+        workout_levels = request.args.get('workoutLevels', default='all', type=str)
+        if workout_levels == 'all':
+            workout_levels = '1,2,3,4,5'
+        if body_split_ids == 'all':
+            body_split_ids = 'bs0001,bs0002,bs0003,bs0004'
+
+        cursor = mydb.cursor()
+        if body_split_ids:
+            cursor.callproc('GetQuickieWorkouts', (workout_levels, body_split_ids))
+            all_quickie_workouts = False
+        else:
+            cursor.callproc('GetAllQuickieWorkouts')
+            all_quickie_workouts = True
+
+        quickies_dict = {}
+        quickie_workouts_dict_list = []
+        for result in cursor.stored_results():
+            data = result.fetchall()
+
+            # check if the quickies dictionary is empty
+            if not quickies_dict:
+                # this assumes it is the first set of results
+                # so iterate over each row to populate the quickies dictionary
+                for row in data:
+                    quickie_id = str(row[0])
+                    quickies_dict[quickie_id] = {
+                        'QuickieId': quickie_id,
+                        'QuickieName': str(row[1]),
+                        'QuickieLevel': row[2],
+                        'QuickieType': str(row[3]),
+                        'BodySplit': str(row[4]),
+                        'Reps1': row[5],
+                        'ExerciseName1': str(row[6]).title(),
+                        'YouTubeId1': str(row[7]),
+                        'Reps2': row[8],
+                        'ExerciseName2': str(row[9]).title(),
+                        'YouTubeId2': str(row[10]),
+                        'Reps3': row[11],
+                        'ExerciseName3': str(row[12]).title(),
+                        'YouTubeId3': str(row[13]),
+                        'Reps4': row[14],
+                        'ExerciseName4': str(row[15]).title(),
+                        'YouTubeId4': str(row[16]),
+                    }
+            else:
+                # iterate over the quickie workout results
+                for row in data:
+                    quickie_list = []
+                    # iterate over the quickie ids
+                    for quickie_id in str(row[4]).split(','):
+                        # look up the quickie id in the dictionary and add it to the quickie list
+                        quickie_list.append(quickies_dict.get(quickie_id.strip()))
+                    quickie_workouts_dict_list.append({
+                        'WorkoutId': str(row[0]),
+                        'WorkoutName': str(row[1]).title(),
+                        'WorkoutLevel': row[2],
+                        'BodySplit': str(row[3]),
+                        'Quickies': quickie_list,
+                        'All': all_quickie_workouts
+                    })
+
+        return json.dumps(quickie_workouts_dict_list)
     except Exception as e:
         return render_template('error.html',error = str(e))
 

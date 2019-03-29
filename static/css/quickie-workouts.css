@@ -1,0 +1,57 @@
+.quickieWorkout {
+  width: 100%;
+  display: inline-block;
+  background-color: #337ab7;
+  color: white;
+  padding: 0px 10px 5px 10px;
+  margin: 20px 0px 20px 0px;
+  font-size: 16px;
+  border: none;
+  border-radius: 4px;
+}
+
+.workoutsTitle {
+  font-size: 24px;
+  text-decoration: underline;
+  font-weight: bold;
+  margin: 10px 0px 0px 0px;
+  text-align: center;
+}
+
+.leftQuickie {
+  float: left;
+  width:50%;
+  padding: 0px 0px 0px 20px;
+}
+
+.rightQuickie {
+  float: right;
+  width:50%;
+  padding: 0px 0px 0px 20px;
+}
+
+.stepQuickieTitleContainer {
+  margin: 15px 0px 0px 0px;
+}
+
+.stepText {
+  color: #CCC;
+  font-size: 22px;
+  text-decoration: underline;
+}
+
+.quickiesTitle {
+  font-size: 22px;
+  font-weight: bold;
+  margin: 0px 0px 0px 10px;
+}
+
+.repsExercise {
+  font-size: 20px;
+}
+
+.quickieWorkoutInfo {
+  float: left;
+  margin: 10px 0px 0px 10px;
+  font-size: 20px;
+}

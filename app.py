@@ -37,6 +37,7 @@ from bin.apps.workouts.workouts_app import workouts_app
 from bin.apps.workouts.workouts_db_app import workouts_db_app
 from bin.apps.workouts.bodyweight_exercises_seo_app import bodyweight_exercises_seo_app
 from bin.apps.workouts.quickies_seo_app import quickies_seo_app
+from bin.apps.workouts.quickie_workouts_seo_app import quickie_workouts_seo_app
 
 
 app = Flask(__name__)
@@ -69,6 +70,7 @@ app.register_blueprint(workouts_app)
 app.register_blueprint(workouts_db_app)
 app.register_blueprint(bodyweight_exercises_seo_app)
 app.register_blueprint(quickies_seo_app)
+app.register_blueprint(quickie_workouts_seo_app)
 
 app.config.update(
     PROPAGATE_EXCEPTIONS = True

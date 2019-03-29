@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-109364959-1"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+
+	  gtag('config', 'UA-109364959-1');
+	</script>
+    <title>SCHS Running: Quickie Workouts</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <link href="https://getbootstrap.com/docs/3.3/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet">
+    <link href="/static/css/signup.css" rel="stylesheet">
+    <link href="/static/css/dropdown.css" rel="stylesheet">
+    <link href="/static/css/quickie-workouts.css" rel="stylesheet">
+    <link href="/static/css/back-to-top.css" rel="stylesheet">
+	<a href="#top" id="back-to-top" class="back-to-top" style="display: inline;">Top</a>
+    <script src="/static/js/jquery-1.11.2.js"></script>
+    <script src="/static/js/back-to-top.js"></script>
+    <script>
+    var bodySplitIds = '{{bsIds}}';
+    var workoutLevels = '{{wLevels}}';
+
+	$(function(){
+		var workoutsHomeLink = $('<a>');
+		$(workoutsHomeLink).attr('href', '/workouts');
+		$(workoutsHomeLink).text('Workouts');
+		$('.breadcrumb').append(workoutsHomeLink);
+		$('.breadcrumb').append(' / ');
+	})
+
+	$.get("/workouts/quickie-workouts/dropdown-menus", function(data){
+	    $(".dropdown-list").append(data);
+	});
+
+	$(function(){
+		$.ajax({
+			url: '/getQuickieWorkouts',
+			type: 'GET',
+			data: {
+				"bodySplitIds": bodySplitIds,
+				"workoutLevels": workoutLevels,
+			},
+			success: function(res){							    				
+				var resultsObj = JSON.parse(res);
+				var allQuickieWorkouts = true;
+				var bodySplit = '';
+				var levelName = '';
+				$.each(resultsObj,function(index, value){
+	                allQuickieWorkouts = value.All;
+	                bodySplit = value.BodySplit;
+	                levelName = $.fn.getLevelName(value.WorkoutLevel);
+
+	                var workoutDiv = $.fn.createQuickieWorkout(value.WorkoutName);
+	                $.each(value.Quickies,function(step, quickie){
+                		$(workoutDiv).append($.fn.createQuickie(step, quickie));
+	                });
+	                $(workoutDiv).append($.fn.createQuickieWorkoutInfo(levelName, bodySplit));
+	                $.fn.addQuickieWorkout(workoutDiv);
+				});
+				$.fn.setTitle(allQuickieWorkouts, levelName, bodySplit, resultsObj.length)
+			},
+			error: function(error){
+				console.log(error);
+			}
+		});
+	});
+
+	$.fn.getLevelName = function(quickieLevel) {
+		var levelName = 'Unknown';
+		if (quickieLevel == 1) {
+			levelName = 'Beginner';
+		} else if (quickieLevel == 2) {
+			levelName = 'Intermediate'
+		} else if (quickieLevel == 3) {
+			levelName = 'Advanced';
+		} else if (quickieLevel == 4) {
+			levelName = 'Expert';
+		} else if (quickieLevel == 5 || quickieLevel == 6) {
+			levelName = 'Master';
+		}
+		return levelName;
+	}
+
+	$.fn.createQuickieWorkout = function(workoutName) {
+		return $('<div>').attr('class', 'quickieWorkout')
+			.append($('<div>').attr('class', 'workoutsTitle').text(workoutName.toUpperCase()));
+	}
+
+	$.fn.createQuickie = function(step, quickie) {
+		var quickieLocation = step % 2 == 0 ? 'leftQuickie' : 'rightQuickie';
+		return $('<div>').attr('class', quickieLocation)
+			.append($.fn.createStepQuickieTitle(step + 1, quickie.QuickieName))
+			.append($.fn.createRepsExercises(
+				quickie.Reps1, quickie.ExerciseName1, quickie.Reps2, quickie.ExerciseName2, 
+				quickie.Reps3, quickie.ExerciseName3, quickie.Reps4, quickie.ExerciseName4)
+			);
+	}
+
+	$.fn.createStepQuickieTitle = function(step, quickieTitle) {
+		return $('<div>').attr('class', 'stepQuickieTitleContainer')
+			.append($('<span>').attr('class', 'stepText').text('Step ' + step + ':'))
+            .append($('<span>').attr('class', 'quickiesTitle').text(quickieTitle));
+	}
+
+	$.fn.createRepsExercises = function(reps1, exercise1, reps2, exercise2, reps3, exercise3, reps4, exercise4) {
+		return $('<ul>')
+			.append($.fn.createRepExerciseName(reps1, exercise1))
+			.append($.fn.createRepExerciseName(reps2, exercise2))
+			.append($.fn.createRepExerciseName(reps3, exercise3))
+			.append($.fn.createRepExerciseName(reps4, exercise4));
+	}
+
+	$.fn.createRepExerciseName = function(reps, exerciseName) {
+		return $('<li>').attr('class', 'repsExercise').text(reps + ' ' + exerciseName);
+	}
+
+
+	$.fn.createClearDiv = function() {
+		return $('<div>').attr('style', 'clear:both');
+	}
+
+	$.fn.createQuickieWorkoutInfo = function(levelName, bodySplit) {
+		return $('<div>').attr('class', 'quickieWorkoutInfo').text(levelName + ' | ' + bodySplit);
+	}
+
+	$.fn.addQuickieWorkout = function(quickieWorkout) {
+		$('.quickieWorkouts').append(quickieWorkout);
+	}
+
+	$.fn.setTitle = function(allQuickieWorkouts, levelName, bodySplit, numResults) {
+		var titleStr = 'Quickie Workouts';
+		if (allQuickieWorkouts) {
+			$('.breadcrumb').append(titleStr);
+		} else {
+			$('.breadcrumb').append($('<a>').attr('href', '/workouts/quickie-workouts/').text(titleStr));
+			if (workoutLevels != 'all') {
+				if (bodySplitIds != 'all') {
+					$('.breadcrumb').append(' / ');
+					var bodySplitLink = bodySplit.toLowerCase().replace(' ', '-');
+					$('.breadcrumb').append($('<a>').attr('href', '/workouts/quickie-workouts/'+bodySplitLink).text(bodySplit));
+					titleStr = levelName + ' | ' + bodySplit + ' ' + titleStr;
+				} else {
+					titleStr = levelName + ' ' + titleStr;
+				}
+				$('.breadcrumb').append(' / ' + levelName);
+			} else {
+				$('.breadcrumb').append(' / ' + bodySplit);
+				titleStr = bodySplit + ' ' + titleStr;
+			}
+		}
+		$('.text-muted').append(titleStr + ' (' + numResults + ')');
+	}
+    </script>
+  </head>
+  <body>
+    <div class="container">
+{% include "nav.html" %}
+{% include "breadcrumb-title.html" %}
+{% include "dropdown.html" %}
+	  <div class="quickieWorkouts"></div>
+{% include "footer.html" %}
+    </div>
+  </body>
+</html>
+
