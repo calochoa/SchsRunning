@@ -12,7 +12,7 @@ from bin.utils import Utils
 # MySQL configurations
 # heroku - JawsDB
 mydb = MySQLdb.connect(
-    host="ofcmikjy9x4lroa2.cbetxkdyhwsb.us-east-1.rds.amazonaws.com ",
+    host="ofcmikjy9x4lroa2.cbetxkdyhwsb.us-east-1.rds.amazonaws.com",
     user="wrcpd5zfxppr2cew",
     passwd="deyz4an53hsnvwko",
     db="sodfafe0xvqscbco"
