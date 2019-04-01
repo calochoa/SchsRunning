@@ -4,6 +4,7 @@ __email__ = "calochoa@gmail.com"
 
 from flask import Blueprint, render_template, json, request
 import mysql.connector
+import HTMLParser
 
 from bin.utils import Utils
 
@@ -183,6 +184,50 @@ def get_quickie_workouts():
                     })
 
         return json.dumps(quickie_workouts_dict_list)
+    except Exception as e:
+        return render_template('error.html',error = str(e))
+
+
+@workouts_db_app.route('/getQuickiesByIds',methods=['GET'])
+def get_quickies_by_ids():
+    try:
+        quickie_ids = HTMLParser.HTMLParser().unescape(request.args.get('quickieIds', default=None, type=str))
+
+        cursor = mydb.cursor()
+        cursor.callproc('GetQuickiesById', [quickie_ids])
+        for result in cursor.stored_results():
+            data = result.fetchall()
+
+        # populate the quickies dictionary
+        quickies_dict = {}
+        for row in data:
+            quickie_id = str(row[0])
+            quickies_dict[quickie_id] = {
+                'QuickieId': quickie_id,
+                'QuickieName': str(row[1]),
+                'QuickieLevel': row[2],
+                'QuickieType': str(row[3]),
+                'BodySplit': str(row[4]),
+                'Reps1': row[5],
+                'ExerciseName1': str(row[6]).title(),
+                'YouTubeId1': str(row[7]),
+                'Reps2': row[8],
+                'ExerciseName2': str(row[9]).title(),
+                'YouTubeId2': str(row[10]),
+                'Reps3': row[11],
+                'ExerciseName3': str(row[12]).title(),
+                'YouTubeId3': str(row[13]),
+                'Reps4': row[14],
+                'ExerciseName4': str(row[15]).title(),
+                'YouTubeId4': str(row[16]),
+            }
+
+        # create the list of quickies dictionary based on the input quickie ids
+        quickies_dict_list = []
+        for quickie_id in quickie_ids.split(','):
+            quickies_dict_list.append(quickies_dict.get(quickie_id.strip()))
+
+        return json.dumps(quickies_dict_list)
     except Exception as e:
         return render_template('error.html',error = str(e))
 

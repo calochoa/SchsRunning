@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-109364959-1"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+
+	  gtag('config', 'UA-109364959-1');
+	</script>
+    <title>SCHS Running: Quickie Workout</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <link href="https://getbootstrap.com/docs/3.3/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet">
+    <link href="/static/css/signup.css" rel="stylesheet">
+    <link href="/static/css/dropdown.css" rel="stylesheet">
+    <link href="/static/css/quickies.css" rel="stylesheet">
+    <link href="/static/css/back-to-top.css" rel="stylesheet">
+	<a href="#top" id="back-to-top" class="back-to-top" style="display: inline;">Top</a>
+    <script src="/static/js/jquery-1.11.2.js"></script>
+    <script src="/static/js/back-to-top.js"></script>
+    <script src="/static/js/quickies.js"></script>
+    <script>
+    var workoutName = '{{workoutName}}';
+    var bodySplit = '{{bodySplit}}';
+    var workoutLevel = '{{workoutLevel}}';
+    var quickieIds = '{{qIds}}';
+
+	$(function(){
+		var workoutsHomeLink = '/workouts';
+		$('.breadcrumb').append($('<a>').attr('href', workoutsHomeLink).text('Workouts')).append(' / ');
+
+		var quickieWorkoutsLink = workoutsHomeLink + '/quickie-workouts/';
+		$('.breadcrumb').append($('<a>').attr('href', quickieWorkoutsLink).text('Quickie Workouts')).append(' / ');
+
+		var bodySplitLink = quickieWorkoutsLink + bodySplit.toLowerCase().replace(' ', '-') + '/';
+		$('.breadcrumb').append($('<a>').attr('href', bodySplitLink).text(bodySplit)).append(' / ');
+
+		var workoutLevelLink = bodySplitLink + workoutLevel.toLowerCase() + '/';
+		$('.breadcrumb').append($('<a>').attr('href', workoutLevelLink).text(workoutLevel)).append(' / ' + workoutName);
+
+		$('.text-muted').append(workoutName);
+	})
+
+	$.get("/workouts/quickie-workouts/dropdown-menus", function(data){
+	    $(".dropdown-list").append(data);
+	});
+
+	$(function(){
+		$.ajax({
+			url: '/getQuickiesByIds',
+			type: 'GET',
+			data: {
+				"quickieIds": quickieIds,
+			},
+			success: function(res){							    				
+				var resultsObj = JSON.parse(res);
+				$.each(resultsObj,function(index, value){
+                	$.fn.addQuickie($.fn.createQuickie(
+                		value.QuickieName, value.Reps1, value.ExerciseName1, value.YouTubeId1, 
+                		value.Reps2, value.ExerciseName2, value.YouTubeId2, value.Reps3, value.ExerciseName3,
+                		value.YouTubeId3, value.Reps4, value.ExerciseName4, value.YouTubeId4, 
+                		$.fn.getLevelName(value.QuickieLevel), value.BodySplit
+                	));
+				});
+			},
+			error: function(error){
+				console.log(error);
+			}
+		});
+	});
+    </script>
+  </head>
+  <body>
+    <div class="container">
+{% include "nav.html" %}
+{% include "breadcrumb-title.html" %}
+{% include "dropdown.html" %}
+	  <div class="quickies"></div>
+{% include "footer.html" %}
+    </div>
+  </body>
+</html>
+

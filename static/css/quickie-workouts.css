@@ -55,3 +55,18 @@
   margin: 10px 0px 0px 10px;
   font-size: 20px;
 }
+
+.videoViewLink {
+  float: right;
+  margin: 10px 10px 0px 0px;
+  font-size: 20px;
+  text-decoration: underline;
+}
+
+.videoViewLink a {
+  color: blue;
+}
+
+.videoViewLink a:hover {
+  color: #CCC;
+}
