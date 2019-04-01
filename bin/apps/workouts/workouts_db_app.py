@@ -3,8 +3,8 @@ __email__ = "calochoa@gmail.com"
 
 
 from flask import Blueprint, render_template, json, request
+from html.parser import HTMLParser
 import mysql.connector
-import HTMLParser
 
 from bin.utils import Utils
 
