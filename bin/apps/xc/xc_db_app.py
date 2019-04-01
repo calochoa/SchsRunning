@@ -3,7 +3,7 @@ __email__ = "calochoa@gmail.com"
 
 
 from flask import Blueprint, render_template, json, request
-import mysql.connector
+import MySQLdb
 
 from bin.utils import Utils
 
@@ -12,38 +12,26 @@ xc_db_app = Blueprint('xc_db_app', __name__, template_folder='templates')
 
 
 # MySQL configurations
-"""
-# heroku - ClearDB
-mydb = mysql.connector.connect(
-    host="us-cdbr-iron-east-05.cleardb.net",
-    user="b31e9fc461a5fd",
-    passwd="105c24d7",
-    database="heroku_d5e2f87dc3f9601",
-    auth_plugin='mysql_native_password'
-)
-"""
 # heroku - JawsDB
-mydb = mysql.connector.connect(
+mydb = MySQLdb.connect(
     host="ofcmikjy9x4lroa2.cbetxkdyhwsb.us-east-1.rds.amazonaws.com ",
     user="wrcpd5zfxppr2cew",
     passwd="deyz4an53hsnvwko",
-    database="sodfafe0xvqscbco",
-    auth_plugin='mysql_native_password'
+    db="sodfafe0xvqscbco"
 )
 """
 # localhost
-mydb = mysql.connector.connect(
+mydb = MySQLdb.connect(
     host="localhost",
     user="root",
     passwd="run4fun1986",
-    database="highSchoolRunning",
-    auth_plugin='mysql_native_password'
+    db="highSchoolRunning"
 )
 """
 
 
 @xc_db_app.route('/getTopCourseResults',methods=['GET'])
-def getTopCourseResults():
+def get_top_course_results():
     try:
         courseId = request.args.get('courseId', default = 1, type = int)
         genderId = request.args.get('genderId', default = 2, type = int)
@@ -52,14 +40,12 @@ def getTopCourseResults():
 
         cursor = mydb.cursor()
         if grade == 0:
-            cursor.callproc('GetTopXcIndividual',(courseId,genderId,limit))
+            cursor.execute('CALL GetTopXcIndividual({0}, {1}, {2})'.format(courseId,genderId,limit))
         else:
-            cursor.callproc('GetTopXcIndividualByGrade',(courseId,genderId,grade,limit))
-        for result in cursor.stored_results():
-            data = result.fetchall()
+            cursor.execute('CALL GetTopXcIndividualByGrade({0}, {1}, {2}, {3})'.format(courseId,genderId,grade,limit))
 
         top_results_dict = []
-        for row in data:
+        for row in cursor.fetchall():
             top_results_dict.append({
                 'Rank': row[0],
                 'FirstName': row[1],
@@ -77,17 +63,15 @@ def getTopCourseResults():
 
 
 @xc_db_app.route('/getCourseInfo',methods=['GET'])
-def getCourseInfo():
+def get_course_info():
     try:
         courseId = request.args.get('courseId', default = 1, type = int)
 
         cursor = mydb.cursor()
-        cursor.callproc('GetCourseInfo',[courseId])
-        for result in cursor.stored_results():
-            data = result.fetchall()
+        cursor.execute('CALL GetCourseInfo({0})'.format(courseId))
 
         courses_dict = []
-        for row in data:
+        for row in cursor.fetchall():
             courses_dict.append({
                 'CourseId': row[0],
                 'CourseName': row[1],
@@ -103,21 +87,19 @@ def getCourseInfo():
 
 
 @xc_db_app.route('/getTopTeamCourseResults',methods=['GET'])
-def getTopTeamCourseResults():
+def get_top_team_course_results():
     try:
         courseId = request.args.get('courseId', default = 1, type = int)
         genderId = request.args.get('genderId', default = 2, type = int)
         limit = request.args.get('limit', default = 15, type = int)
 
         cursor = mydb.cursor()
-        cursor.callproc('GetTopTeamCourse',(courseId,genderId,limit))
-        for result in cursor.stored_results():
-            data = result.fetchall()
+        cursor.execute('CALL GetTopTeamCourse({0}, {1}, {2})'.format(courseId,genderId,limit))
 
         top_team_course_results_dict = []
         all_top_race_ids = []
         all_top_competitor_ids = []
-        for row in data:
+        for row in cursor.fetchall():
             top_team_course_results_dict.append({
                 'Rank': row[0],
                 'Year': row[1],
@@ -129,7 +111,7 @@ def getTopTeamCourseResults():
             all_top_race_ids.append(row[4])
             all_top_competitor_ids.append(row[5])
 
-        race_competitor_data_dict = getXcResultsByRaceCompetitor(all_top_race_ids,all_top_competitor_ids)
+        race_competitor_data_dict = get_xc_results_by_race_competitor(all_top_race_ids,all_top_competitor_ids)
 
         for result in top_team_course_results_dict:
             race_id = str(result['RaceId'])
@@ -162,18 +144,16 @@ def getTopTeamCourseResults():
 
 
 @xc_db_app.route('/getXcResultsByRaceCompetitor',methods=['GET'])
-def getXcResultsByRaceCompetitor(race_ids,competitor_ids):
+def get_xc_results_by_race_competitor(race_ids,competitor_ids):
     try:
         race_ids_str = ','.join(str(e) for e in race_ids)
         competitor_ids_str = ','.join(str(e) for e in competitor_ids)
 
         cursor = mydb.cursor()
-        cursor.callproc('GetXcResultsByRaceCompetitor',(race_ids_str,competitor_ids_str))
-        for result in cursor.stored_results():
-            data = result.fetchall()
+        cursor.execute('CALL GetXcResultsByRaceCompetitor("{0}", "{1}")'.format(race_ids_str,competitor_ids_str))
 
         race_competitor_data_dict = {}
-        for row in data:
+        for row in cursor.fetchall():
             race_id = str(row[0])
             competitor_id = str(row[1])
             time = Utils.formatTime(row[2])
@@ -193,17 +173,15 @@ def getXcResultsByRaceCompetitor(race_ids,competitor_ids):
 
 
 @xc_db_app.route('/getXcRunners',methods=['GET'])
-def getXcRunners():
+def get_xc_runners():
     try:
         genderId = request.args.get('genderId', default = 2, type = int)
 
         cursor = mydb.cursor()
-        cursor.callproc('GetXcRunners',[genderId])
-        for result in cursor.stored_results():
-            data = result.fetchall()
+        cursor.execute('CALL GetXcRunners({0})'.format(genderId))
 
         runners_dict = []
-        for row in data:
+        for row in cursor.fetchall():
             runners_dict.append({
                 'RunnerId': row[0],
                 'FirstName': row[1],
@@ -217,17 +195,15 @@ def getXcRunners():
 
 
 @xc_db_app.route('/getXcRunnerResults',methods=['GET'])
-def getXcRunnerResults():
+def get_xc_runner_results():
     try:
         runnerId = request.args.get('runnerId', default = 1, type = int)
 
         cursor = mydb.cursor()
-        cursor.callproc('GetXcRunnerResults',[runnerId])
-        for result in cursor.stored_results():
-            data = result.fetchall()
+        cursor.execute('CALL GetXcRunnerResults({0})'.format(runnerId))
 
         runner_results_dict = []
-        for row in data:
+        for row in cursor.fetchall():
             runner_results_dict.append({
                 'Time': Utils.formatTime(row[0]),
                 'Pace': Utils.formatTime(row[1]),
@@ -248,18 +224,16 @@ def getXcRunnerResults():
 
 
 @xc_db_app.route('/getXcCompetitorsByYear',methods=['GET'])
-def getXcCompetitorsByYear():
+def get_xc_competitors_by_year():
     try:
         year = request.args.get('year', default = 2003, type = int)
         genderId = request.args.get('genderId', default = 2, type = int)
 
         cursor = mydb.cursor()
-        cursor.callproc('GetXcCompetitorsByYear',(year,genderId))
-        for result in cursor.stored_results():
-            data = result.fetchall()
+        cursor.execute('CALL GetXcCompetitorsByYear({0}, {1})'.format(year,genderId))
 
         competitors_dict = []
-        for row in data:
+        for row in cursor.fetchall():
             competitors_dict.append({
                 'CompetitorId': row[0],
                 'Year': row[1],
@@ -275,17 +249,15 @@ def getXcCompetitorsByYear():
 
 
 @xc_db_app.route('/getXcRacesByYear',methods=['GET'])
-def getXcRacesByYear():
+def get_xc_races_by_year():
     try:
         year = request.args.get('year', default = 2003, type = int)
 
         cursor = mydb.cursor()
-        cursor.callproc('GetXcRacesByYear',[year])
-        for result in cursor.stored_results():
-            data = result.fetchall()
+        cursor.execute('CALL GetXcRacesByYear({0})'.format(year))
 
         races_dict = []
-        for row in data:
+        for row in cursor.fetchall():
             races_dict.append({
                 'RaceId': row[0],
                 'Date': str(row[1]),
@@ -300,17 +272,15 @@ def getXcRacesByYear():
 
 
 @xc_db_app.route('/getXcCompetitorResults',methods=['GET'])
-def getXcCompetitorResults():
+def get_xc_competitor_results():
     try:
         competitorId = request.args.get('competitorId', default = 1.12, type = str)
 
         cursor = mydb.cursor()
-        cursor.callproc('GetXcCompetitorResults',[competitorId])
-        for result in cursor.stored_results():
-            data = result.fetchall()
+        cursor.execute('CALL GetXcCompetitorResults("{0}")'.format(competitorId))
  
         competitor_results_dict = []
-        for row in data:
+        for row in cursor.fetchall():
             competitor_results_dict.append({
                 'Time': Utils.formatTime(row[0]),
                 'Pace': Utils.formatTime(row[1]),
@@ -332,21 +302,19 @@ def getXcCompetitorResults():
 
 
 @xc_db_app.route('/getXcRaceResults',methods=['GET'])
-def getXcRaceResults():
+def get_xc_race_results():
     try:
         raceId = request.args.get('raceId', default = 1000132, type = int)
         genderId = request.args.get('genderId', default = 0, type = int)
 
         cursor = mydb.cursor()
         if genderId == 0:
-            cursor.callproc('GetAllXcRaceResults',[raceId])
+            cursor.execute('CALL GetAllXcRaceResults({0})'.format(raceId))
         else:
-            cursor.callproc('GetXcRaceResults',(raceId,genderId))
-        for result in cursor.stored_results():
-            data = result.fetchall()
+            cursor.execute('CALL GetXcRaceResults({0}, {1})'.format(raceId,genderId))
 
         race_results_dict = []
-        for row in data:
+        for row in cursor.fetchall():
             race_results_dict.append({
                 'Rank': row[0],
                 'Time': Utils.formatTime(row[1]),
@@ -369,15 +337,13 @@ def getXcRaceResults():
 
 
 @xc_db_app.route('/getPastXcAlumniChampions',methods=['GET'])
-def getPastXcAlumniChampions():
+def get_past_xc_alumni_champions():
     try:
         cursor = mydb.cursor()
-        cursor.callproc('GetPastXcAlumniChampions')
-        for result in cursor.stored_results():
-            data = result.fetchall()
+        cursor.execute('CALL GetPastXcAlumniChampions()')
 
         alumni_race_dict = []
-        for row in data:
+        for row in cursor.fetchall():
             alumni_race_dict.append({
                 'Time': Utils.formatTime(row[0]),
                 'Pace': Utils.formatTime(row[1]),

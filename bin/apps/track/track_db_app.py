@@ -2,41 +2,28 @@ __author__ = "Christian Ochoa"
 __email__ = "calochoa@gmail.com"
 
 
-
 from flask import Blueprint, render_template, json, request
-import mysql.connector
+import MySQLdb
 import collections
 
 from bin.utils import Utils
 
 
 # MySQL configurations
-"""
-# heroku - ClearDB
-mydb = mysql.connector.connect(
-    host="us-cdbr-iron-east-05.cleardb.net",
-    user="b31e9fc461a5fd",
-    passwd="105c24d7",
-    database="heroku_d5e2f87dc3f9601",
-    auth_plugin='mysql_native_password'
-)
-"""
 # heroku - JawsDB
-mydb = mysql.connector.connect(
+mydb = MySQLdb.connect(
     host="ofcmikjy9x4lroa2.cbetxkdyhwsb.us-east-1.rds.amazonaws.com ",
     user="wrcpd5zfxppr2cew",
     passwd="deyz4an53hsnvwko",
-    database="sodfafe0xvqscbco",
-    auth_plugin='mysql_native_password'
+    db="sodfafe0xvqscbco"
 )
 """
 # localhost
-mydb = mysql.connector.connect(
+mydb = MySQLdb.connect(
     host="localhost",
     user="root",
     passwd="run4fun1986",
-    database="highSchoolRunning",
-    auth_plugin='mysql_native_password'
+    db="highSchoolRunning"
 )
 """
 
@@ -52,14 +39,12 @@ def get_track_hall_of_fame_race_results():
         limit = 25
         max_rank_in_hall_of_fame = 10
         cursor = mydb.cursor()
-        cursor.callproc('GetTopTrackRaceIndividual', (event_id, gender_id, limit))
-        for result in cursor.stored_results():
-            data = result.fetchall()
+        cursor.execute('CALL GetTopTrackRaceIndividual({0}, {1}, {2})'.format(event_id, gender_id, limit))
 
         top_race_results_dict = []
         last_rank = 0
         last_time = 0
-        for row in data:
+        for row in cursor.fetchall():
             current_rank = row[0]
             current_time = Utils.format_track_time(row[4])
             if last_rank > 0:
@@ -100,14 +85,12 @@ def get_track_hall_of_fame_relay_results():
         limit = 25
         max_rank_in_hall_of_fame = 10
         cursor = mydb.cursor()
-        cursor.callproc('GetTopTrackRelayTeam', (event_id, gender_id, limit))
-        for result in cursor.stored_results():
-            data = result.fetchall()
+        cursor.execute('CALL GetTopTrackRelayTeam({0}, {1}, {2})'.format(event_id, gender_id, limit))
 
         top_relay_results_dict = []
         last_rank = 0
         last_time = 0
-        for row in data:
+        for row in cursor.fetchall():
             current_rank = row[0]
             current_time = Utils.format_track_time(row[2])
             if last_rank > 0:
@@ -156,14 +139,12 @@ def get_track_hall_of_fame_field_results():
         limit = 25
         max_rank_in_hall_of_fame = 10
         cursor = mydb.cursor()
-        cursor.callproc('GetTopFieldIndividual', (event_id, gender_id, limit))
-        for result in cursor.stored_results():
-            data = result.fetchall()
+        cursor.execute('CALL GetTopFieldIndividual({0}, {1}, {2})'.format(event_id, gender_id, limit))
 
         top_field_results_dict = []
         last_rank = 0
         last_distance = 0
-        for row in data:
+        for row in cursor.fetchall():
             current_rank = row[0]
             foot_part_of_distance = int(row[4])
             inch_part_of_distance = float(row[5])
@@ -204,12 +185,10 @@ def get_track_competitors_by_year():
         year = request.args.get('year', default = 2018, type = int)
 
         cursor = mydb.cursor()
-        cursor.callproc('GetTrackCompetitorsByYear',[year])
-        for result in cursor.stored_results():
-            data = result.fetchall()
+        cursor.execute('CALL GetTrackCompetitorsByYear({0})'.format(year))
 
         competitors_dict = []
-        for row in data:
+        for row in cursor.fetchall():
             competitors_dict.append({
                 'CompetitorId': row[0],
                 'Year': row[1],
@@ -230,12 +209,10 @@ def get_track_events_by_year():
         year = request.args.get('year', default = 2018, type = int)
 
         cursor = mydb.cursor()
-        cursor.callproc('GetTrackEventsByYear',[year])
-        for result in cursor.stored_results():
-            data = result.fetchall()
+        cursor.execute('CALL GetTrackEventsByYear({0})'.format(year))
 
         races_dict = []
-        for row in data:
+        for row in cursor.fetchall():
             races_dict.append({
                 'Event': str(row[0]),
                 'EventId': row[1],
@@ -258,14 +235,12 @@ def get_track_race_results():
         squad_id = request.args.get('squadId', default = 1, type = int)
         year = request.args.get('year', default = 2018, type = int)
         cursor = mydb.cursor()
-        cursor.callproc('GetTrackRaceResults', (event_id, squad_id, year))
-        for result in cursor.stored_results():
-            data = result.fetchall()
+        cursor.execute('CALL GetTrackRaceResults({0}, {1}, {2})'.format(event_id, squad_id, year))
 
         race_results_dict = []
         last_rank = 0
         last_time = 0
-        for row in data:
+        for row in cursor.fetchall():
             current_rank = row[0]
             current_time = Utils.format_track_time(row[4])
             if last_rank > 0:
@@ -303,14 +278,12 @@ def get_track_field_results():
         squad_id = request.args.get('squadId', default = 1, type = int)
         year = request.args.get('year', default = 2018, type = int)
         cursor = mydb.cursor()
-        cursor.callproc('GetTrackFieldResults', (event_id, squad_id, year))
-        for result in cursor.stored_results():
-            data = result.fetchall()
+        cursor.execute('CALL GetTrackFieldResults({0}, {1}, {2})'.format(event_id, squad_id, year))
 
         field_results_dict = []
         last_rank = 0
         last_distance = 0
-        for row in data:
+        for row in cursor.fetchall():
             current_rank = row[0]
             foot_part_of_distance = int(row[4])
             inch_part_of_distance = float(row[5])
@@ -350,14 +323,12 @@ def get_track_relay_results():
         squad_id = request.args.get('squadId', default = 1, type = int)
         year = request.args.get('year', default = 2018, type = int)
         cursor = mydb.cursor()
-        cursor.callproc('GetTrackRelayResults', (event_id, squad_id, year))
-        for result in cursor.stored_results():
-            data = result.fetchall()
+        cursor.execute('CALL GetTrackRelayResults({0}, {1}, {2})'.format(event_id, squad_id, year))
 
         relay_results_dict = []
         last_rank = 0
         last_time = 0
-        for row in data:
+        for row in cursor.fetchall():
             current_rank = row[0]
             current_time = Utils.format_track_time(row[2])
             if last_rank > 0:
@@ -401,14 +372,16 @@ def get_track_competitor_results():
     try:
         competitor_id = request.args.get('competitorId', default='1000197.12', type=str)
         cursor = mydb.cursor()
-        cursor.callproc('GetTrackCompetitorResults', [competitor_id])
+        cursor.execute('CALL GetTrackCompetitorResults("{0}")'.format(competitor_id))
 
         competitor_results_dict = []
-        for result in cursor.stored_results():
+
+        more_results = True
+        while more_results:
             last_rank = 0
             last_measurement = 0
             current_measurement = 0
-            for row in result.fetchall():
+            for row in cursor.fetchall():
                 result_competitor_id = str(row[6])
                 current_rank = row[11]
                 event_id = row[1]
@@ -448,6 +421,7 @@ def get_track_competitor_results():
                         'AthleteId': row[10],
                         'Rank': current_rank,
                     })
+            more_results = cursor.nextset()
 
         return json.dumps(competitor_results_dict)
     except Exception as e:
@@ -460,12 +434,10 @@ def get_track_athletes():
         gender_id_str = request.args.get('genderId', default='2,3', type=str)
 
         cursor = mydb.cursor()
-        cursor.callproc('GetTrackAthletes', [gender_id_str])
-        for result in cursor.stored_results():
-            data = result.fetchall()
+        cursor.execute('CALL GetTrackAthletes("{0}")'.format(gender_id_str))
 
         track_athletes_dict = []
-        for row in data:
+        for row in cursor.fetchall():
             track_athletes_dict.append({
                 'AthleteId': row[0],
                 'FirstName': row[1],
@@ -486,12 +458,14 @@ def get_track_athlete_results():
         track_athlete_results = []
         personal_record_dict = {}
         cursor = mydb.cursor()
-        cursor.callproc('GetTrackAthleteResults', [athlete_id])
-        for result in cursor.stored_results():
+        cursor.execute('CALL GetTrackAthleteResults({0})'.format(athlete_id))
+
+        more_results = True
+        while more_results:
             last_rank = 0
             last_measurement = 0
             current_measurement = 0
-            for row in result.fetchall():
+            for row in cursor.fetchall():
                 result_competitor_id = str(row[6])
                 current_rank = row[12]
                 event_id = row[1]
@@ -552,6 +526,8 @@ def get_track_athlete_results():
                     if update_pr:
                         personal_record_dict[event_id] = result_dict.copy()
                         personal_record_dict[event_id]['PR'] = True
+
+            more_results = cursor.nextset()
 
         for event_id in collections.OrderedDict(sorted(personal_record_dict.items())):
             track_athlete_results.append(personal_record_dict.get(event_id))

@@ -3,7 +3,7 @@ __email__ = "calochoa@gmail.com"
 
 
 from flask import Blueprint, render_template, json, request
-import mysql.connector
+import MySQLdb
 
 from bin.utils import Utils
 
@@ -12,49 +12,35 @@ shared_db_app = Blueprint('shared_db_app', __name__, template_folder='templates'
 
 
 # MySQL configurations
-"""
-# heroku - ClearDB
-mydb = mysql.connector.connect(
-    host="us-cdbr-iron-east-05.cleardb.net",
-    user="b31e9fc461a5fd",
-    passwd="105c24d7",
-    database="heroku_d5e2f87dc3f9601",
-    auth_plugin='mysql_native_password'
-)
-"""
 # heroku - JawsDB
-mydb = mysql.connector.connect(
+mydb = MySQLdb.connect(
     host="ofcmikjy9x4lroa2.cbetxkdyhwsb.us-east-1.rds.amazonaws.com ",
     user="wrcpd5zfxppr2cew",
     passwd="deyz4an53hsnvwko",
-    database="sodfafe0xvqscbco",
-    auth_plugin='mysql_native_password'
+    db="sodfafe0xvqscbco"
 )
 """
 # localhost
-mydb = mysql.connector.connect(
+mydb = MySQLdb.connect(
     host="localhost",
     user="root",
     passwd="run4fun1986",
-    database="highSchoolRunning",
-    auth_plugin='mysql_native_password'
+    db="highSchoolRunning"
 )
 """
 
 
 @shared_db_app.route('/getCoachesByYear',methods=['GET'])
-def getCoachesByYear():
+def get_coaches_by_year():
     try:
         year = request.args.get('year', default = 2017, type = int)
         coach_type_ids_str = request.args.get('coachTypeIds', default = '1,2', type = str)
 
         cursor = mydb.cursor()
-        cursor.callproc('GetCoachesByYear',(year,coach_type_ids_str))
-        for result in cursor.stored_results():
-            data = result.fetchall()
+        cursor.execute('CALL GetCoachesByYear({0}, "{1}")'.format(year,coach_type_ids_str))
 
         coaches_dict = []
-        for row in data:
+        for row in cursor.fetchall():
             coaches_dict.append({
                 'FirstName': row[0],
                 'LastName': row[1],
@@ -69,17 +55,15 @@ def getCoachesByYear():
 
 
 @shared_db_app.route('/getCoachTimeline',methods=['GET'])
-def getCoachTimeline():
+def get_coach_timeline():
     try:
         coach_type_ids_str = request.args.get('coachTypeIds', default = '1,2', type = str)
 
         cursor = mydb.cursor()
-        cursor.callproc('GetCoachTimeline',[coach_type_ids_str])
-        for result in cursor.stored_results():
-            data = result.fetchall()
+        cursor.execute('CALL GetCoachTimeline("{0}")'.format(coach_type_ids_str))
 
         coach_timeline_dict = []
-        for row in data:
+        for row in cursor.fetchall():
             coach_timeline_dict.append({
                 'Year': row[0],
                 'Coaches': row[1],
@@ -91,18 +75,16 @@ def getCoachTimeline():
 
 
 @shared_db_app.route('/getCoachById',methods=['GET'])
-def getCoachById():
+def get_coach_by_id():
     try:
         coachId = request.args.get('coachId', default = 1, type = int)
         coach_type_ids_str = request.args.get('coachTypeIds', default = '1,2', type = str)
 
         cursor = mydb.cursor()
-        cursor.callproc('GetCoachById',(coachId,coach_type_ids_str))
-        for result in cursor.stored_results():
-            data = result.fetchall()
+        cursor.execute('CALL GetCoachById({0}, "{1}")'.format(coachId,coach_type_ids_str))
 
         coaches_dict = []
-        for row in data:
+        for row in cursor.fetchall():
             coaches_dict.append({
                 'FirstName': row[0],
                 'LastName': row[1],
@@ -116,17 +98,15 @@ def getCoachById():
 
 
 @shared_db_app.route('/getCoaches',methods=['GET'])
-def getCoaches():
+def get_coaches():
     try:
         coach_type_ids_str = request.args.get('coachTypeIds', default = '1,2', type = str)
 
         cursor = mydb.cursor()
-        cursor.callproc('GetCoaches',[coach_type_ids_str])
-        for result in cursor.stored_results():
-            data = result.fetchall()
+        cursor.execute('CALL GetCoaches("{0}")'.format(coach_type_ids_str))
 
         coaches_dict = []
-        for row in data:
+        for row in cursor.fetchall():
             coaches_dict.append({
                 'CoachId': row[0],
                 'FirstName': row[1],
@@ -141,18 +121,16 @@ def getCoaches():
 
 
 @shared_db_app.route('/getAwardsByYear',methods=['GET'])
-def getAwardsByYear():
+def get_awards_by_year():
     try:
         year = request.args.get('year', default = 2017, type = int)
         sport_id = request.args.get('sportId', default = 1, type = int)
 
         cursor = mydb.cursor()
-        cursor.callproc('GetAwardsByYear',(year,sport_id))
-        for result in cursor.stored_results():
-            data = result.fetchall()
+        cursor.execute('CALL GetAwardsByYear({0}, {1})'.format(year,sport_id))
 
         awards_dict = []
-        for row in data:
+        for row in cursor.fetchall():
             awards_dict.append({
                 'FirstName': row[0],
                 'LastName': row[1],
@@ -171,7 +149,7 @@ def getAwardsByYear():
 
 
 @shared_db_app.route('/getAwardById',methods=['GET'])
-def getAwardById():
+def get_award_by_id():
     try:
         awardId = request.args.get('awardId', default = 0, type = int)
         squadId = request.args.get('squadId', default = 0, type = int)
@@ -183,12 +161,10 @@ def getAwardById():
             squadId = '1,2,3,4'
 
         cursor = mydb.cursor()
-        cursor.callproc('GetAwardsById',(awardId,squadId,sportId))
-        for result in cursor.stored_results():
-            data = result.fetchall()
+        cursor.execute('CALL GetAwardsById("{0}", "{1}", {2})'.format(awardId,squadId,sportId))
         
         awards_dict = []
-        for row in data:
+        for row in cursor.fetchall():
             awards_dict.append({
                 'FirstName': row[0],
                 'LastName': row[1],
@@ -204,7 +180,7 @@ def getAwardById():
 
 
 @shared_db_app.route('/getAwardsTimeline',methods=['GET'])
-def getAwardsTimeline():
+def get_awards_timeline():
     try:
         squadId = request.args.get('squadId', default = 0, type = int)
         sportId = request.args.get('sportId', default = 1, type = int)
@@ -213,12 +189,10 @@ def getAwardsTimeline():
             squadId = '1,2,3,4'
 
         cursor = mydb.cursor()
-        cursor.callproc('GetAwardsTimeline',(squadId,sportId))
-        for result in cursor.stored_results():
-            data = result.fetchall()
+        cursor.execute('CALL GetAwardsTimeline("{0}", {1})'.format(squadId,sportId))
 
         awards_dict = []
-        for row in data:
+        for row in cursor.fetchall():
             awards_dict.append({
                 'FirstName': row[0],
                 'LastName': row[1],
@@ -234,20 +208,17 @@ def getAwardsTimeline():
 
 
 @shared_db_app.route('/getSpecialAchieversById',methods=['GET'])
-def getSpecialAchieversById():
+def get_special_achievers_by_id():
     try:
         splAchvId = request.args.get('splAchvId', default = 0, type = int)
         sportId = request.args.get('sportId', default = 1, type = int)
         
-
         specialAchievementIdsStr = '1,2,3' if splAchvId == 0 else str(splAchvId)
         cursor = mydb.cursor()
-        cursor.callproc('GetSpecialAchieversById',(specialAchievementIdsStr,sportId))
-        for result in cursor.stored_results():
-            data = result.fetchall()
+        cursor.execute('CALL GetSpecialAchieversById("{0}", {1})'.format(specialAchievementIdsStr,sportId))
 
         special_achievers_dict = []
-        for row in data:
+        for row in cursor.fetchall():
             special_achievers_dict.append({
                 'SpecialAchievementName': row[0],
                 'RunnerId': row[1],
