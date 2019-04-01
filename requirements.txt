@@ -13,4 +13,4 @@ PyMySQL==0.7.11
 Werkzeug==0.12.2
 mysql-connector==2.1.6
 flask-blueprint==1.2.7
-HTMLParser==3.7.3
+HTMLParser==0.0.2
