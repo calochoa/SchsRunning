@@ -10,7 +10,7 @@
 
 	  gtag('config', 'UA-109364959-1');
 	</script>
-    <title>SCHS Track Competitor</title>
+    <title>SCHS Track &amp; Field Competitor Bio</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
     <link href="https://getbootstrap.com/docs/3.3/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet">
     <link href="/static/css/signup.css" rel="stylesheet">
@@ -102,6 +102,9 @@
 				$('.career').append(athleteLink);
 				$('.raceHeader').text(year + ' Season Best Track Times');
 				$('.fieldHeader').text(year + ' Season Best Field Marks');
+				$(document).ready(function() {
+					document.title = fullName + ' - ' + year + ' ' + document.title;
+				});
 			},
 			error: function(error){
 				console.log(error);

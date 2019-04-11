@@ -20,6 +20,10 @@
     var yr = {{yr}};
     var urlParams = parseURL();
     var year = yr && yr != 0 ? yr : urlParams.yr;
+
+    $(document).ready(function() {
+		document.title = year + ' ' + document.title;
+	});
 	
 	$(function(){
 		$.ajax({

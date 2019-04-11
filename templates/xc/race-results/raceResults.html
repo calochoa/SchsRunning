@@ -10,7 +10,7 @@
 
 	  gtag('config', 'UA-109364959-1');
 	</script>
-    <title>SCHS XC Season Race Results</title>
+    <title>SCHS XC Results</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
     <link href="https://getbootstrap.com/docs/3.3/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet">
     <link href="../../../static/css/signup.css" rel="stylesheet">
@@ -44,7 +44,9 @@
 				var resultsObj = JSON.parse(res);
 				var results = '';
 				limit = resultsObj.length
+				var docTitleStr = '';
 				$.each(resultsObj,function(index, value){
+					docTitleStr = value.Date.slice(0, 4) + ' ' + value.RaceName;
 					var titleStr = value.Date + ' - ' + value.RaceName + ': ' + value.CourseName + ', ' + value.CourseDistance + 'M'
 					titleStr += value.RaceCondition.localeCompare('unknown') ? ' *' + value.RaceCondition + '*' : ''
 					$('.text-muted').text(titleStr);
@@ -58,6 +60,9 @@
 					$(results).find('h4').text(resultStr);
 					$(results).find('p').text(timeStr);
 					$('.jumbotron').append(results);
+				});
+				$(document).ready(function() {
+					document.title = docTitleStr + ' - ' + document.title;
 				});
 			},
 			error: function(error){

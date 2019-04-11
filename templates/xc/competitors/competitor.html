@@ -10,7 +10,7 @@
 
 	  gtag('config', 'UA-109364959-1');
 	</script>
-    <title>SCHS XC Competitor</title>
+    <title>SCHS XC Competitor Bio</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
     <link href="https://getbootstrap.com/docs/3.3/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet">
     <link href="/static/css/signup.css" rel="stylesheet">
@@ -47,11 +47,13 @@
 				var results = '';
 				var fullName = '';
 				var titleStr = '';
+				var year = '';
 				$.each(resultsObj,function(index, value){
 					fullName = value.FirstName + ' ' + value.LastName
 					var gradeStr = value.Grade == 0 ? 'Alumni' : value.Grade + 'th grade'
 				    var timeStr = value.Time + ' (' + value.Pace + ') - ' + gradeStr;
 					titleStr = fullName + ' - ' + gradeStr + ' - ' + value.Year + ' Season'
+					year = value.Year;
 					var headerStr = value.Date + ' - ' + value.RaceName + ': ' + value.CourseName + ', ' + value.CourseDistance + 'M'
 					headerStr += value.RaceCondition.localeCompare('unknown') ? ' *' + value.RaceCondition + '*' : ''
 				    var timeStr = value.Time + ' (' + value.Pace + ')'
@@ -62,6 +64,9 @@
 					$('.competitorResults').append(results);
 				});
 				$('.text-muted').text(titleStr);
+				$(document).ready(function() {
+					document.title = fullName + ' - ' + year + ' ' + document.title;
+				});
 			},
 			error: function(error){
 				console.log(error);

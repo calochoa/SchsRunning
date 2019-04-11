@@ -10,7 +10,7 @@
 
 	  gtag('config', 'UA-109364959-1');
 	</script>
-    <title>SCHS XC Top Team Course Results</title>
+    <title>SCHS XC Course Results</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
     <link href="https://getbootstrap.com/docs/3.3/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet">
     <link href="../../../static/css/signup.css" rel="stylesheet">
@@ -85,6 +85,9 @@
 				var topStr = limit > 0 ? 'Top ' + limit + ' Team' : 'No Team Results for'
 				var titleStr =  topStr + ' ' + genderStr + ' - ' + courseStr
 				$('.text-muted').text(titleStr);
+				$(document).ready(function() {
+					document.title = titleStr + ' - ' + document.title;
+				});
 			},
 			error: function(error){
 				console.log(error);

@@ -10,7 +10,7 @@
 
 	  gtag('config', 'UA-109364959-1');
 	</script>
-    <title>SCHS Track Hall of Fame Field Results</title>
+    <title>SCHS Track &amp; Field Hall of Fame Results</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
     <link href="https://getbootstrap.com/docs/3.3/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet">
     <link href="/static/css/signup.css" rel="stylesheet">
@@ -73,6 +73,9 @@
 				var titleStr =  ((genderId && genderId == 3) ? 'Girls' : 'Boys') + ' ' + eventStr;
 				$('.text-muted').text(titleStr);
 				$('.breadcrumb').append(titleStr);
+				$(document).ready(function() {
+					document.title = titleStr + ' - ' + document.title;
+				});
 			},
 			error: function(error){
 				console.log(error);

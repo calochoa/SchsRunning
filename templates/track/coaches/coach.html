@@ -10,7 +10,7 @@
 
 	  gtag('config', 'UA-109364959-1');
 	</script>
-    <title>SCHS Track Coach</title>
+    <title>SCHS Track &amp; Field Coach</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
     <link href="https://getbootstrap.com/docs/3.3/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet">
     <link href="/static/css/signup.css" rel="stylesheet">
@@ -68,6 +68,9 @@
 				});
 				$('.breadcrumb').append(coachStr);
 				$('.text-muted').text(coachStr + seasonStr);
+				$(document).ready(function() {
+					document.title = coachStr + ' - ' + document.title;
+				});
 			},
 			error: function(error){
 				console.log(error);

@@ -42,7 +42,7 @@
 				var results = '';
 				var timelineStr = '';
 				$.each(resultsObj,function(index, value){
-					timelineStr = ' - ' + value.SquadName
+					timelineStr = value.SquadName
 					var squadStr = squadId == 0 ? value.SquadName : ''
 					var titleStr = value.Year + ' ' + squadStr + ' ' + value.AwardName
 				    var nameStr = value.FirstName + ' ' + value.LastName
@@ -52,8 +52,11 @@
 					$(results).find('p').text(nameStr);
 					$('.jumbotron').append(results);
 				});
-				timelineStr = (squadId == 0 ? '' : timelineStr)
+				timelineStr = (squadId == 0 ? '' : ' - ' + timelineStr)
 				$('.text-muted').text('SCHS XC Awards Timeline ' + timelineStr);
+				$(document).ready(function() {
+					document.title = document.title + timelineStr;
+				});
 			},
 			error: function(error){
 				console.log(error);

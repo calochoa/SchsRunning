@@ -56,6 +56,9 @@
 					$('.jumbotron').append(results);
 				});
 				$('.text-muted').text(specialAchievementNameStr + 's (' + count + ')');
+				$(document).ready(function() {
+					document.title = (splAchvId == 0 ? '' : specialAchievementNameStr + 's - ') + document.title;
+				});
 			},
 			error: function(error){
 				console.log(error);

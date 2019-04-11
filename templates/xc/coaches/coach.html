@@ -50,6 +50,9 @@
 					coachStr =  value.FirstName + ' ' + value.LastName
 				});
 				$('.text-muted').text('SCHS XC Coach: ' + coachStr + seasonStr);
+				$(document).ready(function() {
+					document.title = coachStr + ' - ' + document.title;
+				});
 			},
 			error: function(error){
 				console.log(error);

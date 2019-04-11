@@ -64,6 +64,9 @@
 				awardStr = awardStr.replace('Co-','')
 				squadStr = squadId == 0 ? 'All Athletes' : squadStr;
 				$('.text-muted').text(awardStr + ' - ' + squadStr + ' (' + count + ')');
+				$(document).ready(function() {
+					document.title = (squadId == 0 ? '' : squadStr + ' ') + awardStr + ' - ' + document.title;
+				});
 			},
 			error: function(error){
 				console.log(error);
