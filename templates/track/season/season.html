@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
     <link href="https://getbootstrap.com/docs/3.3/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet">
     <link href="/static/css/signup.css" rel="stylesheet">
+    <link href="/static/css/dropdown.css" rel="stylesheet">
     <script src="/static/js/jquery-1.11.2.js"></script>
     <script src="/static/js/utils.js"></script>
     <script>
@@ -36,6 +37,10 @@
 	
 	$(document).ready(function() {
 		document.title = year + ' ' + document.title;
+	});
+
+	$.get("/santa-clara-high-track-and-field/season/dropdown-menu", function(data){
+	    $(".dropdown-list").append(data);
 	});
 
 	$(function(){
@@ -169,6 +174,7 @@
     <div class="container">
 {% include "nav.html" %}
 {% include "breadcrumb-title.html" %}
+{% include "dropdown.html" %}
       <div id="team_img_container" class="jumbotron" style="display: none;">
         <p><img id="team_img" src="" style="width: 100%;"></p>
       </div>

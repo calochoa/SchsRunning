@@ -17,3 +17,8 @@ def track_seasons(year):
 @track_season_seo_app.route('/',methods=['GET'])
 def track_season_page_not_found():
 	return render_template('error.html', error='Page not found')	
+
+@track_season_seo_app.route('/dropdown-menu/',methods=['GET'])
+def dropdown_menu():
+    return render_template('track/season/season-dropdown-menu.html')
+

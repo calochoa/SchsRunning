@@ -73,7 +73,7 @@
 					$(results).find('p').text(value.Squad + ' Rank: ' + value.Rank);
 
 					eventId = value.EventId;
-					if (eventId >= 1 && eventId <= 28) {
+					if ((eventId >= 1 && eventId <= 28) || (eventId >= 38 && eventId <= 41)) {
 						if (raceResults == '') {
 							// remove placeholder text bc a race result will be appended
 							$('.raceResults').text('');

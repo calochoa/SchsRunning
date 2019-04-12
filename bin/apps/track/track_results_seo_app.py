@@ -172,9 +172,9 @@ def track_results(event_id, squad_id, year):
             return redirect('/santa-clara-high-track-and-field/results/varsity-boys-discus-1.6kg/{0}/'.format(year))
         if squad_id == 4:
             return redirect('/santa-clara-high-track-and-field/results/frosh-soph-boys-discus-1.6kg/{0}/'.format(year))
-    if event_id >= 1 and event_id <= 24:
+    if (event_id >= 1 and event_id <= 24) or (event_id >= 38 and event_id <= 40):
         return get_track_race_results(event_id, squad_id, year)
-    elif event_id >= 25 and event_id <= 28:
+    elif (event_id >= 25 and event_id <= 28) or (event_id == 41):
         return get_track_relay_results(event_id, squad_id, year)
     elif event_id >= 29 and event_id <= 37:
         return get_track_field_results(event_id, squad_id, year)

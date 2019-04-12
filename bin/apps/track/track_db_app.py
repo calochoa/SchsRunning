@@ -36,8 +36,8 @@ def get_track_hall_of_fame_race_results():
     try:
         event_id = request.args.get('eventId', default = 1, type = int)
         gender_id = request.args.get('genderId', default = 2, type = int)
-        limit = 25
-        max_rank_in_hall_of_fame = 10
+        limit = 40
+        max_rank_in_hall_of_fame = 15
         cursor = mydb.cursor()
         cursor.execute('CALL GetTopTrackRaceIndividual({0}, {1}, {2})'.format(event_id, gender_id, limit))
 
@@ -82,8 +82,8 @@ def get_track_hall_of_fame_relay_results():
     try:
         event_id = request.args.get('eventId', default = 1, type = int)
         gender_id = request.args.get('genderId', default = 2, type = int)
-        limit = 25
-        max_rank_in_hall_of_fame = 10
+        limit = 40
+        max_rank_in_hall_of_fame = 15
         cursor = mydb.cursor()
         cursor.execute('CALL GetTopTrackRelayTeam({0}, {1}, {2})'.format(event_id, gender_id, limit))
 
@@ -136,8 +136,8 @@ def get_track_hall_of_fame_field_results():
     try:
         event_id = request.args.get('eventId', default = 29, type = int)
         gender_id = request.args.get('genderId', default = 3, type = int)
-        limit = 25
-        max_rank_in_hall_of_fame = 10
+        limit = 40
+        max_rank_in_hall_of_fame = 15
         cursor = mydb.cursor()
         cursor.execute('CALL GetTopFieldIndividual({0}, {1}, {2})'.format(event_id, gender_id, limit))
 
@@ -386,7 +386,7 @@ def get_track_competitor_results():
                 current_rank = row[11]
                 event_id = row[1]
                 resultStr = 'Unknown'
-                if event_id >= 1 and event_id <= 28:
+                if (event_id >= 1 and event_id <= 28) or (event_id >= 38 and event_id <= 41):
                     current_measurement = Utils.format_track_time(row[3])
                     resultStr = '{0}{1}'.format(current_measurement, row[4])
                 elif event_id >= 29 and event_id <= 37:
@@ -467,11 +467,13 @@ def get_track_athlete_results():
             current_measurement = 0
             for row in cursor.fetchall():
                 result_competitor_id = str(row[6])
-                current_rank = row[12]
+                current_rank = row[13]
                 event_id = row[1]
+                event_sub_type_id = row[12]
+                pr_key = '{0}.{1}'.format(event_sub_type_id, event_id)
                 resultStr = 'Unknown'
                 pr_measurement = ''
-                if event_id >= 1 and event_id <= 28:
+                if (event_id >= 1 and event_id <= 28) or (event_id >= 38 and event_id <= 41):
                     pr_measurement = row[3]
                     current_measurement = Utils.format_track_time(pr_measurement)
                     resultStr = '{0}{1}'.format(current_measurement, row[4])
@@ -507,6 +509,7 @@ def get_track_athlete_results():
                         'Squad': str(row[8]),
                         'SquadId': row[9],
                         'GenderId': row[11],
+                        'EventSupTypeId': event_sub_type_id,
                         'Rank': current_rank,
                         'PRMeasurement': pr_measurement,
                         'PR': False,
@@ -514,23 +517,23 @@ def get_track_athlete_results():
                     }
                     track_athlete_results.append(result_dict)
 
-                    pr_result_dict = personal_record_dict.get(event_id)
+                    pr_result_dict = personal_record_dict.get(pr_key)
                     update_pr = True if pr_result_dict is None else False
                     if pr_result_dict is not None:
-                        if event_id >= 1 and event_id <= 28:
+                        if (event_id >= 1 and event_id <= 28) or (event_id >= 38 and event_id <= 41):
                             if result_dict['PRMeasurement'] <= pr_result_dict['PRMeasurement']:
                                 update_pr = True
                         elif event_id >= 29 and event_id <= 37:
                             if result_dict['PRMeasurement'] >= pr_result_dict['PRMeasurement']:
                                 update_pr = True
                     if update_pr:
-                        personal_record_dict[event_id] = result_dict.copy()
-                        personal_record_dict[event_id]['PR'] = True
+                        personal_record_dict[pr_key] = result_dict.copy()
+                        personal_record_dict[pr_key]['PR'] = True
 
             more_results = cursor.nextset()
 
-        for event_id in collections.OrderedDict(sorted(personal_record_dict.items())):
-            track_athlete_results.append(personal_record_dict.get(event_id))
+        for pr_key in collections.OrderedDict(sorted(personal_record_dict.items())):
+            track_athlete_results.append(personal_record_dict.get(pr_key))
 
         return json.dumps(track_athlete_results)
     except Exception as e:
