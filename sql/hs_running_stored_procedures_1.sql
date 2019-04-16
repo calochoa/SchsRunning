@@ -1382,6 +1382,196 @@ DELIMITER ;
 
 
 
+DROP PROCEDURE IF EXISTS `GetTrackRaceResultsByGrade`;
+
+SET NAMES utf8mb4;
+SET collation_connection = 'utf8mb4_unicode_ci';
+
+DELIMITER //
+CREATE PROCEDURE `GetTrackRaceResultsByGrade`(
+	IN `inputEventId` INT, 
+	IN `inputGenderId` TINYINT,
+	IN `inputGrade` SMALLINT
+)
+BEGIN
+
+-- this part is necessary to distinguish between a competitor in xc vs track season:  AND `RaceResult`.`year`=`Competitor`.`year`
+SELECT @`rownum` := @`rownum` + 1 AS `myrank`, `t1`.* 
+FROM (
+	SELECT `event`, CONCAT(`firstname`, " ", `lastname`) AS `fullName`,
+		`time` AS `result1`, `raceTimeTypeId` AS `result2`, `grade`, `year`, 
+		`competitorid`, `Athlete`.`athleteId` 
+	FROM `RaceResult` NATURAL JOIN `Event` NATURAL JOIN `Competitor` NATURAL JOIN `Athlete` 
+	WHERE `eventId`=`inputEventId` AND `genderId`=`inputGenderId` AND `grade`=`inputGrade` 
+		AND `RaceResult`.`year`=`Competitor`.`year`
+	ORDER BY `RaceResult`.`time`, `lastname`, `firstname`
+) `t1`, 
+(SELECT @`rownum` := 0) `r`;
+
+END //
+DELIMITER ;
+
+
+
+DROP PROCEDURE IF EXISTS `GetTrackFieldResultsByGrade`;
+
+SET NAMES utf8mb4;
+SET collation_connection = 'utf8mb4_unicode_ci';
+
+DELIMITER //
+CREATE PROCEDURE `GetTrackFieldResultsByGrade`(
+	IN `inputEventId` INT, 
+	IN `inputGenderId` TINYINT,
+	IN `inputGrade` SMALLINT
+)
+BEGIN
+
+-- this part is necessary to distinguish between a competitor in xc vs track season:  AND `FieldResult`.`year`=`Competitor`.`year`
+SELECT @`rownum` := @`rownum` + 1 AS `myrank`, `t`.* 
+FROM (
+	SELECT `event`, CONCAT(`firstname`, " ", `lastname`) AS `fullName`, 
+		`footPartOfDistance` AS `result1`, `inchPartOfDistance` AS `result2`, 
+		`grade`, `year`, `competitorid`, `Athlete`.`athleteId` 
+	FROM `FieldResult` NATURAL JOIN `Event` NATURAL JOIN `Competitor` NATURAL JOIN `Athlete` 
+	WHERE `eventId`=`inputEventId` AND `genderId`=`inputGenderId` AND `grade`=`inputGrade` 
+		AND `FieldResult`.`year`=`Competitor`.`year` 
+	ORDER BY `footPartOfDistance` DESC, `inchPartOfDistance` DESC, `lastname`, `firstname`
+) `t`, 
+(SELECT @`rownum` := 0) `r`;
+
+END //
+DELIMITER ;
+
+
+
+DROP PROCEDURE IF EXISTS `GetAllTrackRaceResults`;
+
+SET NAMES utf8mb4;
+SET collation_connection = 'utf8mb4_unicode_ci';
+
+DELIMITER //
+CREATE PROCEDURE `GetAllTrackRaceResults`(
+	IN `inputEventId` INT, 
+	IN `inputGenderId` TINYINT
+)
+BEGIN
+
+-- this part is necessary to distinguish between a competitor in xc vs track season:  AND `RaceResult`.`year`=`Competitor`.`year`
+SELECT @`rownum` := @`rownum` + 1 AS `myrank`, `t1`.* 
+FROM (
+	SELECT `event`, CONCAT(`firstname`, " ", `lastname`) AS `fullName`,
+		`time` AS `result1`, `raceTimeTypeId` AS `result2`, `grade`, `year`, 
+		`competitorid`, `Athlete`.`athleteId` 
+	FROM `RaceResult` NATURAL JOIN `Event` NATURAL JOIN `Competitor` NATURAL JOIN `Athlete` 
+	WHERE `eventId`=`inputEventId` AND `genderId`=`inputGenderId` AND `RaceResult`.`year`=`Competitor`.`year`
+	ORDER BY `RaceResult`.`time`, `lastname`, `firstname`, `grade` 
+) `t1`, 
+(SELECT @`rownum` := 0) `r`;
+
+END //
+DELIMITER ;
+
+
+
+DROP PROCEDURE IF EXISTS `GetAllTrackFieldResults`;
+
+SET NAMES utf8mb4;
+SET collation_connection = 'utf8mb4_unicode_ci';
+
+DELIMITER //
+CREATE PROCEDURE `GetAllTrackFieldResults`(
+	IN `inputEventId` INT, 
+	IN `inputGenderId` TINYINT
+)
+BEGIN
+
+-- this part is necessary to distinguish between a competitor in xc vs track season:  AND `FieldResult`.`year`=`Competitor`.`year`
+SELECT @`rownum` := @`rownum` + 1 AS `myrank`, `t`.* 
+FROM (
+	SELECT `event`, CONCAT(`firstname`, " ", `lastname`) AS `fullName`, 
+		`footPartOfDistance` AS `result1`, `inchPartOfDistance` AS `result2`, 
+		`grade`, `year`, `competitorid`, `Athlete`.`athleteId` 
+	FROM `FieldResult` NATURAL JOIN `Event` NATURAL JOIN `Competitor` NATURAL JOIN `Athlete` 
+	WHERE `eventId`=`inputEventId` AND `genderId`=`inputGenderId` AND `FieldResult`.`year`=`Competitor`.`year`
+	ORDER BY `footPartOfDistance` DESC, `inchPartOfDistance` DESC, `lastname`, `firstname`, `grade` 
+) `t`, 
+(SELECT @`rownum` := 0) `r`;
+
+END //
+DELIMITER ;
+
+
+
+DROP PROCEDURE IF EXISTS `GetAllTrackRelayResults`;
+
+SET NAMES utf8mb4;
+SET collation_connection = 'utf8mb4_unicode_ci';
+
+DELIMITER //
+CREATE PROCEDURE `GetAllTrackRelayResults`(
+	IN `inputEventId` INT, 
+	IN `inputGenderId` TINYINT
+)
+BEGIN
+
+-- this part is necessary to distinguish between a competitor in xc vs track season:  AND `RelayResult`.`year`=`C1`.`year`
+SELECT @`rownum` := @`rownum` + 1 AS `myrank`, `t`.* 
+FROM (
+	SELECT DISTINCT `event`, `RelayResult`.`time` AS `result1`, `raceTimeTypeId` AS `result2`, `RelayResult`.`year`, 
+        CONCAT(`A1`.`firstName`, " ", `A1`.`lastName`) AS `fullName1`, `C1`.`grade` AS `grade1`, `C1`.`competitorId` AS `competitorId1`, `A1`.`athleteId` AS `athleteId1`, 
+        CONCAT(`A2`.`firstName`, " ", `A2`.`lastName`) AS `fullName2`, `C2`.`grade` AS `grade2`, `C2`.`competitorId` AS `competitorId2`, `A2`.`athleteId` AS `athleteId2`, 
+        CONCAT(`A3`.`firstName`, " ", `A3`.`lastName`) AS `fullName3`, `C3`.`grade` AS `grade3`, `C3`.`competitorId` AS `competitorId3`, `A3`.`athleteId` AS `athleteId3`, 
+        CONCAT(`A4`.`firstName`, " ", `A4`.`lastName`) AS `fullName4`, `C4`.`grade` AS `grade4`, `C4`.`competitorId` AS `competitorId4`, `A4`.`athleteId` AS `athleteId4` 
+	FROM `RelayResult` NATURAL JOIN `Event` NATURAL JOIN `Squad` 
+		JOIN `Competitor` AS `C1` ON (`C1`.`competitorId`=`competitorId1`) JOIN `Athlete` AS `A1` ON (`A1`.`athleteId`=`C1`.`athleteId`) 
+        JOIN `Competitor` AS `C2` ON (`C2`.`competitorId`=`competitorId2`) JOIN `Athlete` AS `A2` ON (`A2`.`athleteId`=`C2`.`athleteId`) 
+        JOIN `Competitor` AS `C3` ON (`C3`.`competitorId`=`competitorId3`) JOIN `Athlete` AS `A3` ON (`A3`.`athleteId`=`C3`.`athleteId`) 
+        JOIN `Competitor` AS `C4` ON (`C4`.`competitorId`=`competitorId4`) JOIN `Athlete` AS `A4` ON (`A4`.`athleteId`=`C4`.`athleteId`) 
+	WHERE `eventId`=`inputEventId` AND `A1`.`genderId`=`inputGenderId` AND `RelayResult`.`year`=`C1`.`year`
+	ORDER BY `RelayResult`.`time`, `RelayResult`.`year`
+) `t`, 
+(SELECT @`rownum` := 0) `r`;
+
+END //
+DELIMITER ;
+
+
+
+DROP PROCEDURE IF EXISTS `GetTrackRelayResultsBySquad`;
+
+SET NAMES utf8mb4;
+SET collation_connection = 'utf8mb4_unicode_ci';
+
+DELIMITER //
+CREATE PROCEDURE `GetTrackRelayResultsBySquad`(
+	IN `inputEventId` INT, 
+	IN `inputGenderId` TINYINT,
+    IN `inputSquadId` TINYINT
+)
+BEGIN
+
+-- this part is necessary to distinguish between a competitor in xc vs track season:  AND `RelayResult`.`year`=`C1`.`year`
+SELECT @`rownum` := @`rownum` + 1 AS `myrank`, `t`.* 
+FROM (
+	SELECT DISTINCT `event`, `RelayResult`.`time` AS `result1`, `raceTimeTypeId` AS `result2`, `RelayResult`.`year`, 
+        CONCAT(`A1`.`firstName`, " ", `A1`.`lastName`) AS `fullName1`, `C1`.`grade` AS `grade1`, `C1`.`competitorId` AS `competitorId1`, `A1`.`athleteId` AS `athleteId1`, 
+        CONCAT(`A2`.`firstName`, " ", `A2`.`lastName`) AS `fullName2`, `C2`.`grade` AS `grade2`, `C2`.`competitorId` AS `competitorId2`, `A2`.`athleteId` AS `athleteId2`, 
+        CONCAT(`A3`.`firstName`, " ", `A3`.`lastName`) AS `fullName3`, `C3`.`grade` AS `grade3`, `C3`.`competitorId` AS `competitorId3`, `A3`.`athleteId` AS `athleteId3`, 
+        CONCAT(`A4`.`firstName`, " ", `A4`.`lastName`) AS `fullName4`, `C4`.`grade` AS `grade4`, `C4`.`competitorId` AS `competitorId4`, `A4`.`athleteId` AS `athleteId4` 
+	FROM `RelayResult` NATURAL JOIN `Event` NATURAL JOIN `Squad` 
+		JOIN `Competitor` AS `C1` ON (`C1`.`competitorId`=`competitorId1`) JOIN `Athlete` AS `A1` ON (`A1`.`athleteId`=`C1`.`athleteId`) 
+        JOIN `Competitor` AS `C2` ON (`C2`.`competitorId`=`competitorId2`) JOIN `Athlete` AS `A2` ON (`A2`.`athleteId`=`C2`.`athleteId`) 
+        JOIN `Competitor` AS `C3` ON (`C3`.`competitorId`=`competitorId3`) JOIN `Athlete` AS `A3` ON (`A3`.`athleteId`=`C3`.`athleteId`) 
+        JOIN `Competitor` AS `C4` ON (`C4`.`competitorId`=`competitorId4`) JOIN `Athlete` AS `A4` ON (`A4`.`athleteId`=`C4`.`athleteId`) 
+	WHERE `eventId`=`inputEventId` AND `squadId`=`inputSquadId` AND `A1`.`genderId`=`inputGenderId` AND `RelayResult`.`year`=`C1`.`year`
+	ORDER BY `RelayResult`.`time`, `RelayResult`.`year`
+) `t`, 
+(SELECT @`rownum` := 0) `r`;
+
+END //
+DELIMITER ;
+
+
 COMMIT;
 
 
@@ -1422,6 +1612,12 @@ CALL `GetTrackRelayResults`(25,1,2018);
 CALL `GetTrackCompetitorResults`("1000464.12");
 CALL `GetTrackAthletes`("3");
 CALL `GetTrackAthleteResults`(1000464);
+CALL `GetTrackRaceResultsByGrade`(8, 2, 12);
+CALL `GetTrackFieldResultsByGrade`(29, 3, 9);
+CALL `GetAllTrackRaceResults`(1, 3);
+CALL `GetAllTrackFieldResults`(29, 2);
+CALL `GetAllTrackRelayResults`(26, 3);
+CALL `GetTrackRelayResultsBySquad`(25, 3, 1);
 
 
 -- need to consider if i want to separate by course, ie ccs: Crystal vs Toro

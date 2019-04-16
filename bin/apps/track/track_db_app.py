@@ -538,3 +538,156 @@ def get_track_athlete_results():
         return json.dumps(track_athlete_results)
     except Exception as e:
         return render_template('error.html',error = str(e))
+
+
+@track_db_app.route('/getTrackRaceResultsByEvent', methods=['GET'])
+def get_track_race_results_by_event():
+    try:
+        event_id = request.args.get('eventId', default = 1, type = int)
+        gender_id = request.args.get('genderId', default = 2, type = int)
+        grade = request.args.get('grade', default = 0, type = int)
+
+        cursor = mydb.cursor()
+        if grade == 0:
+            cursor.execute('CALL GetAllTrackRaceResults({0}, {1})'.format(event_id, gender_id))
+        else:
+            cursor.execute('CALL GetTrackRaceResultsByGrade({0}, {1}, {2})'.format(event_id, gender_id, grade))
+
+        top_race_results_dict = []
+        last_rank = 0
+        last_time = 0
+        for row in cursor.fetchall():
+            current_rank = row[0]
+            current_time = Utils.format_track_time(row[3])
+            if last_rank > 0:
+                if current_time == last_time:
+                    current_rank = last_rank
+                else:
+                    last_rank = current_rank
+                    last_time = current_time
+            else:
+                last_rank = current_rank
+                last_time = current_time
+
+            top_race_results_dict.append({
+                'Rank': current_rank,
+                'Event': row[1],
+                'FullName': row[2],
+                'Time': current_time,
+                'RaceTimeTypeId': row[4],
+                'Grade': row[5],
+                'Year': row[6],
+                'CompetitorId': row[7],
+                'AthleteId': row[8],
+            })
+
+        return json.dumps(top_race_results_dict)
+    except Exception as e:
+        return render_template('error.html', error=str(e))
+
+
+@track_db_app.route('/getTrackFieldResultsByEvent', methods=['GET'])
+def get_track_field_results_by_event():
+    try:
+        event_id = request.args.get('eventId', default = 29, type = int)
+        gender_id = request.args.get('genderId', default = 3, type = int)
+        grade = request.args.get('grade', default = 0, type = int)
+ 
+        cursor = mydb.cursor()
+        if grade == 0:
+            cursor.execute('CALL GetAllTrackFieldResults({0}, {1})'.format(event_id, gender_id))
+        else:
+            cursor.execute('CALL GetTrackFieldResultsByGrade({0}, {1}, {2})'.format(event_id, gender_id, grade))
+
+        top_field_results_dict = []
+        last_rank = 0
+        last_distance = 0
+        for row in cursor.fetchall():
+            current_rank = row[0]
+            foot_part_of_distance = int(row[3])
+            inch_part_of_distance = float(row[4])
+            current_distance_in_inches = (12 * foot_part_of_distance) + inch_part_of_distance
+            if last_rank > 0:
+                if current_distance_in_inches == last_distance:
+                    current_rank = last_rank
+                else:
+                    last_rank = current_rank
+                    last_distance = current_distance_in_inches
+            else:
+                last_rank = current_rank
+                last_distance = current_distance_in_inches
+
+            top_field_results_dict.append({
+                'Rank': current_rank,
+                'Event': row[1],
+                'FullName': row[2],
+                'FootPartOfDistance': foot_part_of_distance,
+                'InchPartOfDistance': inch_part_of_distance,
+                'Grade': row[5],
+                'Year': row[6],
+                'CompetitorId': row[7],
+                'AthleteId': row[8],
+            })
+
+        return json.dumps(top_field_results_dict)
+    except Exception as e:
+        return render_template('error.html', error=str(e))
+
+
+
+@track_db_app.route('/getTrackRelayResultsByEvent', methods=['GET'])
+def get_track_relay_results_by_event():
+    try:
+        event_id = request.args.get('eventId', default = 25, type = int)
+        gender_id = request.args.get('genderId', default = 2, type = int)
+        squad_id = request.args.get('squadId', default = 0, type = int)
+
+        cursor = mydb.cursor()
+        if squad_id == 0:
+            cursor.execute('CALL GetAllTrackRelayResults({0}, {1})'.format(event_id, gender_id))
+        else:
+            cursor.execute('CALL GetTrackRelayResultsBySquad({0}, {1}, {2})'.format(event_id, gender_id, squad_id))
+
+        top_relay_results_dict = []
+        last_rank = 0
+        last_time = 0
+        for row in cursor.fetchall():
+            current_rank = row[0]
+            current_time = Utils.format_track_time(row[2])
+            if last_rank > 0:
+                if current_time == last_time:
+                    current_rank = last_rank
+                else:
+                    last_rank = current_rank
+                    last_time = current_time
+            else:
+                last_rank = current_rank
+                last_time = current_time
+
+            top_relay_results_dict.append({
+                'Rank': current_rank,
+                'Event': row[1],
+                'Time': current_time,
+                'RaceTimeTypeId': row[3],
+                'Year': row[4],
+                'FullName1': row[5],
+                'Grade1': row[6],
+                'CompetitorId1': row[7],
+                'AthleteId1': row[8],
+                'FullName2': row[9],
+                'Grade2': row[10],
+                'CompetitorId2': row[11],
+                'AthleteId2': row[12],
+                'FullName3': row[13],
+                'Grade3': row[14],
+                'CompetitorId3': row[15],
+                'AthleteId3': row[16],
+                'FullName4': row[17],
+                'Grade4': row[18],
+                'CompetitorId4': row[19],
+                'AthleteId4': row[20],                
+            })
+
+        return json.dumps(top_relay_results_dict)
+    except Exception as e:
+        return render_template('error.html', error=str(e))

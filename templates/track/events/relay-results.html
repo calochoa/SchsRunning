@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-109364959-1"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+
+	  gtag('config', 'UA-109364959-1');
+	</script>
+    <title>SCHS Track &amp; Field Results</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <link href="https://getbootstrap.com/docs/3.3/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet">
+    <link href="/static/css/signup.css" rel="stylesheet">
+    <link href="/static/css/dropdown.css" rel="stylesheet">
+    <script src="/static/js/jquery-1.11.2.js"></script>
+    <script src="/static/js/utils.js"></script>
+    <script src="/static/js/results.js"></script>
+    <style>
+	    .competitor:link {
+		    color: #c7ddef;
+		    text-decoration: none;
+		}
+		.competitor:visited {
+		    color: #c7ddef;
+		    text-decoration: none;
+		}
+		.competitor:hover {
+   			text-decoration: underline;
+		}
+	</style>
+    <script>
+    var eId = {{eId}};
+    var gId = {{gId}};
+    var sId = {{sId}};
+    var urlParams = parseURL();
+    var eventId = eId && eId != 0 ? eId : urlParams.eId;
+    var genderId = gId && gId != 0 ? gId : urlParams.gId;
+    var squadId = sId && sId != 0 ? sId : urlParams.sId;
+
+	$(function(){
+		var trackHomeLink = $('<a>');
+		$(trackHomeLink).attr('href', '/santa-clara-high-track-and-field');
+		$(trackHomeLink).text('SCHS Track & Field');
+		$('.breadcrumb').append(trackHomeLink);
+		$('.breadcrumb').append(' / ');
+		var eventsLink = $('<a>');
+		$(eventsLink).attr('href', '/santa-clara-high-track-and-field/events/');
+		$(eventsLink).text('Events');
+		$('.breadcrumb').append(eventsLink);
+		$('.breadcrumb').append(' / ');
+	})
+
+	$(function(){
+		$.ajax({
+			url: '/getTrackRelayResultsByEvent',
+			type: 'GET',
+			data: {
+				"eventId": eventId,
+				"genderId": genderId,
+				"squadId": squadId,
+			},
+			success: function(res){
+				var div = $('<div>')
+				    .attr('class', 'list-group')
+				    .append($('<a>')
+				        .attr('class', 'list-group-item active')
+				        .append($('<h4>')
+				            .attr('class', 'list-group-item-heading'),
+				            $('<p>')
+				            .attr('class', 'list-group-item-text')));
+							    				
+				var resultsObj = JSON.parse(res);
+				var results = '';
+				limit = resultsObj.length
+				var eventStr = '';
+				$.each(resultsObj,function(index, value){
+					eventStr = value.Event;
+				    var resultStr = value.Rank + '. ' + value.Time + value.RaceTimeTypeId + ' (' + value.Year + ')';
+				    var nameInfoStr1 = value.FullName1 + (value.Grade1 > 12 ? '' : ' - ' + value.Grade1 + 'th grade') + "</div>";
+				    var nameInfoStr2 = value.FullName2 + (value.Grade2 > 12 ? '' : ' - ' + value.Grade2 + 'th grade') + "</div>";
+				    var nameInfoStr3 = value.FullName3 + (value.Grade3 > 12 ? '' : ' - ' + value.Grade3 + 'th grade') + "</div>";
+				    var nameInfoStr4 = value.FullName4 + (value.Grade4 > 12 ? '' : ' - ' + value.Grade4 + 'th grade') + "</div>";
+				    var divLinkStr1 =  '<div><a class="competitor" href="/trackCompetitor?cId=' + value.CompetitorId1 + '">' + nameInfoStr1 + '</a></div>';
+				    var divLinkStr2 =  '<div><a class="competitor" href="/trackCompetitor?cId=' + value.CompetitorId2 + '">' + nameInfoStr2 + '</a></div>';
+				    var divLinkStr3 =  '<div><a class="competitor" href="/trackCompetitor?cId=' + value.CompetitorId3 + '">' + nameInfoStr3 + '</a></div>';
+				    var divLinkStr4 =  '<div><a class="competitor" href="/trackCompetitor?cId=' + value.CompetitorId4 + '">' + nameInfoStr4 + '</a></div>';
+				    var teamInfo = divLinkStr1 + divLinkStr2 + divLinkStr3 + divLinkStr4
+					results = $(div).clone();
+					$(results).find('h4').text(resultStr);
+					$(results).find('p').append(teamInfo);
+					$('.jumbotron').append(results);
+				});
+				var titleStr = $.fn.getSquadName(squadId) + $.fn.getGenderName(genderId) + eventStr;
+				$('.text-muted').text(titleStr);
+				$('.breadcrumb').append(titleStr);
+				$(document).ready(function() {
+					document.title = titleStr + ' - ' + document.title;
+				});
+			},
+			error: function(error){
+				console.log(error);
+			}
+		});
+	});
+
+	$.get("/santa-clara-high-track-and-field/events/dropdown-menus", function(data){
+	    $(".dropdown-list").append(data);
+	});
+    </script>
+    <style>
+    	.jumbotron p {margin-bottom: 0px;font-size:18px;}
+	</style>
+  </head>
+  <body>
+{% include "breadcrumb-dropdown-body.html" %}
+  </body>
+</html>
+

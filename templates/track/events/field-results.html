@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-109364959-1"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+
+	  gtag('config', 'UA-109364959-1');
+	</script>
+    <title>SCHS Track &amp; Field Results</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <link href="https://getbootstrap.com/docs/3.3/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet">
+    <link href="/static/css/signup.css" rel="stylesheet">
+    <link href="/static/css/dropdown.css" rel="stylesheet">
+    <script src="/static/js/jquery-1.11.2.js"></script>
+    <script src="/static/js/utils.js"></script>
+    <script src="/static/js/results.js"></script>
+    <script>
+    var eId = {{eId}};
+    var gId = {{gId}};
+    var gr = {{gr}};
+    var urlParams = parseURL();
+    var eventId = eId && eId != 0 ? eId : urlParams.eId;
+    var genderId = gId && gId != 0 ? gId : urlParams.gId;
+    var grade = gr && gr != 0 ? gr : urlParams.gr;
+
+	$(function(){
+		var trackHomeLink = $('<a>');
+		$(trackHomeLink).attr('href', '/santa-clara-high-track-and-field');
+		$(trackHomeLink).text('SCHS Track & Field');
+		$('.breadcrumb').append(trackHomeLink);
+		$('.breadcrumb').append(' / ');
+		var eventsLink = $('<a>');
+		$(eventsLink).attr('href', '/santa-clara-high-track-and-field/events/');
+		$(eventsLink).text('Events');
+		$('.breadcrumb').append(eventsLink);
+		$('.breadcrumb').append(' / ');
+	})
+
+	$(function(){
+		$.ajax({
+			url: '/getTrackFieldResultsByEvent',
+			type: 'GET',
+			data: {
+				"eventId": eventId,
+				"genderId": genderId,
+				"grade": grade,
+			},
+			success: function(res){
+				var div = $('<div>')
+				    .attr('class', 'list-group')
+				    .append($('<a>')
+				        .attr('class', 'list-group-item active')
+				        .append($('<h4>')
+				            .attr('class', 'list-group-item-heading'),
+				            $('<p>')
+				            .attr('class', 'list-group-item-text')));
+							    				
+				var resultsObj = JSON.parse(res);
+				var results = '';
+				limit = resultsObj.length
+				var eventStr = '';
+				$.each(resultsObj,function(index, value){
+					eventStr = value.Event;
+				    var resultStr = value.Rank + '. ' + value.FullName + ' (' + value.Year + ')'
+				    var gradeStr = value.Grade > 12 ? '' : ' - ' + value.Grade + 'th grade'
+				    var distanceStr = value.FootPartOfDistance + '\' ' + value.InchPartOfDistance + '"'+ gradeStr
+					results = $(div).clone();
+					$(results).find('a').attr('href', '/trackCompetitor?cId='+ value.CompetitorId);
+					$(results).find('h4').text(resultStr);
+					$(results).find('p').text(distanceStr);
+					$('.jumbotron').append(results);
+				});
+				var titleStr =  $.fn.getGradeName(grade) + $.fn.getGenderName(genderId) + eventStr;
+				$('.text-muted').text(titleStr);
+				$('.breadcrumb').append(titleStr);
+				$(document).ready(function() {
+					document.title = titleStr + ' - ' + document.title;
+				});
+			},
+			error: function(error){
+				console.log(error);
+			}
+		});
+	});
+
+	$.get("/santa-clara-high-track-and-field/events/dropdown-menus", function(data){
+	    $(".dropdown-list").append(data);
+	});
+    </script>
+    <style>
+    	.jumbotron p {margin-bottom: 0px;font-size:18px;}
+	</style>
+  </head>
+  <body>
+{% include "breadcrumb-dropdown-body.html" %}
+  </body>
+</html>
+
