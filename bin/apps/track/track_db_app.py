@@ -470,7 +470,8 @@ def get_track_athlete_results():
                 current_rank = row[13]
                 event_id = row[1]
                 event_sub_type_id = row[12]
-                pr_key = '{0}.{1}'.format(event_sub_type_id, event_id)
+                event_id_str = '0{0}'.format(event_id) if event_id < 10 else event_id
+                pr_key = '{0}.{1}'.format(event_sub_type_id, event_id_str)
                 resultStr = 'Unknown'
                 pr_measurement = ''
                 if (event_id >= 1 and event_id <= 28) or (event_id >= 38 and event_id <= 41):
