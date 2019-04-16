@@ -1,11 +1,11 @@
-Flask==0.11
+Flask==0.12.3
 Flask-Cors==3.0.2
 Flask-HTTPAuth==1.0.0
 Flask-MySQL==1.4.0
 Flask-RESTful==0.3.5
 gunicorn==19.7.1
 itsdangerous==0.24
-Jinja2==2.9.6
+Jinja2==2.10.1
 jsondatabase==0.1.7
 jsonschema==2.6.0
 MarkupSafe==0.23
