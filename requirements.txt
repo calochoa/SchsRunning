@@ -1,4 +1,4 @@
-Flask==0.12.3
+Flask==0.11
 Flask-Cors==3.0.2
 Flask-HTTPAuth==1.0.0
 Flask-MySQL==1.4.0
