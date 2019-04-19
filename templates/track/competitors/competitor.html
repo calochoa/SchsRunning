@@ -18,9 +18,33 @@
 	    .competitorResults p {
 	    	font-size:18px;
 		}
+		.career {
+			font-size:16px;
+		}
+		.raceHeader {
+			font-size:20px;
+		}
+		.fieldHeader {
+			font-size:20px;
+		}
+		.eventMark {
+			font-size:20px;
+		}
+		.rankings {
+			font-size:18px;
+		}
+		.rankingsLink:link, .rankingsLink:visited {
+			color: #c7ddef;
+			text-decoration: underline;
+		}
+		.rankingsLink:hover, .rankingsLink:active, .rankingsLink:focus {
+			color: #FFF;
+			text-decoration: underline;
+		}
     </style>
     <script src="/static/js/jquery-1.11.2.js"></script>
     <script src="/static/js/utils.js"></script>
+    <script src="/static/js/results.js"></script>
     <script>
     var cId = '{{competitorId}}';
     var urlParams = parseURL();
@@ -44,7 +68,7 @@
 			success: function(res){
 				var div = $('<div>')
 				    .attr('class', 'list-group')
-				    .append($('<a>')
+				    .append($('<div>')
 				        .attr('class', 'list-group-item active')
 				        .append($('<h4>')
 				            .attr('class', 'list-group-item-heading'),
@@ -52,65 +76,142 @@
 				            .attr('class', 'list-group-item-text')));
 							    				
 				var resultsObj = JSON.parse(res);
-				var results = '';
 				var fullName = '';
 				var titleStr = '';
 				var year = '';
 				var athleteId = '';
-				var raceResults = '';
-				var fieldResults = '';
 				$.each(resultsObj,function(index, value){
-					fullName = value.FullName
-					titleStr = fullName + (value.Grade > 12 ? '' : ' (' + value.Grade + 'th grade)');
+					fullName = value.FullName;
+					var grade = value.Grade;
+					titleStr = fullName + (grade > 12 ? '' : ' (' + grade + 'th grade)');
 					year = value.Year;
 					athleteId = value.AthleteId;
-
-					results = $(div).clone();
-					$(results).find('a').attr(
-						'href', '/santa-clara-high-track-and-field/results/' + value.EventId + '/' + value.SquadId + '/' + value.Year + '/'
-					);
-					$(results).find('h4').text(value.Event + ' - ' + value.Result);
-					$(results).find('p').text(value.Squad + ' Rank: ' + value.Rank);
-
 					eventId = value.EventId;
-					if ((eventId >= 1 && eventId <= 28) || (eventId >= 38 && eventId <= 41)) {
-						if (raceResults == '') {
-							// remove placeholder text bc a race result will be appended
-							$('.raceResults').text('');
-							raceResults = 'yay!'
-						}
-						$('.raceResults').append(results);
-					} else if (eventId >= 29 && eventId <= 37) {
-						if (fieldResults == '') {
-							// remove placeholder text bc a field result will be appended
-							$('.fieldResults').text('');
-							fieldResults = 'yay!'
-						}
-						$('.fieldResults').append(results);
-					}
+					var genderId = 2;
+					var resultDiv = $.fn.getResultDiv(
+						div, value.Event, value.Result, eventId, value.SquadId, year, value.Squad, value.Rank, grade, genderId
+					);
+					$.fn.addResults(eventId, resultDiv);
 				});
-				var seasonLink = $('<a>');
-				$(seasonLink).attr('href', '/santa-clara-high-track-and-field/season/' + year);
-				$(seasonLink).text(year + ' Season');
-				$('.breadcrumb').append(seasonLink);
-				$('.breadcrumb').append(' / ' + titleStr);
-				$('.text-muted').append(titleStr);
-
-				var athleteLink = $('<a>');
-				$(athleteLink).attr('href', '/santa-clara-high-track-and-field/athletes/' + athleteId);
-				$(athleteLink).text(fullName + ' (All Records)');
-				$('.career').append(athleteLink);
-				$('.raceHeader').text(year + ' Season Best Track Times');
-				$('.fieldHeader').text(year + ' Season Best Field Marks');
-				$(document).ready(function() {
-					document.title = fullName + ' - ' + year + ' ' + document.title;
-				});
+				$.fn.setDocTitle(fullName, year);
+				$.fn.addToBreadcrumb(year, titleStr);
+				$.fn.setTitle(titleStr);
+				$.fn.setCareer(athleteId, fullName);
+				$.fn.setHeaders(year);
 			},
 			error: function(error){
 				console.log(error);
 			}
 		});
 	});
+
+	$.fn.getResultDiv = function(div, event, result, eventId, squadId, year, squad, squadRank, grade, genderId) {
+		var results = $(div).clone();
+		$(results).find('h4').append(
+			$('<div>').attr('class', 'eventMark').append(event + ' - ' + result)
+		);
+		$(results).find('p').append(
+			$.fn.getRankings(eventId, squadId, year, squad, squadRank, grade, genderId)
+		);
+		return results;
+	}
+
+	$.fn.getRankings = function(eventId, squadId, year, squad, squadRank, grade, genderId) {
+		var genderName = $.fn.getGenderName(genderId).trim();
+		var seasonSquadRankDiv = $.fn.getSeasonSquadRankDiv(eventId, squadId, year, squad, squadRank);
+		var allGradeRankDiv = $.fn.getAllGradeRankDiv(eventId, genderId, grade, genderName);
+		var allTimeRankDiv = $.fn.getAllTimeRankDiv(eventId, genderId, genderName);
+		var rankingsDiv = $('<div>').attr('class', 'rankings').append('Rankings');
+		$(rankingsDiv).append(seasonSquadRankDiv).append(allGradeRankDiv).append(allTimeRankDiv);
+		return rankingsDiv;
+	}
+
+	$.fn.getSeasonSquadRankDiv = function(eventId, squadId, year, squad, squadRank) {
+		return $('<div>').append('&raquo; ')
+			.append($('<a>')
+				.attr('class', 'rankingsLink')
+				.attr('href', '/santa-clara-high-track-and-field/results/' + eventId + '/' + squadId + '/' + year + '/')
+				.append(year + ' ' + squad))
+			.append(': ' + squadRank + ' of 4');
+	}
+
+	$.fn.getAllGradeRankDiv = function(eventId, genderId, grade, genderName) {
+		return $('<div>').append('&raquo; ')
+			.append($('<a>')
+				.attr('class', 'rankingsLink')
+				.attr('href', '/santa-clara-high-track-and-field/events/' + eventId + '/' + genderId + '/' + grade)
+				.append($.fn.getGradeName(grade) + ' ' + genderName))
+			.append(': 12 of 140');
+	}
+
+	$.fn.getAllTimeRankDiv = function(eventId, genderId, genderName) {
+		return $('<div>').append('&raquo; ')
+			.append($('<a>')
+				.attr('class', 'rankingsLink')
+				.attr('href', '/santa-clara-high-track-and-field/events/' + eventId + '/' + genderId + '/0')
+				.append($.fn.getGradeName(0) + ' ' + genderName))
+			.append(': 120 of 1400');
+
+		return $('<div>').append('&raquo; ')
+			.append($('<a>')
+				.attr('class', 'rankingsLink')
+				.attr('href', '/santa-clara-high-track-and-field/events/' + eventId + '/' + genderId + '/' + grade)
+				.append($.fn.getGradeName(grade) + ' ' + genderName))
+			.append(': 12 of 140');
+	}
+
+	$.fn.addResults = function(eventId, results) {
+		if ($.fn.isRaceResult(eventId)) {
+			if ($('.raceResults').text() == 'No Track Times') {
+				// remove placeholder text bc a race result will be appended
+				$('.raceResults').text('');
+			}
+			$('.raceResults').append(results);
+		} else if ($.fn.isFieldResult(eventId)) {
+			if ($('.fieldResults').text() == 'No Field Marks') {
+				// remove placeholder text bc a field result will be appended
+				$('.fieldResults').text('');
+			}
+			$('.fieldResults').append(results);
+		}
+	}
+
+	$.fn.isRaceResult = function(eventId) {
+		return (eventId >= 1 && eventId <= 28) || (eventId >= 38 && eventId <= 41);
+	}
+
+	$.fn.isFieldResult = function(eventId) {
+		return (eventId >= 29 && eventId <= 37);
+	}
+
+	$.fn.setDocTitle = function(fullName, year) {
+		$(document).ready(function() {
+			document.title = fullName + ' - ' + year + ' ' + document.title;
+		});
+	}
+
+	$.fn.addToBreadcrumb = function(year, titleStr) {
+		var seasonLink = $('<a>')
+			.attr('href', '/santa-clara-high-track-and-field/season/' + year)
+			.text(year + ' Season');
+		$('.breadcrumb').append(seasonLink).append(' / ' + titleStr);
+	}
+
+	$.fn.setTitle = function(titleStr) {
+		$('.text-muted').append(titleStr);
+	}
+
+	$.fn.setCareer = function(athleteId, fullName) {
+		var athleteLink = $('<a>')
+			.attr('href', '/santa-clara-high-track-and-field/athletes/' + athleteId)
+			.text(fullName + ' (All Records)');
+		$('.career').append(athleteLink);
+	}
+
+	$.fn.setHeaders = function(year) {
+		$('.raceHeader').text(year + ' Season Best Track Times');
+		$('.fieldHeader').text(year + ' Season Best Field Marks');
+	}
     </script>
   </head>
   <body>
@@ -119,11 +220,11 @@
 {% include "breadcrumb-title.html" %}
       <div><p class="career"></p></div>
       <div class="row marketing">
-        <div class="col-lg-6">
+        <div class="col-xs-6">
         	<h4 class="raceHeader"></h4>
         	<div class="raceResults">No Track Times</div>
 		</div>
-        <div class="col-lg-6">
+        <div class="col-xs-6">
         	<h4 class="fieldHeader"></h4>
         	<div class="fieldResults">No Field Marks</div>
 		</div>
