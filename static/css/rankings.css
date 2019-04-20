@@ -1,0 +1,14 @@
+.eventMark {
+	font-size:20px;
+}
+.rankings {
+	font-size:18px;
+}
+.rankingsLink:link, .rankingsLink:visited {
+	color: #c7ddef;
+	text-decoration: underline;
+}
+.rankingsLink:hover, .rankingsLink:active, .rankingsLink:focus {
+	color: #FFF;
+	text-decoration: underline;
+}
