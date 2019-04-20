@@ -11,11 +11,11 @@
 	  gtag('config', 'UA-109364959-1');
 	</script>
     <title>SCHS XC Photos: Crystal Springs Alumni Race</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
-    <link href="https://getbootstrap.com/docs/3.3/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet">
-    <link href="../../../static/css/signup.css" rel="stylesheet">
-    <link href="../../../static/css/lightbox.css" rel="stylesheet">
-    <script src="../../../static/js/lightbox-plus-jquery.js"></script>
+    <link rel="stylesheet" href="/static/bootstrap-3.4.1-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/bootstrap-3.4.1-dist/css/jumbotron-narrow.css">
+    <link rel="stylesheet" href="/static/css/signup.css">
+    <link rel="stylesheet" href="/static/css/lightbox.css">
+    <script src="/static/js/lightbox-plus-jquery.js"></script>
     <script>
     	$(function(){
     		var photos = ["2018-07-28 [3]", "2017-07-29", "2016-06-18", "2015-08-08", "2014-05-04", "2013-05-11", "2012-07-21"]
@@ -37,10 +37,10 @@
 				var pictured = picturedArr[index];
    				$('.jumbotron').append(
    					'<h4>' + race + ' Annual Race - ' + date + '</h4>'
-    				+ '<p><a href="../../../static/Uploads/cs_alumni_race/' + photo + '.jpg" '
+    				+ '<p><a href="/static/Uploads/cs_alumni_race/' + photo + '.jpg" '
     				+ 'data-lightbox="cs-alumni-race-photos" '
     				+ 'data-title="'+date+': ' + race + ' Annual Crystal Springs Alumni Race<br/>Pictured: '+pictured+'">' 
-    				+ '<img id="cs_alumni_race_img_' + photo + '" src="../../../static/Uploads/cs_alumni_race/' + photo + '.jpg" '
+    				+ '<img id="cs_alumni_race_img_' + photo + '" src="/static/Uploads/cs_alumni_race/' + photo + '.jpg" '
     				+ 'style="width: 100%;""/></a></p><br/>'    			
     			);
 			}
