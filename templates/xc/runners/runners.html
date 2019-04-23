@@ -15,6 +15,10 @@
     <link rel="stylesheet" href="/static/bootstrap-3.4.1-dist/css/jumbotron-narrow.css">
     <link rel="stylesheet" href="/static/css/fixed-header.css">
     <script src="/static/js/jquery-1.11.2.js"></script>
+    <style>
+    	.filter {font-size:16px;font-weight: bold;}
+    	.runners {font-size:16px;padding-bottom:8px;}
+	</style>
     <script>
     var genderId = '{{gId}}';
 
@@ -42,9 +46,9 @@
 				    var nameStr = value.LastName + ', ' + value.FirstName + ' ... ' + value.Years
 				    var link = "/xcRunner?rId=" + value.RunnerId
 				    if (index < countRight) {
-				    	$('.runnersLeft').append("<div><a href='" + link + "'>" + nameStr + "</a></div>");
+				    	$('.runnersLeft').append("<div class='runners'>&raquo; <a href='" + link + "'>" + nameStr + "</a></div>");
 				    } else {
-				    	$('.runnersRight').append("<div><a href='" + link + "'>" + nameStr + "</a></div>");
+				    	$('.runnersRight').append("<div class='runners'>&raquo; <a href='" + link + "'>" + nameStr + "</a></div>");
 				    }
 				});
 				if (genderId == '2' || genderId == '3') {
