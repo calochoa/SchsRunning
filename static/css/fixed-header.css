@@ -1,0 +1,24 @@
+.fixed-header {
+  z-index:1000;
+  background: #FFF;
+  position: fixed;
+  top: 0px;
+  width: 700px;
+  padding: 20px 0px 10px 0px;
+}
+
+.non-fixed-content {
+  padding-top: 130px;
+}
+
+.non-fixed-content-bc {
+  padding-top: 140px;
+}
+
+.non-fixed-content-bcdd {
+  padding-top: 205px;
+}
+
+.non-fixed-content-bcf {
+  padding-top: 205px;
+}

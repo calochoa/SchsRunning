@@ -13,9 +13,26 @@
     <title>SCHS XC Videos: Crystal Springs Alumni Race</title>
     <link rel="stylesheet" href="/static/bootstrap-3.4.1-dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="/static/bootstrap-3.4.1-dist/css/jumbotron-narrow.css">
-    <link rel="stylesheet" href="/static/css/signup.css">
+    <link rel="stylesheet" href="/static/css/fixed-header.css">
     <script src="/static/js/jquery-1.11.2.js"></script>
     <script>
+      $(function(){
+        var xcHomeLink = $('<a>');
+        $(xcHomeLink).attr('href', '/santa-clara-high-cross-country');
+        $(xcHomeLink).text('SCHS Cross Country');
+        $('.breadcrumb').append(xcHomeLink);
+        $('.breadcrumb').append(' / ');
+
+        var videosLink = $('<a>');
+        $(videosLink).attr('href', '/santa-clara-high-cross-country/videos/');
+        $(videosLink).text('Videos');
+        $('.breadcrumb').append(videosLink);
+        var titleStr = 'Crystal Springs Alumni Race'
+        $('.breadcrumb').append(' / ' + titleStr);
+
+        $('.text-muted').text('SCHS XC Videos: ' + titleStr);
+      })
+
     	$(function(){
     		var videos = ["yDG5khQ_l1c"]
     		var dates = ["07/21/2012"]
@@ -30,12 +47,14 @@
    					+ 'frameborder="0" allowfullscreen></iframe>'    			
     			);
 			}
-      $('.text-muted').text('SCHS XC Videos: Crystal Springs Alumni Race');
 		});
     </script>
+    <style>
+      .jumbotron {margin-top:185px;}
+  </style>
   </head>
   <body>
-{% include "xc/body.html" %}
+{% include "/common/container-fh-nav-bc-title.html" %}
   </body>
 </html>
 

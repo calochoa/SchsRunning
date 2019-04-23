@@ -10,6 +10,10 @@ xc_videos_seo_app = Blueprint(
 )    
 
 
+@xc_videos_seo_app.route('/',methods=['GET'])
+def xc_videos_home():
+    return render_template('xc/videos/videos.html')
+
 @xc_videos_seo_app.route('/crystal-springs-alumni-race/',methods=['GET'])
 def getXcCrystalSpringsAlumniRace():
     return render_template('xc/videos/videosCsAlumniRace.html')

@@ -13,7 +13,7 @@
     <title>SCHS Track &amp; Field Coach</title>
     <link rel="stylesheet" href="/static/bootstrap-3.4.1-dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="/static/bootstrap-3.4.1-dist/css/jumbotron-narrow.css">
-    <link rel="stylesheet" href="/static/css/signup.css">
+    <link rel="stylesheet" href="/static/css/fixed-header.css">
     <script src="/static/js/jquery-1.11.2.js"></script>
     <script src="/static/js/utils.js"></script>
     <script>
@@ -67,7 +67,7 @@
 					coachStr =  value.FirstName + ' ' + value.LastName
 				});
 				$('.breadcrumb').append(coachStr);
-				$('.text-muted').text(coachStr + seasonStr);
+				$('.text-muted').text('SCHS Track Coach: ' + coachStr + seasonStr);
 				$(document).ready(function() {
 					document.title = coachStr + ' - ' + document.title;
 				});
@@ -79,11 +79,12 @@
 	});
     </script>
     <style>
-    	.jumbotron p {margin-bottom: 0px;}
+	  .jumbotron {margin-top:185px;}
+      .jumbotron p {margin-bottom: 0px;}
 	</style>
   </head>
   <body>
-{% include "breadcrumb-body.html" %}
+{% include "/common/container-fh-nav-bc-title.html" %}
   </body>
 </html>
 

@@ -1,3 +1,17 @@
+  $.fn.getAbbrGradeName = function(grade) {
+      var abbrGradeName = 'Unknown';
+      if (grade ==  12) {
+        abbrGradeName = 'Sr'
+      } else if (grade ==  11) {
+        abbrGradeName = 'Jr'
+      } else if (grade ==  10) {
+        abbrGradeName = 'So'
+      } else if (grade ==  9) {
+        abbrGradeName = 'Fr'
+      }
+      return abbrGradeName;
+  }
+
   $.fn.getGradeName = function(grade) {
       var gradeName = 'All';
       if (grade ==  12) {

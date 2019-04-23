@@ -10,15 +10,30 @@
 
 	  gtag('config', 'UA-109364959-1');
 	</script>
-    <title>SCHS XC Special Achievement</title>
+    <title>SCHS Cross Country Special Achievement</title>
     <link rel="stylesheet" href="/static/bootstrap-3.4.1-dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="/static/bootstrap-3.4.1-dist/css/jumbotron-narrow.css">
-    <link rel="stylesheet" href="/static/css/signup.css">
+    <link rel="stylesheet" href="/static/css/fixed-header.css">
     <script src="/static/js/jquery-1.11.2.js"></script>
     <script src="/static/js/utils.js"></script>
     <script>
     var splAchvId = {{splAchvId}};
     var sportId = {{sportId}};
+
+    $(function(){
+        var xcHomeLink = $('<a>');
+        $(xcHomeLink).attr('href', '/santa-clara-high-cross-country');
+        $(xcHomeLink).text('SCHS Cross Country');
+        $('.breadcrumb').append(xcHomeLink);
+		$('.breadcrumb').append(' / ');
+
+        var specialAchievementsHomeLink = $('<a>');
+        $(specialAchievementsHomeLink).attr('href', '/santa-clara-high-cross-country/special-achievements/');
+        $(specialAchievementsHomeLink).text('Special Achievements');
+        $('.breadcrumb').append(specialAchievementsHomeLink);
+		$('.breadcrumb').append(' / ');
+    })
+
 	$(function(){
 		$.ajax({
 			url: '/getSpecialAchieversById',
@@ -55,7 +70,8 @@
 					$(results).find('p').text(notesStr);
 					$('.jumbotron').append(results);
 				});
-				$('.text-muted').text(specialAchievementNameStr + 's (' + count + ')');
+		        $('.breadcrumb').append(splAchvId == 0 ? 'All' : specialAchievementNameStr);
+				$('.text-muted').text('SCHS Cross Country ' + specialAchievementNameStr + 's (' + count + ')');
 				$(document).ready(function() {
 					document.title = (splAchvId == 0 ? '' : specialAchievementNameStr + 's - ') + document.title;
 				});
@@ -67,11 +83,12 @@
 	});
     </script>
     <style>
-    	.jumbotron p {margin-bottom: 0px;font-size:18px;}
+      .jumbotron {margin-top:185px;}
+      .jumbotron p {margin-bottom: 0px;font-size:18px;}
 	</style>
   </head>
   <body>
-{% include "xc/body.html" %}
+{% include "/common/container-fh-nav-bc-title.html" %}
   </body>
 </html>
 

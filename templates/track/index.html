@@ -13,240 +13,241 @@
     <title>SCHS Track &amp; Field</title>
     <link rel="stylesheet" href="/static/bootstrap-3.4.1-dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="/static/bootstrap-3.4.1-dist/css/jumbotron-narrow.css">
+    <link rel="stylesheet" href="/static/css/fixed-header.css">
   </head>
   <body>
-
     <div class="container">
-{% include "nav_active_track.html" %}
-      <div>
-        <h3 class="text-muted">Santa Clara High School Track &amp; Field</h3>
-      </div>
-
-      <div class="jumbotron">
-        <p><img src="/static/Uploads/schs_track_2005_west_valley_relays_scott_robinson.jpg" alt="SCHS Track 2005 West Valley Relays Scott Robinson" width="550"></p>
-      </div>
-
-      <div class="row marketing">
-        <div class="col-xs-6">
-          <h4 style="color:red">Latest Updates</h4>
-          <p>
-            <div>&raquo; 04/16/19 - added <a href="/santa-clara-high-track-and-field/events/">Track Results by Event</a></div>
-            <div>&raquo; 04/12/19 - added <a href="/santa-clara-high-track-and-field/season/2010">2010</a> thru <a href="/santa-clara-high-track-and-field/season/2017">2017</a> Track Seasons</div>
-          </p>
-          <h4><a id="season-results" style="text-decoration:none;color:black;">Track Seasons</a></h4>
-          <p>
-            <a href="/santa-clara-high-track-and-field/season/2018">2018</a>,
-            <a href="/santa-clara-high-track-and-field/season/2017">2017</a>,
-            <a href="/santa-clara-high-track-and-field/season/2016">2016</a>,
-            <a href="/santa-clara-high-track-and-field/season/2015">2015</a>,
-            <a href="/santa-clara-high-track-and-field/season/2014">2014</a>,
-            <a href="/santa-clara-high-track-and-field/season/2013">2013</a>,
-            <a href="/santa-clara-high-track-and-field/season/2012">2012</a>,
-            <a href="/santa-clara-high-track-and-field/season/2011">2011</a>,
-            <a href="/santa-clara-high-track-and-field/season/2010">2010</a>
-          </p>
-          <h4><a href="/santa-clara-high-track-and-field/events/">Track Results by Event</a></h4>
-          <p>
-            <h5>Boys</h5>
-            <div>&raquo; Sprints: 
-              <a href="/santa-clara-high-track-and-field/events/100m-dash/all-boys/">100m</a>, 
-              <a href="/santa-clara-high-track-and-field/events/200m-dash/all-boys/">200m</a>, 
-              <a href="/santa-clara-high-track-and-field/events/400m-dash/all-boys/">400m</a>
-            </div>
-            <div>&raquo; Distance: 
-              <a href="/santa-clara-high-track-and-field/events/800m-run/all-boys/">800m</a>, 
-              <a href="/santa-clara-high-track-and-field/events/1600m-run/all-boys/">1600m</a>, 
-              <a href="/santa-clara-high-track-and-field/events/3200m-run/all-boys/">3200m</a>
-            </div>
-            <div>&raquo; Hurdles: 
-              <a href="/santa-clara-high-track-and-field/events/110m-hurdles-39in/all-boys/">110m Hurdles</a>, 
-              <a href="/santa-clara-high-track-and-field/events/300m-hurdles-36in/all-boys/">300m Hurdles</a>
-            </div>
-            <div>&raquo; Relays: 
-              <a href="/santa-clara-high-track-and-field/events/400m-relay/all-boys/">400m Relay</a>, 
-              <a href="/santa-clara-high-track-and-field/events/1600m-relay/all-boys/">1600m Relay</a>
-            </div>
-            <div>&raquo; Jumps: 
-              <a href="/santa-clara-high-track-and-field/events/high-jump/all-boys/">High Jump</a>, 
-              <a href="/santa-clara-high-track-and-field/events/long-jump/all-boys/">Long Jump</a>, 
-              <a href="/santa-clara-high-track-and-field/events/triple-jump/all-boys/">Triple Jump</a>
-            </div>
-            <div>&raquo; Throws: 
-              <a href="/santa-clara-high-track-and-field/events/shot-put-12lb/all-boys/">Shot Put</a>, 
-              <a href="/santa-clara-high-track-and-field/events/discus-1.6kg/all-boys/">Discus</a>
-            </div>
-            <div>
-              <a href="/santa-clara-high-track-and-field/events/">All Boys Events</a>
-            </div>
-            <div>&nbsp;</div>
-            <h5>Girls</h5>
-            <div>&raquo; Sprints: 
-              <a href="/santa-clara-high-track-and-field/events/100m-dash/all-girls/">100m</a>, 
-              <a href="/santa-clara-high-track-and-field/events/200m-dash/all-girls/">200m</a>, 
-              <a href="/santa-clara-high-track-and-field/events/400m-dash/all-girls/">400m</a>
-            </div>
-            <div>&raquo; Distance:
-              <a href="/santa-clara-high-track-and-field/events/800m-run/all-girls/">800m</a>, 
-              <a href="/santa-clara-high-track-and-field/events/1600m-run/all-girls/">1600m</a>, 
-              <a href="/santa-clara-high-track-and-field/events/3200m-run/all-girls/">3200m</a>
-            </div>
-            <div>&raquo; Hurdles:
-              <a href="/santa-clara-high-track-and-field/events/100m-hurdles-33in/all-girls/">100m Hurdles</a>, 
-              <a href="/santa-clara-high-track-and-field/events/300m-hurdles-30in/all-girls/">300m Hurdles</a>
-            </div>
-            <div>&raquo; Relays:
-              <a href="/santa-clara-high-track-and-field/events/400m-relay/all-girls/">400m Relay</a>, 
-              <a href="/santa-clara-high-track-and-field/events/1600m-relay/all-girls/">1600m Relay</a>
-            </div>
-            <div>&raquo; Jumps:
-              <a href="/santa-clara-high-track-and-field/events/high-jump/all-girls/">High Jump</a>, 
-              <a href="/santa-clara-high-track-and-field/events/long-jump/all-girls/">Long Jump</a>, 
-              <a href="/santa-clara-high-track-and-field/events/triple-jump/all-girls/">Triple Jump</a>
-            </div>
-            <div>&raquo; Throws:
-              <a href="/santa-clara-high-track-and-field/events/shot-put-4kg/all-girls/">Shot Put</a>, 
-              <a href="/santa-clara-high-track-and-field/events/discus-1kg/all-girls/">Discus</a>
-            </div>
-            <div>
-              <a href="/santa-clara-high-track-and-field/events/">All Girls Events</a>
-            </div>
-          </p>
-          <h4><a href="/santa-clara-high-track-and-field/athletes/">Track Results by Athlete</a></h4>
-          <p>
-            <h5>Boys</h5>
-            <div>
-              <a href="/santa-clara-high-track-and-field/athletes/scott-robinson">Scott Robinson</a>, 
-              <a href="/santa-clara-high-track-and-field/athletes/dave-wallick">Dave Wallick</a>, 
-              <a href="/santa-clara-high-track-and-field/athletes/steve-marcki">Steve Marcki</a>, 
-              <a href="/santa-clara-high-track-and-field/athletes/john-siirila">John Siirila</a>, 
-              <a href="/santa-clara-high-track-and-field/athletes/girmay-guangul">Girmay Guangul</a>, 
-              <a href="/santa-clara-high-track-and-field/athletes/david-zamora">David Zamora</a>, 
-              <a href="/santa-clara-high-track-and-field/athletes/billy-chaung">Billy Chaung</a> ...
-              <a href="/santa-clara-high-track-and-field/athletes/boys">All Boys</a>
-            </div>
-            <div>&nbsp;</div>
-            <h5>Girls</h5>
-            <div>
-              <a href="/santa-clara-high-track-and-field/athletes/margaret-demorest">Margaret Demorest</a>, 
-              <a href="/santa-clara-high-track-and-field/athletes/shana-buchanan">Shana Buchanan</a>, 
-              <a href="/santa-clara-high-track-and-field/athletes/emily-gordon">Emily Gordon</a>, 
-              <a href="/santa-clara-high-track-and-field/athletes/cynthia-smith">Cynthia Smith</a>,
-              <a href="/santa-clara-high-track-and-field/athletes/grace-wills">Grace Wills</a>,
-              <a href="/santa-clara-high-track-and-field/athletes/olivia-valente">Olivia Valente</a>, 
-              <a href="/santa-clara-high-track-and-field/athletes/julie-sumpter">Julie Sumpter</a>...
-              <a href="/santa-clara-high-track-and-field/athletes/girls">All Girls</a>
-            </div>
-          </p>
-          <div>&nbsp;</div>
-        </div>
-
-        <div class="col-xs-6">
-          <h4><a href="/santa-clara-high-track-and-field/hall-of-fame/">Track Hall of Fame</a></h4>
-          <p>
-            <h5>Boys</h5>
-            <div>&raquo; Sprints: 
-              <a href="/santa-clara-high-track-and-field/hall-of-fame/boys-100m-dash">100m</a>, 
-              <a href="/santa-clara-high-track-and-field/hall-of-fame/boys-200m-dash">200m</a>, 
-              <a href="/santa-clara-high-track-and-field/hall-of-fame/boys-440yd-dash">440yd</a>
-            </div>
-            <div>&raquo; Distance:
-              <a href="/santa-clara-high-track-and-field/hall-of-fame/boys-880yd-run">880yd</a>, 
-              <a href="/santa-clara-high-track-and-field/hall-of-fame/boys-1600m-run">1600m</a>, 
-              <a href="/santa-clara-high-track-and-field/hall-of-fame/boys-2-mile-run">2 Mile</a>
-            </div>
-            <div>&raquo; Hurdles:
-              <a href="/santa-clara-high-track-and-field/hall-of-fame/boys-120yd-hurdles/">120yd Hurdles</a>, 
-              <a href="/santa-clara-high-track-and-field/hall-of-fame/boys-330yd-hurdles/">330yd Hurdles</a>
-            </div>
-            <div>&raquo; Relays:
-              <a href="/santa-clara-high-track-and-field/hall-of-fame/boys-400m-relay/">400m Relay</a>, 
-              <a href="/santa-clara-high-track-and-field/hall-of-fame/boys-mile-relay/">Mile Relay</a>
-            </div>
-            <div>&raquo; Jumps:
-              <a href="/santa-clara-high-track-and-field/hall-of-fame/boys-high-jump/">High Jump</a>, 
-              <a href="/santa-clara-high-track-and-field/hall-of-fame/boys-long-jump/">Long Jump</a>, 
-              <a href="/santa-clara-high-track-and-field/hall-of-fame/boys-triple-jump/">Triple Jump</a>
-            </div>
-            <div>&raquo; Throws:
-              <a href="/santa-clara-high-track-and-field/hall-of-fame/boys-shot-put-12lb/">Shot Put</a>, 
-              <a href="/santa-clara-high-track-and-field/hall-of-fame/boys-discus-1.6kg/">Discus</a>
-            </div>
-            <div>
-              <a href="/santa-clara-high-track-and-field/hall-of-fame/">All Hall of Fame Boys Events</a>
-            </div>
-            <div>&nbsp;</div>
-            <h5>Girls</h5>
-            <div>&raquo; Sprints: 
-              <a href="/santa-clara-high-track-and-field/hall-of-fame/girls-100m-dash">100m</a>, 
-              <a href="/santa-clara-high-track-and-field/hall-of-fame/girls-200m-dash">200m</a>, 
-              <a href="/santa-clara-high-track-and-field/hall-of-fame/girls-400m-dash">400m</a>
-            </div>
-            <div>&raquo; Distance:
-              <a href="/santa-clara-high-track-and-field/hall-of-fame/girls-880yd-run">880yd</a>, 
-              <a href="/santa-clara-high-track-and-field/hall-of-fame/girls-1600m-run">1600m</a>, 
-              <a href="/santa-clara-high-track-and-field/hall-of-fame/girls-2-mile-run">2 Mile</a>
-            </div>
-            <div>&raquo; Hurdles:
-              <a href="/santa-clara-high-track-and-field/hall-of-fame/girls-100m-hurdles-33in/">100m Hurdles</a>, 
-              <a href="/santa-clara-high-track-and-field/hall-of-fame/girls-300m-hurdles-30in/">300m Hurdles</a>
-            </div>
-            <div>&raquo; Relays:
-              <a href="/santa-clara-high-track-and-field/hall-of-fame/girls-440yd-relay/">400yd Relay</a>, 
-              <a href="/santa-clara-high-track-and-field/hall-of-fame/girls-1600m-relay/">1600m Relay</a>
-            </div>
-            <div>&raquo; Jumps:
-              <a href="/santa-clara-high-track-and-field/hall-of-fame/girls-high-jump/">High Jump</a>, 
-              <a href="/santa-clara-high-track-and-field/hall-of-fame/girls-long-jump/">Long Jump</a>, 
-              <a href="/santa-clara-high-track-and-field/hall-of-fame/girls-triple-jump/">Triple Jump</a>
-            </div>
-            <div>&raquo; Throws:
-              <a href="/santa-clara-high-track-and-field/hall-of-fame/girls-shot-put-4kg/">Shot Put</a>, 
-              <a href="/santa-clara-high-track-and-field/hall-of-fame/girls-discus-1kg/">Discus</a>
-            </div>
-            <div>
-              <a href="/santa-clara-high-track-and-field/hall-of-fame/">All Hall of Fame Girls Events</a>
-            </div>
-          </p>
-          <h4>Track Coaches</h4>
-          <p>
-            <div>
-              &raquo; <a href="/santa-clara-high-track-and-field/coaches/timeline">Timeline</a>
-            </div>
-            <div>
-              &raquo; 
-              <a href="/santa-clara-high-track-and-field/coaches/chuck-kappen">Chuck Kappen</a>, 
-              <a href="/santa-clara-high-track-and-field/coaches/julie-lheureux">Julie L'Heureux</a>, 
-              <a href="/santa-clara-high-track-and-field/coaches/margaret-demorest">Margaret Demorest</a>, 
-              <a href="/santa-clara-high-track-and-field/coaches/paul-fuller">Paul Fuller</a> ...
-              <a href="/santa-clara-high-track-and-field/coaches/">All Coaches</a>
-            </div>
-          </p>
-          <h4>Track Special Achievements</h4>
-          <p>
-            <h5>Individual</h5>
-            <div>
-              &raquo;
-              State Qualifiers, 
-              CCS Champions,
-              League Champions ...
-              All
-            </div>
-            <div>&nbsp;</div>
-            <h5>Team</h5>
-            <div>
-              &raquo; 
-              CCS Champions,
-              League Champions ...
-              All
-            </div>
-          </p>
-          <h4>Track Photos</h4>
-          <p>
-            Team Timeline
-          </p>
+      <div class="fixed-header">
+{% include "/common/nav_active_track.html" %}
+        <div>
+          <h3 class="text-muted">Santa Clara High School Track &amp; Field</h3>
         </div>
       </div>
-{% include "footer.html" %}
+      <div class="non-fixed-content">
+        <div class="jumbotron">
+          <p><img src="/static/Uploads/schs_track_2005_west_valley_relays_scott_robinson.jpg" alt="SCHS Track 2005 West Valley Relays Scott Robinson" width="550"></p>
+        </div>
+        <div class="row marketing">
+          <div class="col-xs-6">
+            <h4 style="color:red">Latest Updates</h4>
+            <p>
+              <div>&raquo; 04/16/19 - added <a href="/santa-clara-high-track-and-field/events/">Track Results by Event</a></div>
+              <div>&raquo; 04/12/19 - added <a href="/santa-clara-high-track-and-field/season/2010">2010</a> thru <a href="/santa-clara-high-track-and-field/season/2017">2017</a> Track Seasons</div>
+            </p>
+            <h4><a id="season-results" style="text-decoration:none;color:black;">Track Seasons</a></h4>
+            <p>
+              <a href="/santa-clara-high-track-and-field/season/2018">2018</a>,
+              <a href="/santa-clara-high-track-and-field/season/2017">2017</a>,
+              <a href="/santa-clara-high-track-and-field/season/2016">2016</a>,
+              <a href="/santa-clara-high-track-and-field/season/2015">2015</a>,
+              <a href="/santa-clara-high-track-and-field/season/2014">2014</a>,
+              <a href="/santa-clara-high-track-and-field/season/2013">2013</a>,
+              <a href="/santa-clara-high-track-and-field/season/2012">2012</a>,
+              <a href="/santa-clara-high-track-and-field/season/2011">2011</a>,
+              <a href="/santa-clara-high-track-and-field/season/2010">2010</a>
+            </p>
+            <h4><a href="/santa-clara-high-track-and-field/events/">Track Results by Event</a></h4>
+            <p>
+              <h5>Boys</h5>
+              <div>&raquo; Sprints: 
+                <a href="/santa-clara-high-track-and-field/events/100m-dash/all-boys/">100m</a>, 
+                <a href="/santa-clara-high-track-and-field/events/200m-dash/all-boys/">200m</a>, 
+                <a href="/santa-clara-high-track-and-field/events/400m-dash/all-boys/">400m</a>
+              </div>
+              <div>&raquo; Distance: 
+                <a href="/santa-clara-high-track-and-field/events/800m-run/all-boys/">800m</a>, 
+                <a href="/santa-clara-high-track-and-field/events/1600m-run/all-boys/">1600m</a>, 
+                <a href="/santa-clara-high-track-and-field/events/3200m-run/all-boys/">3200m</a>
+              </div>
+              <div>&raquo; Hurdles: 
+                <a href="/santa-clara-high-track-and-field/events/110m-hurdles-39in/all-boys/">110m Hurdles</a>, 
+                <a href="/santa-clara-high-track-and-field/events/300m-hurdles-36in/all-boys/">300m Hurdles</a>
+              </div>
+              <div>&raquo; Relays: 
+                <a href="/santa-clara-high-track-and-field/events/400m-relay/all-boys/">400m Relay</a>, 
+                <a href="/santa-clara-high-track-and-field/events/1600m-relay/all-boys/">1600m Relay</a>
+              </div>
+              <div>&raquo; Jumps: 
+                <a href="/santa-clara-high-track-and-field/events/high-jump/all-boys/">High Jump</a>, 
+                <a href="/santa-clara-high-track-and-field/events/long-jump/all-boys/">Long Jump</a>, 
+                <a href="/santa-clara-high-track-and-field/events/triple-jump/all-boys/">Triple Jump</a>
+              </div>
+              <div>&raquo; Throws: 
+                <a href="/santa-clara-high-track-and-field/events/shot-put-12lb/all-boys/">Shot Put</a>, 
+                <a href="/santa-clara-high-track-and-field/events/discus-1.6kg/all-boys/">Discus</a>
+              </div>
+              <div>
+                <a href="/santa-clara-high-track-and-field/events/">All Boys Events</a>
+              </div>
+              <div>&nbsp;</div>
+              <h5>Girls</h5>
+              <div>&raquo; Sprints: 
+                <a href="/santa-clara-high-track-and-field/events/100m-dash/all-girls/">100m</a>, 
+                <a href="/santa-clara-high-track-and-field/events/200m-dash/all-girls/">200m</a>, 
+                <a href="/santa-clara-high-track-and-field/events/400m-dash/all-girls/">400m</a>
+              </div>
+              <div>&raquo; Distance:
+                <a href="/santa-clara-high-track-and-field/events/800m-run/all-girls/">800m</a>, 
+                <a href="/santa-clara-high-track-and-field/events/1600m-run/all-girls/">1600m</a>, 
+                <a href="/santa-clara-high-track-and-field/events/3200m-run/all-girls/">3200m</a>
+              </div>
+              <div>&raquo; Hurdles:
+                <a href="/santa-clara-high-track-and-field/events/100m-hurdles-33in/all-girls/">100m Hurdles</a>, 
+                <a href="/santa-clara-high-track-and-field/events/300m-hurdles-30in/all-girls/">300m Hurdles</a>
+              </div>
+              <div>&raquo; Relays:
+                <a href="/santa-clara-high-track-and-field/events/400m-relay/all-girls/">400m Relay</a>, 
+                <a href="/santa-clara-high-track-and-field/events/1600m-relay/all-girls/">1600m Relay</a>
+              </div>
+              <div>&raquo; Jumps:
+                <a href="/santa-clara-high-track-and-field/events/high-jump/all-girls/">High Jump</a>, 
+                <a href="/santa-clara-high-track-and-field/events/long-jump/all-girls/">Long Jump</a>, 
+                <a href="/santa-clara-high-track-and-field/events/triple-jump/all-girls/">Triple Jump</a>
+              </div>
+              <div>&raquo; Throws:
+                <a href="/santa-clara-high-track-and-field/events/shot-put-4kg/all-girls/">Shot Put</a>, 
+                <a href="/santa-clara-high-track-and-field/events/discus-1kg/all-girls/">Discus</a>
+              </div>
+              <div>
+                <a href="/santa-clara-high-track-and-field/events/">All Girls Events</a>
+              </div>
+            </p>
+            <h4><a href="/santa-clara-high-track-and-field/athletes/">Track Results by Athlete</a></h4>
+            <p>
+              <h5>Boys</h5>
+              <div>
+                <a href="/santa-clara-high-track-and-field/athletes/scott-robinson">Scott Robinson</a>, 
+                <a href="/santa-clara-high-track-and-field/athletes/dave-wallick">Dave Wallick</a>, 
+                <a href="/santa-clara-high-track-and-field/athletes/steve-marcki">Steve Marcki</a>, 
+                <a href="/santa-clara-high-track-and-field/athletes/john-siirila">John Siirila</a>, 
+                <a href="/santa-clara-high-track-and-field/athletes/girmay-guangul">Girmay Guangul</a>, 
+                <a href="/santa-clara-high-track-and-field/athletes/david-zamora">David Zamora</a>, 
+                <a href="/santa-clara-high-track-and-field/athletes/billy-chaung">Billy Chaung</a> ...
+                <a href="/santa-clara-high-track-and-field/athletes/males">All Boys</a>
+              </div>
+              <div>&nbsp;</div>
+              <h5>Girls</h5>
+              <div>
+                <a href="/santa-clara-high-track-and-field/athletes/margaret-demorest">Margaret Demorest</a>, 
+                <a href="/santa-clara-high-track-and-field/athletes/shana-buchanan">Shana Buchanan</a>, 
+                <a href="/santa-clara-high-track-and-field/athletes/emily-gordon">Emily Gordon</a>, 
+                <a href="/santa-clara-high-track-and-field/athletes/cynthia-smith">Cynthia Smith</a>,
+                <a href="/santa-clara-high-track-and-field/athletes/grace-wills">Grace Wills</a>,
+                <a href="/santa-clara-high-track-and-field/athletes/olivia-valente">Olivia Valente</a>, 
+                <a href="/santa-clara-high-track-and-field/athletes/julie-sumpter">Julie Sumpter</a>...
+                <a href="/santa-clara-high-track-and-field/athletes/females">All Girls</a>
+              </div>
+            </p>
+            <div>&nbsp;</div>
+          </div>
+          <div class="col-xs-6">
+            <h4><a href="/santa-clara-high-track-and-field/hall-of-fame/">Track Hall of Fame</a></h4>
+            <p>
+              <h5>Boys</h5>
+              <div>&raquo; Sprints: 
+                <a href="/santa-clara-high-track-and-field/hall-of-fame/boys-100m-dash">100m</a>, 
+                <a href="/santa-clara-high-track-and-field/hall-of-fame/boys-200m-dash">200m</a>, 
+                <a href="/santa-clara-high-track-and-field/hall-of-fame/boys-440yd-dash">440yd</a>
+              </div>
+              <div>&raquo; Distance:
+                <a href="/santa-clara-high-track-and-field/hall-of-fame/boys-880yd-run">880yd</a>, 
+                <a href="/santa-clara-high-track-and-field/hall-of-fame/boys-1600m-run">1600m</a>, 
+                <a href="/santa-clara-high-track-and-field/hall-of-fame/boys-2-mile-run">2 Mile</a>
+              </div>
+              <div>&raquo; Hurdles:
+                <a href="/santa-clara-high-track-and-field/hall-of-fame/boys-120yd-hurdles/">120yd Hurdles</a>, 
+                <a href="/santa-clara-high-track-and-field/hall-of-fame/boys-330yd-hurdles/">330yd Hurdles</a>
+              </div>
+              <div>&raquo; Relays:
+                <a href="/santa-clara-high-track-and-field/hall-of-fame/boys-400m-relay/">400m Relay</a>, 
+                <a href="/santa-clara-high-track-and-field/hall-of-fame/boys-mile-relay/">Mile Relay</a>
+              </div>
+              <div>&raquo; Jumps:
+                <a href="/santa-clara-high-track-and-field/hall-of-fame/boys-high-jump/">High Jump</a>, 
+                <a href="/santa-clara-high-track-and-field/hall-of-fame/boys-long-jump/">Long Jump</a>, 
+                <a href="/santa-clara-high-track-and-field/hall-of-fame/boys-triple-jump/">Triple Jump</a>
+              </div>
+              <div>&raquo; Throws:
+                <a href="/santa-clara-high-track-and-field/hall-of-fame/boys-shot-put-12lb/">Shot Put</a>, 
+                <a href="/santa-clara-high-track-and-field/hall-of-fame/boys-discus-1.6kg/">Discus</a>
+              </div>
+              <div>
+                <a href="/santa-clara-high-track-and-field/hall-of-fame/">All Hall of Fame Boys Events</a>
+              </div>
+              <div>&nbsp;</div>
+              <h5>Girls</h5>
+              <div>&raquo; Sprints: 
+                <a href="/santa-clara-high-track-and-field/hall-of-fame/girls-100m-dash">100m</a>, 
+                <a href="/santa-clara-high-track-and-field/hall-of-fame/girls-200m-dash">200m</a>, 
+                <a href="/santa-clara-high-track-and-field/hall-of-fame/girls-400m-dash">400m</a>
+              </div>
+              <div>&raquo; Distance:
+                <a href="/santa-clara-high-track-and-field/hall-of-fame/girls-880yd-run">880yd</a>, 
+                <a href="/santa-clara-high-track-and-field/hall-of-fame/girls-1600m-run">1600m</a>, 
+                <a href="/santa-clara-high-track-and-field/hall-of-fame/girls-2-mile-run">2 Mile</a>
+              </div>
+              <div>&raquo; Hurdles:
+                <a href="/santa-clara-high-track-and-field/hall-of-fame/girls-100m-hurdles-33in/">100m Hurdles</a>, 
+                <a href="/santa-clara-high-track-and-field/hall-of-fame/girls-300m-hurdles-30in/">300m Hurdles</a>
+              </div>
+              <div>&raquo; Relays:
+                <a href="/santa-clara-high-track-and-field/hall-of-fame/girls-440yd-relay/">400yd Relay</a>, 
+                <a href="/santa-clara-high-track-and-field/hall-of-fame/girls-1600m-relay/">1600m Relay</a>
+              </div>
+              <div>&raquo; Jumps:
+                <a href="/santa-clara-high-track-and-field/hall-of-fame/girls-high-jump/">High Jump</a>, 
+                <a href="/santa-clara-high-track-and-field/hall-of-fame/girls-long-jump/">Long Jump</a>, 
+                <a href="/santa-clara-high-track-and-field/hall-of-fame/girls-triple-jump/">Triple Jump</a>
+              </div>
+              <div>&raquo; Throws:
+                <a href="/santa-clara-high-track-and-field/hall-of-fame/girls-shot-put-4kg/">Shot Put</a>, 
+                <a href="/santa-clara-high-track-and-field/hall-of-fame/girls-discus-1kg/">Discus</a>
+              </div>
+              <div>
+                <a href="/santa-clara-high-track-and-field/hall-of-fame/">All Hall of Fame Girls Events</a>
+              </div>
+            </p>
+            <h4>Track Coaches</h4>
+            <p>
+              <div>
+                &raquo; <a href="/santa-clara-high-track-and-field/coaches/timeline">Timeline</a>
+              </div>
+              <div>
+                &raquo; 
+                <a href="/santa-clara-high-track-and-field/coaches/chuck-kappen">Chuck Kappen</a>, 
+                <a href="/santa-clara-high-track-and-field/coaches/julie-lheureux">Julie L'Heureux</a>, 
+                <a href="/santa-clara-high-track-and-field/coaches/margaret-demorest">Margaret Demorest</a>, 
+                <a href="/santa-clara-high-track-and-field/coaches/paul-fuller">Paul Fuller</a> ...
+                <a href="/santa-clara-high-track-and-field/coaches/">All Coaches</a>
+              </div>
+            </p>
+            <h4>Track Special Achievements</h4>
+            <p>
+              <h5>Individual</h5>
+              <div>
+                &raquo;
+                State Qualifiers, 
+                CCS Champions,
+                League Champions ...
+                All
+              </div>
+              <div>&nbsp;</div>
+              <h5>Team</h5>
+              <div>
+                &raquo; 
+                CCS Champions,
+                League Champions ...
+                All
+              </div>
+            </p>
+            <h4>Track Photos</h4>
+            <p>
+              Team Timeline
+            </p>
+          </div>
+        </div>
+      </div>
+{% include "/common/footer.html" %}
     </div>
   </body>
 </html>

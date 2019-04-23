@@ -10,10 +10,10 @@
 
 	  gtag('config', 'UA-109364959-1');
 	</script>
-    <title>SCHS XC Course Results</title>
+    <title>SCHS Cross Country Top Team Results</title>
     <link rel="stylesheet" href="/static/bootstrap-3.4.1-dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="/static/bootstrap-3.4.1-dist/css/jumbotron-narrow.css">
-    <link rel="stylesheet" href="/static/css/signup.css">
+    <link rel="stylesheet" href="/static/css/fixed-header.css">
     <script src="/static/js/jquery-1.11.2.js"></script>
     <script src="/static/js/utils.js"></script>
     <script>
@@ -24,7 +24,21 @@
     var courseId = cId ? cId : urlParams.cId;
     var genderId = gId ? gId : urlParams.gId;
     var limit = li ? li : urlParams.limit;
-        
+
+    $(function(){
+        var xcHomeLink = $('<a>');
+        $(xcHomeLink).attr('href', '/santa-clara-high-cross-country');
+        $(xcHomeLink).text('SCHS Cross Country');
+        $('.breadcrumb').append(xcHomeLink);
+		$('.breadcrumb').append(' / ');
+
+        var xcTopTeamHomeLink = $('<a>');
+        $(xcTopTeamHomeLink).attr('href', '/santa-clara-high-cross-country/course-results/top-team');
+        $(xcTopTeamHomeLink).text('Top Team Results');
+        $('.breadcrumb').append(xcTopTeamHomeLink);
+		$('.breadcrumb').append(' / ');
+    })
+
 	$(function(){
 		$.ajax({
 			url: '/getTopTeamCourseResults',
@@ -84,6 +98,7 @@
 				var courseStr = courseObj.CourseName + ' (' + courseObj.CourseDistance + 'M)'
 				var topStr = limit > 0 ? 'Top ' + limit + ' Team' : 'No Team Results for'
 				var titleStr =  topStr + ' ' + genderStr + ' - ' + courseStr
+				$('.breadcrumb').append(genderStr + ' - ' + courseStr);
 				$('.text-muted').text(titleStr);
 				$(document).ready(function() {
 					document.title = titleStr + ' - ' + document.title;
@@ -96,11 +111,12 @@
 	}
     </script>
     <style>
-    	.jumbotron p {margin-bottom: 0px;font-size:18px;}
+      .jumbotron {margin-top:185px;}
+      .jumbotron p {margin-bottom: 0px;font-size:18px;}
 	</style>
   </head>
   <body>
-{% include "xc/body.html" %}
+{% include "/common/container-fh-nav-bc-title.html" %}
   </body>
 </html>
 

@@ -10,6 +10,10 @@ xc_season_seo_app = Blueprint(
 )    
 
 
+@xc_season_seo_app.route('/dropdown-menu/',methods=['GET'])
+def dropdown_menu():
+    return render_template('xc/season/season-dropdown-menu.html')
+
 @xc_season_seo_app.route('/<year>',methods=['GET'])
 def xcSeasonDNE(year=None):
     return render_template('error.html', error='No data for {0} season'.format(year))

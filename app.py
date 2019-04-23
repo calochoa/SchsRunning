@@ -18,6 +18,7 @@ from bin.apps.xc.xc_photos_seo_app import xc_photos_seo_app
 from bin.apps.xc.xc_videos_seo_app import xc_videos_seo_app
 from bin.apps.xc.xc_race_results_seo_app import xc_race_results_seo_app
 from bin.apps.xc.xc_competitors_seo_app import xc_competitors_seo_app
+from bin.apps.xc.xc_alumni_seo_app import xc_alumni_seo_app
 
 # shared related apps
 from bin.apps.shared_db_app import shared_db_app
@@ -55,6 +56,7 @@ app.register_blueprint(xc_photos_seo_app)
 app.register_blueprint(xc_videos_seo_app)
 app.register_blueprint(xc_race_results_seo_app)
 app.register_blueprint(xc_competitors_seo_app)
+app.register_blueprint(xc_alumni_seo_app)
 
 app.register_blueprint(shared_db_app)
 

@@ -13,253 +13,186 @@
     <title>SCHS Cross Country</title>
     <link rel="stylesheet" href="/static/bootstrap-3.4.1-dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="/static/bootstrap-3.4.1-dist/css/jumbotron-narrow.css">
+    <link rel="stylesheet" href="/static/css/fixed-header.css">
   </head>
   <body>
     <div class="container">
-{% include "nav_active_xc.html" %}
-      <div>
-        <h3 class="text-muted">Santa Clara High School Cross Country</h3>
-      </div>
-      <div class="jumbotron">
-        <p><img src="/static/Uploads/schs_xc_2018_league_team_1.jpg" alt="SCHS XC 2018 SCVAL League Meet" width="550"></p>
-      </div>
-      <div class="row marketing">
-        <div class="col-xs-6">
-          <h4 style="color:red">Latest Updates</h4>
-          <p>
-            <div>&raquo; 12/12/18 - added <a href="/santa-clara-high-cross-country/special-achievements/">XC Special Achievements</a></div>
-            <div>&raquo; 12/09/18 - added <a href="/santa-clara-high-cross-country/season/2018">2018 XC Awards</a> + <a href="xcPhotosTeamTimeline">team photo</a></div>
-            <div>&raquo; 10/24/18 - added <a href="/santa-clara-high-cross-country/season/2018">2018 XC Season</a></div>
-          </p>
-          <h4>XC Results by Runner</h4>
-          <p>
-          	<div>Boys: 
-          	  <a href="/santa-clara-high-cross-country/runners/girmay-guangul">Girmay Guangul</a>, 
-          	  <a href="/santa-clara-high-cross-country/runners/vince-rodriguez">Vince Rodriguez</a>, 
-          	  <a href="/santa-clara-high-cross-country/runners/kindu-ejigu">Kindu Ejigu</a>, 
-          	  <a href="/santa-clara-high-cross-country/runners/lenin-zapata">Lenin Zapata</a>,
-              <a href="/santa-clara-high-cross-country/runners/rick-duenas">Rick Dueñas</a>,
-          	  <a href="/santa-clara-high-cross-country/runners/cal-ochoa">Cal Ochoa</a> ...
-          	  <a href="/santa-clara-high-cross-country/runners/boys">All Boys</a>
-          	</div>
-          	<div>&nbsp;</div>
-          	<div>Girls: 
-          	  <a href="/santa-clara-high-cross-country/runners/bita-manesh">Bita Manesh</a>, 
-          	  <a href="/santa-clara-high-cross-country/runners/rachel-newman">Rachel Newman</a>, 
-          	  <a href="/santa-clara-high-cross-country/runners/sophia-kennedy">Sophia Kennedy</a>, 
-              <a href="/santa-clara-high-cross-country/runners/regan-dyer">Regan Dyer</a>, 
-          	  <a href="/santa-clara-high-cross-country/runners/ingrid-lacy">Ingrid Lacy</a>,
-          	  <a href="/santa-clara-high-cross-country/runners/abby-olsen">Abby Olsen</a> ...
-          	  <a href="/santa-clara-high-cross-country/runners/girls">All Girls</a>
-          	</div>
-          </p>
-          <h4>XC Seasons</h4>
-          <p>
-            <a href="/santa-clara-high-cross-country/season/2018">2018</a>, 
-            <a href="/santa-clara-high-cross-country/season/2017">2017</a>, 
-            <a href="/santa-clara-high-cross-country/season/2016">2016</a>, 
-            <a href="/santa-clara-high-cross-country/season/2015">2015</a>, 
-            <a href="/santa-clara-high-cross-country/season/2014">2014</a>, 
-            <a href="/santa-clara-high-cross-country/season/2013">2013</a>, 
-            <a href="/santa-clara-high-cross-country/season/2012">2012</a>, 
-            <a href="/santa-clara-high-cross-country/season/2011">2011</a>, 
-            <a href="/santa-clara-high-cross-country/season/2010">2010</a>, 
-            <a href="/santa-clara-high-cross-country/season/2009">2009</a>, 
-            <a href="/santa-clara-high-cross-country/season/2008">2008</a>, 
-            <a href="/santa-clara-high-cross-country/season/2007">2007</a>, 
-            <a href="/santa-clara-high-cross-country/season/2006">2006</a>, 
-            <a href="/santa-clara-high-cross-country/season/2005">2005</a>, 
-            <a href="/santa-clara-high-cross-country/season/2004">2004</a>, 
-            <a href="/santa-clara-high-cross-country/season/2003">2003</a>, 
-            <a href="/santa-clara-high-cross-country/season/2002">2002</a>, 
-            <a href="/santa-clara-high-cross-country/season/2001">2001</a>, 
-            <a href="/santa-clara-high-cross-country/season/2000">2000</a>, 
-            <a href="/santa-clara-high-cross-country/season/1999">1999</a>, 
-            <a href="/santa-clara-high-cross-country/season/1998">1998</a>, 
-            <a href="/santa-clara-high-cross-country/season/1997">1997</a>, 
-            <a href="/santa-clara-high-cross-country/season/1996">1996</a>, 
-            <a href="/santa-clara-high-cross-country/season/1995">1995</a>, 
-            <a href="/santa-clara-high-cross-country/season/1994">1994</a>, 
-            <a href="/santa-clara-high-cross-country/season/1993">1993</a>, 
-            <a href="/santa-clara-high-cross-country/season/1992">1992</a>, 
-            <a href="/santa-clara-high-cross-country/season/1991">1991</a>, 
-            <a href="/santa-clara-high-cross-country/season/1988">1988</a>
-          </p>
-          <h4>XC Coaches</h4>
-          <p>
-          	<a href="/santa-clara-high-cross-country/coaches/timeline">Timeline</a>, 
-          	<a href="/santa-clara-high-cross-country/coaches/julie-lheureux">Julie L'Heureux</a>, 
-          	<a href="/santa-clara-high-cross-country/coaches/cal-ochoa">Cal Ochoa</a>, 
-          	<a href="/santa-clara-high-cross-country/coaches/jamie-vierling">Jamie Vierling</a>, 
-          	<a href="/santa-clara-high-cross-country/coaches/mario-bouza">Mario Bouza</a> ...
-          	<a href="/santa-clara-high-cross-country/coaches/">All Coaches</a>
-          </p>
-          <h4>XC Special Achievements</h4>
-          <p>
-            <a href="/santa-clara-high-cross-country/special-achievements/">All</a>, 
-            <a href="/santa-clara-high-cross-country/special-achievements/state-qualifiers">State Qualifiers</a>,
-            <a href="/santa-clara-high-cross-country/special-achievements/section-champions">CCS Champions</a>,
-            <a href="/santa-clara-high-cross-country/special-achievements/league-champions">League Champions</a> 
-          </p>
-          <h4>XC Awards</h4>
-          <p>
-            <div>Timeline: 
-          	  <a href="/santa-clara-high-cross-country/awards/timeline/">All</a>,
-          	  <a href="/santa-clara-high-cross-country/awards/timeline/varsity-girls">VG</a>,
-          	  <a href="/santa-clara-high-cross-country/awards/timeline/varsity-boys">VB</a>,
-          	  <a href="/santa-clara-high-cross-country/awards/timeline/junior-varsity-girls">JVG</a>,
-          	  <a href="/santa-clara-high-cross-country/awards/timeline/frosh-soph-boys">FSB</a>
-          	</div>
-            <div>Most Valuable Runner: 
-          	  <a href="/santa-clara-high-cross-country/awards/most-valuable-runner/">All</a>,
-          	  <a href="/santa-clara-high-cross-country/awards/varsity-girls-most-valuable-runner/">VG</a>,
-          	  <a href="/santa-clara-high-cross-country/awards/varsity-boys-most-valuable-runner/">VB</a>,
-          	  <a href="/santa-clara-high-cross-country/awards/junior-varsity-girls-most-valuable-runner/">JVG</a>,
-          	  <a href="/santa-clara-high-cross-country/awards/frosh-soph-boys-most-valuable-runner/">FSB</a>
-          	</div>
-            <div>Most Improved: 
-          	  <a href="/santa-clara-high-cross-country/awards/most-improved/">All</a>,
-          	  <a href="/santa-clara-high-cross-country/awards/varsity-girls-most-improved/">VG</a>,
-          	  <a href="/santa-clara-high-cross-country/awards/varsity-boys-most-improved/">VB</a>,
-          	  <a href="/santa-clara-high-cross-country/awards/junior-varsity-girls-most-improved/">JVG</a>,
-          	  <a href="/santa-clara-high-cross-country/awards/frosh-soph-boys-most-improved/">FSB</a>
-          	</div>
-          </p>
-          <h4>XC Photos</h4>
-          <p>
-          	<a href="/santa-clara-high-cross-country/photos/team-timeline/">Team Timeline</a>, 
-          	<a href="/santa-clara-high-cross-country/photos/crystal-springs-alumni-race/">Crystal Springs Alumni Race</a>
-          </p>
-          <p>&nbsp;</p>
-        </div>
-        <div class="col-xs-6">
-          <h4>XC Top 25 Individual List</h4>
-          <p>
-          	<div>Crystal Springs: </div>
-            <div>&raquo; Boys: 
-              <a href="/santa-clara-high-cross-country/course-results/top-25-all-time-boys-crystal-springs">All Time</a>,
-              <a href="/santa-clara-high-cross-country/course-results/top-25-senior-boys-crystal-springs">Senior</a>,
-              <a href="/santa-clara-high-cross-country/course-results/top-25-junior-boys-crystal-springs">Junior</a>,
-              <a href="/santa-clara-high-cross-country/course-results/top-25-sophomore-boys-crystal-springs">Soph</a>,
-              <a href="/santa-clara-high-cross-country/course-results/top-25-freshman-boys-crystal-springs">Frosh</a>
-            </div>
-            <div>&raquo; Girls: 
-              <a href="/santa-clara-high-cross-country/course-results/top-25-all-time-girls-crystal-springs">All Time</a>,
-              <a href="/santa-clara-high-cross-country/course-results/top-25-senior-girls-crystal-springs">Senior</a>,
-              <a href="/santa-clara-high-cross-country/course-results/top-25-junior-girls-crystal-springs">Junior</a>,
-              <a href="/santa-clara-high-cross-country/course-results/top-25-sophomore-girls-crystal-springs">Soph</a>,
-              <a href="/santa-clara-high-cross-country/course-results/top-25-freshman-girls-crystal-springs">Frosh</a>
-            </div>
-            <div>&nbsp;</div>
-            <div>Toro Park: </div>
-            <div>&raquo; Boys: 
-              <a href="/santa-clara-high-cross-country/course-results/top-25-all-time-boys-toro-park">All Time</a>,
-              <a href="/santa-clara-high-cross-country/course-results/top-25-senior-boys-toro-park">Senior</a>,
-              <a href="/santa-clara-high-cross-country/course-results/top-25-junior-boys-toro-park">Junior</a>,
-              <a href="/santa-clara-high-cross-country/course-results/top-25-sophomore-boys-toro-park">Soph</a>,
-              <a href="/santa-clara-high-cross-country/course-results/top-25-freshman-boys-toro-park">Frosh</a>
-            </div>
-            <div>&raquo; Girls: 
-              <a href="/santa-clara-high-cross-country/course-results/top-25-all-time-girls-toro-park">All Time</a>,
-              <a href="/santa-clara-high-cross-country/course-results/top-25-senior-girls-toro-park">Senior</a>,
-              <a href="/santa-clara-high-cross-country/course-results/top-25-junior-girls-toro-park">Junior</a>,
-              <a href="/santa-clara-high-cross-country/course-results/top-25-sophomore-girls-toro-park">Soph</a>,
-              <a href="/santa-clara-high-cross-country/course-results/top-25-freshman-girls-toro-park">Frosh</a>
-            </div>
-            <div>&nbsp;</div>
-            <div>Central Park: </div>
-            <div>&raquo; Boys: 
-              <a href="/santa-clara-high-cross-country/course-results/top-25-all-time-boys-central-park">All Time</a>,
-              <a href="/santa-clara-high-cross-country/course-results/top-25-senior-boys-central-park">Senior</a>,
-              <a href="/santa-clara-high-cross-country/course-results/top-25-junior-boys-central-park">Junior</a>,
-              <a href="/santa-clara-high-cross-country/course-results/top-25-sophomore-boys-central-park">Soph</a>,
-              <a href="/santa-clara-high-cross-country/course-results/top-25-freshman-boys-central-park">Frosh</a>
-            </div>
-            <div>&raquo; Girls: 
-              <a href="/santa-clara-high-cross-country/course-results/top-25-all-time-girls-central-park">All Time</a>,
-              <a href="/santa-clara-high-cross-country/course-results/top-25-senior-girls-central-park">Senior</a>,
-              <a href="/santa-clara-high-cross-country/course-results/top-25-junior-girls-central-park">Junior</a>,
-              <a href="/santa-clara-high-cross-country/course-results/top-25-sophomore-girls-central-park">Soph</a>,
-              <a href="/santa-clara-high-cross-country/course-results/top-25-freshman-girls-central-park">Frosh</a>
-            </div>
-            <div>&nbsp;</div>
-            <div>Baylands Park: </div>
-            <div>&raquo; Boys: 
-              <a href="/santa-clara-high-cross-country/course-results/top-25-all-time-boys-baylands-park">All Time</a>,
-              <a href="/santa-clara-high-cross-country/course-results/top-25-senior-boys-baylands-park">Senior</a>,
-              <a href="/santa-clara-high-cross-country/course-results/top-25-junior-boys-baylands-park">Junior</a>,
-              <a href="/santa-clara-high-cross-country/course-results/top-25-sophomore-boys-baylands-park">Soph</a>,
-              <a href="/santa-clara-high-cross-country/course-results/top-25-freshman-boys-baylands-park">Frosh</a>
-            </div>
-            <div>&raquo; Girls: 
-              <a href="/santa-clara-high-cross-country/course-results/top-25-all-time-girls-baylands-park">All Time</a>,
-              <a href="/santa-clara-high-cross-country/course-results/top-25-senior-girls-baylands-park">Senior</a>,
-              <a href="/santa-clara-high-cross-country/course-results/top-25-junior-girls-baylands-park">Junior</a>,
-              <a href="/santa-clara-high-cross-country/course-results/top-25-sophomore-girls-baylands-park">Soph</a>,
-              <a href="/santa-clara-high-cross-country/course-results/top-25-freshman-girls-baylands-park">Frosh</a>
-            </div>
-            <div>&nbsp;</div>
-            <div><a name="xcTop25LynHs"></a>Lynbrook High School: </div>
-            <div>&raquo; Boys: 
-              <a href="/santa-clara-high-cross-country/course-results/top-25-all-time-boys-lynbrook-high-school">All Time</a>,
-              <a href="/santa-clara-high-cross-country/course-results/top-25-senior-boys-lynbrook-high-school">Senior</a>,
-              <a href="/santa-clara-high-cross-country/course-results/top-25-junior-boys-lynbrook-high-school">Junior</a>,
-              <a href="/santa-clara-high-cross-country/course-results/top-25-sophomore-boys-lynbrook-high-school">Soph</a>,
-              <a href="/santa-clara-high-cross-country/course-results/top-25-freshman-boys-lynbrook-high-school">Frosh</a>
-            </div>
-            <div>&raquo; Girls: 
-              <a href="/santa-clara-high-cross-country/course-results/top-25-all-time-girls-lynbrook-high-school">All Time</a>,
-              <a href="/santa-clara-high-cross-country/course-results/top-25-senior-girls-lynbrook-high-school">Senior</a>,
-              <a href="/santa-clara-high-cross-country/course-results/top-25-junior-girls-lynbrook-high-school">Junior</a>,
-              <a href="/santa-clara-high-cross-country/course-results/top-25-sophomore-girls-lynbrook-high-school">Soph</a>,
-              <a href="/santa-clara-high-cross-country/course-results/top-25-freshman-girls-lynbrook-high-school">Frosh</a>
-            </div>
-          </p>
-          <h4>XC Top 15 Team List</h4>
-          <p>
-            <div>
-              <span style="font-size:12px; color:gray;">
-            	(Note: Based on fastest 5 runners for a given race, as opposed to a competing squad, i.e. VB, VG, FSB, JVG)
-              </span>
-            </div>
-          	<div>Crystal Springs: 
-          	  <a href="/santa-clara-high-cross-country/course-results/top-15-all-time-team-boys-crystal-springs">Boys</a>, 
-          	  <a href="/santa-clara-high-cross-country/course-results/top-15-all-time-team-girls-crystal-springs">Girls</a>
-          	</div>
-          	<div>Toro Park: 
-              <a href="/santa-clara-high-cross-country/course-results/top-15-all-time-team-boys-toro-park">Boys</a>, 
-              <a href="/santa-clara-high-cross-country/course-results/top-15-all-time-team-girls-toro-park">Girls</a>
-          	</div>
-          	<div>Central Park: 
-              <a href="/santa-clara-high-cross-country/course-results/top-15-all-time-team-boys-central-park">Boys</a>, 
-              <a href="/santa-clara-high-cross-country/course-results/top-15-all-time-team-girls-central-park">Girls</a>
-          	</div>
-          	<div>Baylands Park: 
-              <a href="/santa-clara-high-cross-country/course-results/top-15-all-time-team-boys-baylands-park">Boys</a>, 
-              <a href="/santa-clara-high-cross-country/course-results/top-15-all-time-team-girls-baylands-park">Girls</a>
-          	</div>
-          </p>
-          <h4>XC Alumni Race</h4>
-          <p>
-          	<div>
-          		Results: 
-              <a href="/santa-clara-high-cross-country/race-results/7th-annual-crystal-springs-alumni-race-2018/">2018</a>, 
-              <a href="/santa-clara-high-cross-country/race-results/6th-annual-crystal-springs-alumni-race-2017/">2017</a>, 
-	          	<a href="/santa-clara-high-cross-country/race-results/5th-annual-crystal-springs-alumni-race-2016/">2016</a>, 
-	          	<a href="/santa-clara-high-cross-country/race-results/4th-annual-crystal-springs-alumni-race-2015/">2015</a>, 
-	          	<a href="/santa-clara-high-cross-country/race-results/3rd-annual-crystal-springs-alumni-race-2014/">2014</a>, 
-	          	<a href="/santa-clara-high-cross-country/race-results/2nd-annual-crystal-springs-alumni-race-2013/">2013</a>, 
-	          	<a href="/santa-clara-high-cross-country/race-results/1st-annual-crystal-springs-alumni-race-2012/">2012</a>
-          	</div>
-          	<div>
-          		<a href="/santa-clara-high-cross-country/photos/crystal-springs-alumni-race/">Photos</a>, 
-          		<a href="/santa-clara-high-cross-country/videos/crystal-springs-alumni-race/">Videos</a>, 
-          		<a href="/santa-clara-high-cross-country/special-achievements/past-crystal-springs-alumni-race-champions">Past Alumni Champions</a>
-          	</div>
-          </p>
+      <div class="fixed-header">
+{% include "/common/nav_active_xc.html" %}
+        <div>
+          <h3 class="text-muted">Santa Clara High School Cross Country</h3>
         </div>
       </div>
-{% include "footer.html" %}
+      <div class="non-fixed-content">
+        <div class="jumbotron">
+          <p><img src="/static/Uploads/schs_xc_2018_league_team_1.jpg" alt="SCHS XC 2018 SCVAL League Meet" width="550"></p>
+        </div>
+        <div class="row marketing">
+          <div class="col-xs-6">
+            <h4 style="color:red">Latest Updates</h4>
+            <p>
+              <div>&raquo; 04/22/19 - improve site navigation</div>
+              <div>&raquo; 12/12/18 - added <a href="/santa-clara-high-cross-country/special-achievements/">XC Special Achievements</a></div>
+              <div>&raquo; 12/09/18 - added <a href="/santa-clara-high-cross-country/season/2018">2018 XC Awards</a> + <a href="xcPhotosTeamTimeline">team photo</a></div>
+              <div>&raquo; 10/24/18 - added <a href="/santa-clara-high-cross-country/season/2018">2018 XC Season</a></div>
+            </p>
+            <h4><a href="/santa-clara-high-cross-country/runners/">XC Results by Runner</a></h4>
+            <p>
+            	<h5>Boys</h5>
+              <div>
+            	  <a href="/santa-clara-high-cross-country/runners/girmay-guangul">Girmay Guangul</a>, 
+            	  <a href="/santa-clara-high-cross-country/runners/vince-rodriguez">Vince Rodriguez</a>, 
+            	  <a href="/santa-clara-high-cross-country/runners/kindu-ejigu">Kindu Ejigu</a>, 
+            	  <a href="/santa-clara-high-cross-country/runners/lenin-zapata">Lenin Zapata</a>,
+                <a href="/santa-clara-high-cross-country/runners/rick-duenas">Rick Dueñas</a>,
+            	  <a href="/santa-clara-high-cross-country/runners/cal-ochoa">Cal Ochoa</a> ...
+            	  <a href="/santa-clara-high-cross-country/runners/boys">All Boys</a>
+            	</div>
+            	<div>&nbsp;</div>
+            	<h5>Girls</h5>
+              <div>
+            	  <a href="/santa-clara-high-cross-country/runners/bita-manesh">Bita Manesh</a>, 
+            	  <a href="/santa-clara-high-cross-country/runners/rachel-newman">Rachel Newman</a>, 
+            	  <a href="/santa-clara-high-cross-country/runners/sophia-kennedy">Sophia Kennedy</a>, 
+                <a href="/santa-clara-high-cross-country/runners/regan-dyer">Regan Dyer</a>, 
+            	  <a href="/santa-clara-high-cross-country/runners/ingrid-lacy">Ingrid Lacy</a>,
+            	  <a href="/santa-clara-high-cross-country/runners/abby-olsen">Abby Olsen</a> ...
+            	  <a href="/santa-clara-high-cross-country/runners/girls">All Girls</a>
+            	</div>
+            </p>
+            <h4>XC Seasons</h4>
+            <p>
+              <a href="/santa-clara-high-cross-country/season/2018">2018</a>, 
+              <a href="/santa-clara-high-cross-country/season/2017">2017</a>, 
+              <a href="/santa-clara-high-cross-country/season/2016">2016</a>, 
+              <a href="/santa-clara-high-cross-country/season/2015">2015</a>, 
+              <a href="/santa-clara-high-cross-country/season/2014">2014</a>, 
+              <a href="/santa-clara-high-cross-country/season/2013">2013</a>, 
+              <a href="/santa-clara-high-cross-country/season/2012">2012</a>, 
+              <a href="/santa-clara-high-cross-country/season/2011">2011</a>, 
+              <a href="/santa-clara-high-cross-country/season/2010">2010</a>, 
+              <a href="/santa-clara-high-cross-country/season/2009">2009</a>, 
+              <a href="/santa-clara-high-cross-country/season/2008">2008</a>, 
+              <a href="/santa-clara-high-cross-country/season/2007">2007</a>, 
+              <a href="/santa-clara-high-cross-country/season/2006">2006</a>, 
+              <a href="/santa-clara-high-cross-country/season/2005">2005</a>, 
+              <a href="/santa-clara-high-cross-country/season/2004">2004</a>, 
+              <a href="/santa-clara-high-cross-country/season/2003">2003</a>, 
+              <a href="/santa-clara-high-cross-country/season/2002">2002</a>, 
+              <a href="/santa-clara-high-cross-country/season/2001">2001</a>, 
+              <a href="/santa-clara-high-cross-country/season/2000">2000</a>, 
+              <a href="/santa-clara-high-cross-country/season/1999">1999</a>, 
+              <a href="/santa-clara-high-cross-country/season/1998">1998</a>, 
+              <a href="/santa-clara-high-cross-country/season/1997">1997</a>, 
+              <a href="/santa-clara-high-cross-country/season/1996">1996</a>, 
+              <a href="/santa-clara-high-cross-country/season/1995">1995</a>, 
+              <a href="/santa-clara-high-cross-country/season/1994">1994</a>, 
+              <a href="/santa-clara-high-cross-country/season/1993">1993</a>, 
+              <a href="/santa-clara-high-cross-country/season/1992">1992</a>, 
+              <a href="/santa-clara-high-cross-country/season/1991">1991</a>, 
+              <a href="/santa-clara-high-cross-country/season/1988">1988</a>
+            </p>
+            <h4><a href="/santa-clara-high-cross-country/coaches/">XC Coaches</a></h4>
+            <p>
+              <div>
+                &raquo; <a href="/santa-clara-high-cross-country/coaches/timeline">Timeline</a>
+              </div>
+              <div>
+                &raquo; 
+              	<a href="/santa-clara-high-cross-country/coaches/julie-lheureux">Julie L'Heureux</a>, 
+              	<a href="/santa-clara-high-cross-country/coaches/cal-ochoa">Cal Ochoa</a>, 
+              	<a href="/santa-clara-high-cross-country/coaches/jamie-vierling">Jamie Vierling</a>, 
+              	<a href="/santa-clara-high-cross-country/coaches/mario-bouza">Mario Bouza</a> ...
+              	<a href="/santa-clara-high-cross-country/coaches/">All Coaches</a>
+              </div>
+            </p>
+            <h4><a href="/santa-clara-high-cross-country/special-achievements/">XC Special Achievements</a></h4>
+            <p>
+              <div>&raquo; <a href="/santa-clara-high-cross-country/special-achievements/state-qualifiers">State Qualifiers</a></div>
+              <div>&raquo; <a href="/santa-clara-high-cross-country/special-achievements/section-champions">CCS Champions</a></div>
+              <div>&raquo; <a href="/santa-clara-high-cross-country/special-achievements/league-champions">League Champions</a></div>
+            </p>
+            <h4><a href="/santa-clara-high-cross-country/awards/">XC Awards</a></h4>
+            <p>
+              <div>&raquo; <a href="/santa-clara-high-cross-country/awards/timeline/">Timeline</a></div>
+              <div>&raquo; <a href="/santa-clara-high-cross-country/awards/most-valuable-runner/">Most Valuable Runner</a></div>
+              <div>&raquo; <a href="/santa-clara-high-cross-country/awards/most-improved/">Most Improved</a></div>
+            </p>
+            <p>&nbsp;</p>
+          </div>
+          <div class="col-xs-6">
+            <h4><a href="/santa-clara-high-cross-country/course-results/top-individual">XC Top 25 Individual List</a></h4>
+            <p>
+              <h5>All Time Boys:</h5>
+            	<div>&raquo; <a href="/santa-clara-high-cross-country/course-results/top-25-all-time-boys-crystal-springs">Crystal Springs</a></div>
+              <div>&raquo; <a href="/santa-clara-high-cross-country/course-results/top-25-all-time-boys-toro-park">Toro Park</a></div>
+              <div>&raquo; <a href="/santa-clara-high-cross-country/course-results/top-25-all-time-boys-central-park">Central Park</a></div>
+              <div>&raquo; <a href="/santa-clara-high-cross-country/course-results/top-25-all-time-boys-baylands-park">Baylands Park</a></div>
+              <div>&raquo; <a href="/santa-clara-high-cross-country/course-results/top-25-all-time-boys-lynbrook-high-school">Lynbrook High School</a></div>
+            </p>
+            <p>
+              <h5>All Time Girls:</h5>
+              <div>&raquo; <a href="/santa-clara-high-cross-country/course-results/top-25-all-time-girls-crystal-springs">Crystal Springs</a></div>
+              <div>&raquo; <a href="/santa-clara-high-cross-country/course-results/top-25-all-time-girls-toro-park">Toro Park</a></div>
+              <div>&raquo; <a href="/santa-clara-high-cross-country/course-results/top-25-all-time-girls-central-park">Central Park</a></div>
+              <div>&raquo; <a href="/santa-clara-high-cross-country/course-results/top-25-all-time-girls-baylands-park">Baylands Park</a></div>
+              <div>&raquo; <a href="/santa-clara-high-cross-country/course-results/top-25-all-time-girls-lynbrook-high-school">Lynbrook High School</a></div>
+            </p>
+            <h4><a href="/santa-clara-high-cross-country/course-results/top-team">XC Top 15 Team List</a></h4>
+            <p>
+              <div>
+                <span style="font-size:12px; color:gray;">
+              	(Note: Based on fastest 5 runners for a given race, as opposed to a competing squad, i.e. VB, VG, FSB, JVG)
+                </span>
+              </div>
+            	<div>Crystal Springs: 
+            	  <a href="/santa-clara-high-cross-country/course-results/top-15-all-time-team-boys-crystal-springs">Boys</a>, 
+            	  <a href="/santa-clara-high-cross-country/course-results/top-15-all-time-team-girls-crystal-springs">Girls</a>
+            	</div>
+            	<div>Toro Park: 
+                <a href="/santa-clara-high-cross-country/course-results/top-15-all-time-team-boys-toro-park">Boys</a>, 
+                <a href="/santa-clara-high-cross-country/course-results/top-15-all-time-team-girls-toro-park">Girls</a>
+            	</div>
+            	<div>Central Park: 
+                <a href="/santa-clara-high-cross-country/course-results/top-15-all-time-team-boys-central-park">Boys</a>, 
+                <a href="/santa-clara-high-cross-country/course-results/top-15-all-time-team-girls-central-park">Girls</a>
+            	</div>
+            	<div>Baylands Park: 
+                <a href="/santa-clara-high-cross-country/course-results/top-15-all-time-team-boys-baylands-park">Boys</a>, 
+                <a href="/santa-clara-high-cross-country/course-results/top-15-all-time-team-girls-baylands-park">Girls</a>
+            	</div>
+            </p>
+            <h4><a href="/santa-clara-high-cross-country/crystal-springs-alumni-race/">XC Alumni Race</a></h4>
+            <p>
+            	<div>&raquo; 
+                <a href="/santa-clara-high-cross-country/race-results/7th-annual-crystal-springs-alumni-race-2018/">2018</a>, 
+                <a href="/santa-clara-high-cross-country/race-results/6th-annual-crystal-springs-alumni-race-2017/">2017</a>, 
+  	          	<a href="/santa-clara-high-cross-country/race-results/5th-annual-crystal-springs-alumni-race-2016/">2016</a>, 
+  	          	<a href="/santa-clara-high-cross-country/race-results/4th-annual-crystal-springs-alumni-race-2015/">2015</a>, 
+  	          	<a href="/santa-clara-high-cross-country/race-results/3rd-annual-crystal-springs-alumni-race-2014/">2014</a>, 
+  	          	<a href="/santa-clara-high-cross-country/race-results/2nd-annual-crystal-springs-alumni-race-2013/">2013</a>, 
+  	          	<a href="/santa-clara-high-cross-country/race-results/1st-annual-crystal-springs-alumni-race-2012/">2012</a>
+            	</div>
+              <div>
+                &raquo; <a href="/santa-clara-high-cross-country/special-achievements/past-crystal-springs-alumni-race-champions">Past Alumni Champions</a>
+              </div>
+            	<div>
+            		&raquo; <a href="/santa-clara-high-cross-country/photos/crystal-springs-alumni-race/">Photos</a> + <a href="/santa-clara-high-cross-country/videos/crystal-springs-alumni-race/">Videos</a>
+                </div>
+            </p>
+            <h4><a href="/santa-clara-high-cross-country/photos/">XC Photos</a></h4>
+            <p>
+              <div>&raquo; <a href="/santa-clara-high-cross-country/photos/team-timeline/">Team Timeline</a></div>
+              <div>&raquo; <a href="/santa-clara-high-cross-country/photos/crystal-springs-alumni-race/">Crystal Springs Alumni Race</a></div>
+            </p>
+            <h4><a href="/santa-clara-high-cross-country/videos/">XC Videos</a></h4>
+            <p>
+              <div>&raquo; <a href="/santa-clara-high-cross-country/videos/crystal-springs-alumni-race/">Crystal Springs Alumni Race</a></div>
+            </p>
+          </div>
+        </div>
+      </div>
+{% include "/common/footer.html" %}
     </div>
   </body>
 </html>

@@ -13,7 +13,7 @@
     <title>SCHS Running: Bodyweight Exercises</title>
     <link rel="stylesheet" href="/static/bootstrap-3.4.1-dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="/static/bootstrap-3.4.1-dist/css/jumbotron-narrow.css">
-    <link rel="stylesheet" href="/static/css/signup.css">
+    <link rel="stylesheet" href="/static/css/fixed-header.css">
     <link rel="stylesheet" href="/static/css/videos.css">
     <link rel="stylesheet" href="/static/css/dropdown.css">
     <link rel="stylesheet" href="/static/css/back-to-top.css">
@@ -144,11 +144,9 @@
   </head>
   <body>
     <div class="container">
-{% include "nav.html" %}
-{% include "breadcrumb-title.html" %}
-{% include "dropdown.html" %}
-	  <div class="bodyweight-exercises"></div>
-{% include "footer.html" %}
+{% include "/common/fh-nav-bc-title-dd.html" %}
+	  <div class="non-fixed-content-bcdd bodyweight-exercises"></div>
+{% include "/common/footer.html" %}
     </div>
   </body>
 </html>

@@ -13,7 +13,8 @@
     <title>SCHS XC Competitor Bio</title>
     <link rel="stylesheet" href="/static/bootstrap-3.4.1-dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="/static/bootstrap-3.4.1-dist/css/jumbotron-narrow.css">
-    <link rel="stylesheet" href="/static/css/signup.css">
+    <link rel="stylesheet" href="/static/css/fixed-header.css">
+    <link rel="stylesheet" href="/static/css/competitor.css">
     <style>
     .competitorResults p {
     	font-size:18px;
@@ -25,7 +26,15 @@
     var cId = '{{competitorId}}';
     var urlParams = parseURL();
     var competitorId = cId ? cId : urlParams.cId;
-        
+
+    $(function(){
+        var xcHomeLink = $('<a>');
+        $(xcHomeLink).attr('href', '/santa-clara-high-cross-country');
+        $(xcHomeLink).text('SCHS Cross Country');
+        $('.breadcrumb').append(xcHomeLink);
+		$('.breadcrumb').append(' / ');
+    })
+
 	$(function(){
 		$.ajax({
 			url: '/getXcCompetitorResults',
@@ -48,22 +57,33 @@
 				var fullName = '';
 				var titleStr = '';
 				var year = '';
+				var athleteId = ''
 				$.each(resultsObj,function(index, value){
-					fullName = value.FirstName + ' ' + value.LastName
-					var gradeStr = value.Grade == 0 ? 'Alumni' : value.Grade + 'th grade'
+					fullName = value.FirstName + ' ' + value.LastName;
+					athleteId = value.AthleteId;
+					var gradeStr = value.Grade == 0 ? 'Alumni' : value.Grade + 'th grade';
 				    var timeStr = value.Time + ' (' + value.Pace + ') - ' + gradeStr;
-					titleStr = fullName + ' - ' + gradeStr + ' - ' + value.Year + ' Season'
+					titleStr = fullName + ' (' + gradeStr + ')';
 					year = value.Year;
-					var headerStr = value.Date + ' - ' + value.RaceName + ': ' + value.CourseName + ', ' + value.CourseDistance + 'M'
-					headerStr += value.RaceCondition.localeCompare('unknown') ? ' *' + value.RaceCondition + '*' : ''
-				    var timeStr = value.Time + ' (' + value.Pace + ')'
+					var headerStr = value.Date + ' - ' + value.RaceName + ': ' + value.CourseName + ', ' + value.CourseDistance + 'M';
+					headerStr += value.RaceCondition.localeCompare('unknown') ? ' *' + value.RaceCondition + '*' : '';
+				    var timeStr = value.Time + ' (' + value.Pace + ')';
 					results = $(div).clone();
 					$(results).find('a').attr('href', '/xcRaceResults?raceId=' + value.RaceId);
 					$(results).find('h4').text(headerStr);
 					$(results).find('p').text(timeStr);
 					$('.competitorResults').append(results);
 				});
-				$('.text-muted').text(titleStr);
+				var seasonLink = $('<a>');
+				$(seasonLink).attr('href', '/santa-clara-high-cross-country/season/' + year);
+				$(seasonLink).text(year + ' Season');
+				$('.breadcrumb').append(seasonLink);
+				$('.breadcrumb').append(' / ' + titleStr);
+				$('.text-muted').append(titleStr);
+				var athleteLink = $('<a>');
+				$(athleteLink).attr('href', '/santa-clara-high-cross-country/runners/' + athleteId);
+				$(athleteLink).text(fullName + ' (All Results)');
+				$('.filter').append(athleteLink);
 				$(document).ready(function() {
 					document.title = fullName + ' - ' + year + ' ' + document.title;
 				});
@@ -77,12 +97,9 @@
   </head>
   <body>
     <div class="container">
-{% include "nav.html" %}
-	  <div>
-        <h3 class="text-muted"></h3>
-      </div>
-      <div class="competitorResults"></div>
-{% include "footer.html" %}
+{% include "/common/fh-nav-bc-title-filter.html" %}
+      <div class="non-fixed-content-bcf competitorResults"></div>
+{% include "/common/footer.html" %}
     </div>
   </body>
 </html>

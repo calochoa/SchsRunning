@@ -35,7 +35,7 @@
     var athleteLink = $('<a>')
       .attr('href', '/santa-clara-high-track-and-field/athletes/' + athleteId)
       .text(fullName + ' (All Records)');
-    $('.career').append(athleteLink);
+    $('.filter').append(athleteLink);
   }
 
   $.fn.setHeaders = function(year) {

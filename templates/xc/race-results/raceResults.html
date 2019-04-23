@@ -10,19 +10,28 @@
 
 	  gtag('config', 'UA-109364959-1');
 	</script>
-    <title>SCHS XC Results</title>
+    <title>SCHS Cross Country Results</title>
     <link rel="stylesheet" href="/static/bootstrap-3.4.1-dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="/static/bootstrap-3.4.1-dist/css/jumbotron-narrow.css">
-    <link rel="stylesheet" href="/static/css/signup.css">
+    <link rel="stylesheet" href="/static/css/fixed-header.css">
     <script src="/static/js/jquery-1.11.2.js"></script>
     <script src="/static/js/utils.js"></script>
+    <script src="/static/js/results.js"></script>
     <script>
     var rId = {{raceId}};
     var gId = {{genderId}};
     var urlParams = parseURL();
     var raceId = rId ? rId : urlParams.raceId;
     var genderId = gId ? gId : urlParams.gId;
-        
+
+    $(function(){
+        var xcHomeLink = $('<a>');
+        $(xcHomeLink).attr('href', '/santa-clara-high-cross-country');
+        $(xcHomeLink).text('SCHS Cross Country');
+        $('.breadcrumb').append(xcHomeLink);
+		$('.breadcrumb').append(' / ');
+    })
+
 	$(function(){
 		$.ajax({
 			url: '/getXcRaceResults',
@@ -45,12 +54,14 @@
 				var results = '';
 				limit = resultsObj.length
 				var docTitleStr = '';
+				var year = '';
+				var titleStr = '';
+				var raceStr = '';
 				$.each(resultsObj,function(index, value){
-					docTitleStr = value.Date.slice(0, 4) + ' ' + value.RaceName;
-					var titleStr = value.Date + ' - ' + value.RaceName + ': ' + value.CourseName + ', ' + value.CourseDistance + 'M'
-					titleStr += value.RaceCondition.localeCompare('unknown') ? ' *' + value.RaceCondition + '*' : ''
-					$('.text-muted').text(titleStr);
-
+					raceStr = value.RaceName;
+					docTitleStr = value.Date.slice(0, 4) + ' ' + raceStr;
+					year = value.Year;
+					titleStr = value.Date + ' - ' + raceStr + ': ' + value.CourseName + ', ' + value.CourseDistance + 'M' + (value.RaceCondition.localeCompare('unknown') ? ' *' + value.RaceCondition + '*' : '');
 				    var resultStr = value.Rank + '. ' + value.FirstName + ' ' + value.LastName + ' (' + value.Year + ')'
 					var runnerId = parseInt(value.CompetitorId)
 					var gradeStr = value.Grade == 0 ? (runnerId >= 100000 && runnerId < 1000000 ? 'Special Guest' : 'Alumni' ) : value.Grade + 'th grade'
@@ -61,6 +72,30 @@
 					$(results).find('p').text(timeStr);
 					$('.jumbotron').append(results);
 				});
+				$('.text-muted').text(titleStr);
+
+				if (raceId >= 1000000) {
+					var seasonLink = $('<a>');
+					$(seasonLink).attr('href', '/santa-clara-high-cross-country/season/' + year);
+					$(seasonLink).text(year + ' Season');
+					$('.breadcrumb').append(seasonLink);
+					$('.breadcrumb').append(' / ');					
+					if (genderId == 2 || genderId == 3) {
+						var raceLink = '/santa-clara-high-cross-country/race-results/' + rId +'/0';
+						var raceLinkTag = $('<a>').attr('href', raceLink).text(raceStr);
+						$('.breadcrumb').append(raceLinkTag);
+						$('.breadcrumb').append(' / ' + $.fn.getGenderName(genderId));
+					} else {
+						$('.breadcrumb').append(raceStr);
+					}
+				} else {
+					var raceLink = '/santa-clara-high-cross-country/crystal-springs-alumni-race/';
+					var raceLinkTag = $('<a>').attr('href', raceLink).text(raceStr);
+					$('.breadcrumb').append(raceLinkTag);
+					$('.breadcrumb').append(' / ' + year);
+				}
+
+
 				$(document).ready(function() {
 					document.title = docTitleStr + ' - ' + document.title;
 				});
@@ -72,11 +107,12 @@
 	});
     </script>
     <style>
-    	.jumbotron p {margin-bottom: 0px;font-size:18px;}
+      .jumbotron {margin-top:185px;}
+      .jumbotron p {margin-bottom: 0px;font-size:18px;}
 	</style>
   </head>
   <body>
-{% include "xc/body.html" %}
+{% include "/common/container-fh-nav-bc-title.html" %}
   </body>
 </html>
 

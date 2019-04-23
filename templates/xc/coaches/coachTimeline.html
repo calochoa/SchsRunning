@@ -13,10 +13,27 @@
     <title>SCHS XC Coaches: Timeline</title>
     <link rel="stylesheet" href="/static/bootstrap-3.4.1-dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="/static/bootstrap-3.4.1-dist/css/jumbotron-narrow.css">
-    <link rel="stylesheet" href="/static/css/signup.css">
+    <link rel="stylesheet" href="/static/css/fixed-header.css">
     <script src="/static/js/jquery-1.11.2.js"></script>
     <script src="/static/js/utils.js"></script>
     <script>
+    $(function(){
+      	var xcHomeLink = $('<a>');
+      	$(xcHomeLink).attr('href', '/santa-clara-high-cross-country');
+      	$(xcHomeLink).text('SCHS Cross Country');
+      	$('.breadcrumb').append(xcHomeLink);
+		$('.breadcrumb').append(' / ');
+
+		var coachesLink = $('<a>');
+		$(coachesLink).attr('href', '/santa-clara-high-cross-country/coaches/');
+		$(coachesLink).text('Coaches');
+		$('.breadcrumb').append(coachesLink);
+
+		var titleStr = 'Timeline';
+		$('.breadcrumb').append(' / ' + titleStr);
+		$('.text-muted').text('SCHS Cross Country Coaches ' + titleStr);
+    })
+
 	$(function(){
 		$.ajax({
 			url: '/getCoachTimeline',
@@ -27,8 +44,7 @@
 				    .append($('<a>')
 				        .attr('class', 'list-group-item active')
 				        .append($('<p>')
-				            .attr('class', 'list-group-item-text')));
-							    				
+				            .attr('class', 'list-group-item-text')));		
 				var resultsObj = JSON.parse(res);
 				var results = '';
 				$.each(resultsObj,function(index, value){
@@ -38,7 +54,6 @@
 					$(results).find('a').attr('href', '/xcSeason?yr='+ value.Year);
 					$('.jumbotron').append(results);
 				});
-				$('.text-muted').text('SCHS XC Coaches: Timeline');
 			},
 			error: function(error){
 				console.log(error);
@@ -47,11 +62,12 @@
 	});
     </script>
     <style>
-    	.jumbotron p {margin-bottom: 0px;}
+	  .jumbotron {margin-top:185px;}
+      .jumbotron p {margin-bottom: 0px;}
 	</style>
   </head>
   <body>
-{% include "xc/body.html" %}
+{% include "/common/container-fh-nav-bc-title.html" %}
   </body>
 </html>
 

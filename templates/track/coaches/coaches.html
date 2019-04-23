@@ -13,7 +13,7 @@
     <title>SCHS Track &amp; Field Coaches</title>
     <link rel="stylesheet" href="/static/bootstrap-3.4.1-dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="/static/bootstrap-3.4.1-dist/css/jumbotron-narrow.css">
-    <link rel="stylesheet" href="/static/css/signup.css">
+    <link rel="stylesheet" href="/static/css/fixed-header.css">
     <script src="/static/js/jquery-1.11.2.js"></script>
     <script>
     var ctIds = '{{coachTypeIds}}';
@@ -33,8 +33,9 @@
 		$('.jumbotron').append(coachesPhoto)
 
 		var link = "/santa-clara-high-track-and-field/coaches/timeline";
-	    var coachTimelineLinkDiv = $('<div>').append($('<a>').attr('href', link).text('Coaches Timeline'));
-		$('.coaches').append(coachTimelineLinkDiv).append($('<br>'));
+		var linkTag = $('<a>').attr('href', link).text('Coaches Timeline');
+	    var coachTimelineLinkDiv = $('<div>').attr('class', 'coach').append('&raquo; ').append(linkTag);
+		$('.coaches').append(coachTimelineLinkDiv);
 	})
 
 	$(function(){
@@ -47,15 +48,16 @@
 			success: function(res){							    				
 				var resultsObj = JSON.parse(res);
 				var count = resultsObj.length;
-				$('.text-muted').text('Coaches (' + count + ')');
+				$('.text-muted').text('SCHS Track & Field Coaches (' + count + ')');
 				$.each(resultsObj,function(index, value){
 				    var nameStr = value.FirstName + ' ' + value.LastName;
 				    var numSeasons = value.NumSeasons;
 				    var seasonStr = ' (' + numSeasons + (numSeasons > 1 ? ' seasons' : ' season') + ')';
 				    var displayStr = nameStr + seasonStr + ' ... ' + value.Years;
-				    var link = "/santa-clara-high-track-and-field/coaches/" + value.CoachId;
-				    var coachLinkDiv = $('<div>').append($('<a>').attr('href', link).text(displayStr));
-					$('.coaches').append(coachLinkDiv).append($('<br>'));
+				    var link = '/santa-clara-high-track-and-field/coaches/' + value.CoachId;
+				    var linkTag = $('<a>').attr('href', link).text(displayStr);
+				    var coachLinkDiv = $('<div>').attr('class', 'coach').append('&raquo; ').append(linkTag);
+					$('.coaches').append(coachLinkDiv);
 				});
 			},
 			error: function(error){
@@ -64,16 +66,19 @@
 		});
 	});
     </script>
+    <style>
+	  .jumbotron {margin-top:205px;}
+	  .coach {font-size:18px;padding-bottom:10px;}
+	</style>
   </head>
   <body>
     <div class="container">
-{% include "nav.html" %}
-{% include "breadcrumb-title.html" %}
-{% include "main.html" %}
+{% include "/common/fh-nav-bc-title.html" %}
+{% include "/common/main.html" %}
       <div class="row marketing">
         <p class=coaches></p>
       </div>
-{% include "footer.html" %}
+{% include "/common/footer.html" %}
     </div>
   </body>
 </html>

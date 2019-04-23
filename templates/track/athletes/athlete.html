@@ -13,7 +13,7 @@
     <title>SCHS Track &amp; Field Athlete Bio</title>
     <link rel="stylesheet" href="/static/bootstrap-3.4.1-dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="/static/bootstrap-3.4.1-dist/css/jumbotron-narrow.css">
-    <link rel="stylesheet" href="/static/css/signup.css">
+    <link rel="stylesheet" href="/static/css/fixed-header.css">
     <style>
     .runnerResults p {
     	font-size:16px;
@@ -65,8 +65,8 @@
 				var genderLinkStr = '';
 				var resultsObj = JSON.parse(res);
 				$.each(resultsObj,function(index, value){
-					genderStr = value.GenderId == 2 ? 'Boys' : 'Girls';
-					genderLinkStr = value.GenderId == 2 ? 'boys' : 'girls';
+					genderStr = value.GenderId == 2 ? 'Males' : 'Females';
+					genderLinkStr = value.GenderId == 2 ? 'males' : 'females';
 
 					var gradeStr = value.Grade > 12 ? '' : ' - ' + value.Grade + 'th grade';
 					results = $(div).clone();
@@ -112,9 +112,8 @@
   </head>
   <body>
     <div class="container">
-{% include "nav.html" %}
-{% include "breadcrumb-title.html" %}
-      <div class="row marketing">
+{% include "/common/fh-nav-bc-title.html" %}
+      <div class="non-fixed-content row marketing">
         <div class="col-xs-6">
         	<h4>Personal Records</h4>
         	<div class="personalRecords"></div>
@@ -123,7 +122,7 @@
         	<div class="seasonRecords"></div>
 		</div>
       </div>
-{% include "footer.html" %}
+{% include "/common/footer.html" %}
     </div>
   </body>
 </html>

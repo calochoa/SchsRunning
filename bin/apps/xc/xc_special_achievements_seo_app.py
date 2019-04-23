@@ -11,6 +11,10 @@ xc_special_achievements_seo_app = Blueprint(
 
 
 @xc_special_achievements_seo_app.route('/',methods=['GET'])
+def xc_special_achievements_home():
+    return render_template('xc/special-achievements/special-achievements.html')
+
+@xc_special_achievements_seo_app.route('/all',methods=['GET'])
 def xcAllSpecialAchievements():
     return render_template('xc/special-achievements/specialAchievement.html', splAchvId=0, sportId=1)
 

@@ -175,10 +175,10 @@ def get_xc_results_by_race_competitor(race_ids,competitor_ids):
 @xc_db_app.route('/getXcRunners',methods=['GET'])
 def get_xc_runners():
     try:
-        genderId = request.args.get('genderId', default = 2, type = int)
+        genderId = request.args.get('genderId', default = '2,3', type = str)
 
         cursor = mydb.cursor()
-        cursor.execute('CALL GetXcRunners({0})'.format(genderId))
+        cursor.execute('CALL GetXcRunners("{0}")'.format(genderId))
 
         runners_dict = []
         for row in cursor.fetchall():
@@ -216,6 +216,7 @@ def get_xc_runner_results():
                 'FirstName': row[8],
                 'LastName': row[9],
                 'RaceId': row[10],
+                'GenderId': row[11],
             })
 
         return json.dumps(runner_results_dict)
@@ -294,6 +295,7 @@ def get_xc_competitor_results():
                 'LastName': row[9],
                 'Year': row[10],
                 'RaceId': row[11],
+                'AthleteId': row[12],
             })
 
         return json.dumps(competitor_results_dict)

@@ -10,10 +10,10 @@
 
 	  gtag('config', 'UA-109364959-1');
 	</script>
-    <title>SCHS XC Runner Bio</title>
+    <title>SCHS Cross Country Runner Bio</title>
     <link rel="stylesheet" href="/static/bootstrap-3.4.1-dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="/static/bootstrap-3.4.1-dist/css/jumbotron-narrow.css">
-    <link rel="stylesheet" href="/static/css/signup.css">
+    <link rel="stylesheet" href="/static/css/fixed-header.css">
     <style>
     .runnerResults p {
     	font-size:16px;
@@ -25,6 +25,19 @@
     var rId = {{rId}};
     var urlParams = parseURL();
     var runnerId = rId ? rId : urlParams.rId
+
+    $(function(){
+        var xcHomeLink = $('<a>');
+        $(xcHomeLink).attr('href', '/santa-clara-high-cross-country');
+        $(xcHomeLink).text('SCHS Cross Country');
+        $('.breadcrumb').append(xcHomeLink);
+		$('.breadcrumb').append(' / ');
+		var runnersLink = $('<a>');
+		$(runnersLink).attr('href', '/santa-clara-high-cross-country/runners/');
+		$(runnersLink).text('Runners');
+		$('.breadcrumb').append(runnersLink);
+		$('.breadcrumb').append(' / ');
+    })
         
 	$(function(){
 		$.ajax({
@@ -46,24 +59,31 @@
 							    				
 				var resultsObj = JSON.parse(res);
 				var results = '';
-				var fullName = '';
 				var currentGradeStr = '';
+				var titleStr = '';
+				var genderStr = '';
+				var genderLinkStr = '';
 				$.each(resultsObj,function(index, value){
-					fullName = value.FirstName + ' ' + value.LastName
+					genderStr = value.GenderId == 2 ? 'Males' : 'Females';
+					genderLinkStr = value.GenderId == 2 ? 'males' : 'females';
+					titleStr = value.FirstName + ' ' + value.LastName;
+					year = new Date(value.Date).getFullYear();
+
 					var headerStr = value.Date + ' - ' + value.RaceName + ': ' + value.CourseName + ', ' + value.CourseDistance + 'M'
 					headerStr += value.RaceCondition.localeCompare('unknown') ? ' *' + value.RaceCondition + '*' : ''
 					var gradeStr = value.Grade == 0 ? 'Alumni' : value.Grade + 'th grade'
 				    var timeStr = value.Time + ' (' + value.Pace + ') - ' + gradeStr;
 				    if (currentGradeStr != gradeStr) {
 				    	currentGradeStr = gradeStr;
-				    	var resultsHeaderDisplayStr = 'Alumni Results'
+				    	var resultsHeaderDiv = $('<h3>').attr('class', 'grade');
 				    	if (value.Grade != 0) {
-				    		resultsHeaderDisplayStr = value.Grade + 'th Grade Results - ' 
-				    			+ new Date(value.Date).getFullYear() + ' Season'
+					    	var seasonLink = '/santa-clara-high-cross-country/season/' + year;
+					    	var seasonDiv = $('<a>').attr('href', seasonLink).append(year + ' Season');
+				    		resultsHeaderDiv.append(seasonDiv).append(' - ' + value.Grade + 'th Grade Results');
+				    	} else {
+					    	resultsHeaderDiv.append('Alumni Results');
 				    	}
-				    	var resultsHeaderDiv = "<div><h3 class=\"grade\">" + resultsHeaderDisplayStr + "</h3></div>"
 				    	$('.runnerResults').append(resultsHeaderDiv);
-
 				    }
 					results = $(div).clone();
 					$(results).find('a').attr('href', '/xcRaceResults?raceId=' + value.RaceId);
@@ -71,9 +91,14 @@
 					$(results).find('p').text(timeStr);
 					$('.runnerResults').append(results);
 				});
-				$('.text-muted').text(fullName);
+				var genderLink = $('<a>');
+				$(genderLink).attr('href', '/santa-clara-high-cross-country/runners/' + genderLinkStr);
+				$(genderLink).text(genderStr);
+				$('.breadcrumb').append(genderLink);
+				$('.breadcrumb').append(' / ' + titleStr);
+				$('.text-muted').text(titleStr);
 				$(document).ready(function() {
-					document.title = fullName + ' - ' + document.title;
+					document.title = titleStr + ' - ' + document.title;
 				});
 			},
 			error: function(error){
@@ -85,12 +110,9 @@
   </head>
   <body>
     <div class="container">
-{% include "nav.html" %}
-      <div>
-        <h3 class="text-muted"></h3>
-      </div>
-      <div class="runnerResults"></div>
-{% include "footer.html" %}
+{% include "/common/fh-nav-bc-title.html" %}
+      <div class="non-fixed-content runnerResults marketing"></div>
+{% include "/common/footer.html" %}
     </div>
   </body>
 </html>

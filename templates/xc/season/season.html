@@ -10,20 +10,35 @@
 
 	  gtag('config', 'UA-109364959-1');
 	</script>
-    <title>SCHS XC Season</title>
+    <title>SCHS Cross Country Season</title>
     <link rel="stylesheet" href="/static/bootstrap-3.4.1-dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="/static/bootstrap-3.4.1-dist/css/jumbotron-narrow.css">
-    <link rel="stylesheet" href="/static/css/signup.css">
+    <link rel="stylesheet" href="/static/css/fixed-header.css">
+    <link rel="stylesheet" href="/static/css/dropdown.css">
     <script src="/static/js/jquery-1.11.2.js"></script>
     <script src="/static/js/utils.js"></script>
+    <script src="/static/js/results.js"></script>
     <script>
     var yr = {{yr}};
     var urlParams = parseURL();
     var year = yr && yr != 0 ? yr : urlParams.yr;
 
-    $(document).ready(function() {
+	$(document).ready(function() {
 		document.title = year + ' ' + document.title;
 	});
+
+	$.get("/santa-clara-high-cross-country/season/dropdown-menu", function(data){
+	    $(".dropdown-list").append(data);
+	});
+
+	$(function(){
+        var xcHomeLink = $('<a>');
+        $(xcHomeLink).attr('href', '/santa-clara-high-cross-country');
+        $(xcHomeLink).text('SCHS Cross Country');
+        $('.breadcrumb').append(xcHomeLink);
+		$('.breadcrumb').append(' / ' + year + ' Season');
+		$('.text-muted').text(year + ' SCHS Cross Country Season');
+	})
 	
 	$(function(){
 		$.ajax({
@@ -58,15 +73,14 @@
 				"genderId": 2,
 			},
 			success: function(res){
-				$('.text-muted').text(year + ' SCHS XC Season');
-
 				var resultsObj = JSON.parse(res);
 				var count = resultsObj.length
 				$('.mRunnerTitle').text('Male Runners (' +count + ')');
 
 				$.each(resultsObj,function(index, value){
-				    var nameStr = value.LastName + ', ' + value.FirstName + ' (' + value.Grade + ')'
-				    var link = "/xcCompetitor?cId=" + value.CompetitorId
+					var gradeStr = $.fn.getAbbrGradeName(value.Grade);
+				    var nameStr = value.LastName + ', ' + value.FirstName + ' (' + gradeStr + ')';
+				    var link = "/xcCompetitor?cId=" + value.CompetitorId;
 					$('.mRunnerNames').append("<div><a href='" + link + "'>" + nameStr + "</a></div>");
 				});
 			},
@@ -90,8 +104,9 @@
 				$('.fRunnerTitle').text('Female Runners (' +count + ')');
 
 				$.each(resultsObj,function(index, value){
-				    var nameStr = value.LastName + ', ' + value.FirstName + ' (' + value.Grade + ')'
-				    var link = "/xcCompetitor?cId=" + value.CompetitorId
+					var gradeStr = $.fn.getAbbrGradeName(value.Grade);
+				    var nameStr = value.LastName + ', ' + value.FirstName + ' (' + gradeStr + ')';
+				    var link = "/xcCompetitor?cId=" + value.CompetitorId;
 					$('.fRunnerNames').append("<div><a href='" + link + "'>" + nameStr + "</a></div>");
 				});
 			},
@@ -133,9 +148,9 @@
 		});
 	});
 	
-	$.get("../../../static/Uploads/team/SC_XC_"+year+".jpeg")
+	$.get("/static/Uploads/team/SC_XC_"+year+".jpeg")
     .done(function() { 
-    	$("#team_img").attr("src", "../../../static/Uploads/team/SC_XC_"+year+".jpeg");
+    	$("#team_img").attr("src", "/static/Uploads/team/SC_XC_"+year+".jpeg");
         $("#team_img_container").show();
     }).fail(function() { 
         $("#team_img_container").hide();
@@ -171,31 +186,30 @@
   </head>
   <body>
     <div class="container">
-{% include "nav.html" %}
-	  <div>
-        <h3 class="text-muted"></h3>
-      </div>
-      <div id="team_img_container" class="jumbotron" style="display: none;">
-        <p><img id="team_img" src="" style="width: 100%;"></p>
-      </div>
-      <div class="row marketing">
-        <div class="col-xs-6">
-          <h4 class="coachesTitle"></h4>
-          <p class=coachesNames></p>
-          <h4 class="fRunnerTitle"></h4>
-          <p class=fRunnerNames></p>
-          <h4 class="mRunnerTitle"></h4>
-          <p class=mRunnerNames></p>
-          <br/>
+{% include "/common/fh-nav-bc-title-dd.html" %}
+	  <div class="non-fixed-content-bcdd">
+        <div id="team_img_container" class="jumbotron" style="display: none;">
+          <p><img id="team_img" src="" style="width: 100%;"></p>
         </div>
-        <div class="col-xs-6">
-          <h4 class="raceTitle"></h4>
-          <p class=raceNames></p>
-          <h4 class="awardsTitle"></h4>
-          <p class=awardsNames></p>
+        <div class="row marketing">
+          <div class="col-xs-6">
+            <h4 class="coachesTitle"></h4>
+            <p class=coachesNames></p>
+            <h4 class="fRunnerTitle"></h4>
+            <p class=fRunnerNames></p>
+            <h4 class="mRunnerTitle"></h4>
+            <p class=mRunnerNames></p>
+            <br/>
+          </div>
+          <div class="col-xs-6">
+            <h4 class="raceTitle"></h4>
+            <p class=raceNames></p>
+            <h4 class="awardsTitle"></h4>
+            <p class=awardsNames></p>
+          </div>
         </div>
-      </div>        
-{% include "footer.html" %}
+	  </div>
+{% include "/common/footer.html" %}
     </div>
   </body>
 </html>

@@ -13,7 +13,7 @@
     <title>SCHS Track &amp; Field Athletes</title>
     <link rel="stylesheet" href="/static/bootstrap-3.4.1-dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="/static/bootstrap-3.4.1-dist/css/jumbotron-narrow.css">
-    <link rel="stylesheet" href="/static/css/signup.css">
+    <link rel="stylesheet" href="/static/css/fixed-header.css">
     <script src="/static/js/jquery-1.11.2.js"></script>
     <script>
     var genderId = '{{gId}}';
@@ -35,9 +35,9 @@
 			success: function(res){							    				
 				var resultsObj = JSON.parse(res);
 				var count = resultsObj.length;
-				var countRight = count / 2 ;
-				var titleStr = (genderId && genderId == '3') ? 'Girls ' : ((genderId && genderId == '2') ? 'Boys ': 'Athletes');
-				$('.text-muted').text(titleStr + ' (' + count + ')');
+				var countRight = count / 2;
+				var titleStr = (genderId && genderId == '3') ? 'Female' : ((genderId && genderId == '2') ? 'Male': '');
+				$('.text-muted').text('SCHS ' + titleStr + ' Athletes (' + count + ')');
 				$.each(resultsObj,function(index, value){
 				    var nameStr = value.LastName + ', ' + value.FirstName + ' ... ' + value.Years;
 				    var link = "/santa-clara-high-track-and-field/athletes/" + value.AthleteId;
@@ -55,16 +55,17 @@
 					$('.breadcrumb').append(athletesLink);
 				} else {
 					var girlsLink = $('<a>');
-					$(girlsLink).attr('href', '/santa-clara-high-track-and-field/athletes/girls');
-					$(girlsLink).text('Girls');
+					$(girlsLink).attr('href', '/santa-clara-high-track-and-field/athletes/females');
+					$(girlsLink).text('Females');
 					$('.filter').append(girlsLink);
 					$('.filter').append(' | ');
 					var boysLink = $('<a>');
-					$(boysLink).attr('href', '/santa-clara-high-track-and-field/athletes/boys');
-					$(boysLink).text('Boys');
+					$(boysLink).attr('href', '/santa-clara-high-track-and-field/athletes/males');
+					$(boysLink).text('Males');
 					$('.filter').append(boysLink);
 				}
-				$('.breadcrumb').append(' / ' + titleStr);
+				var breadcrumbStr = (genderId && genderId == '3') ? 'Females' : ((genderId && genderId == '2') ? 'Males': 'Athletes');
+				$('.breadcrumb').append(' / ' + breadcrumbStr);
 			},
 			error: function(error){
 				console.log(error);
@@ -75,10 +76,8 @@
   </head>
   <body>
     <div class="container">
-{% include "nav.html" %}
-{% include "breadcrumb-title.html" %}
-{% include "filter.html" %}
-      <div class="row marketing">
+{% include "/common/fh-nav-bc-title-filter.html" %}
+      <div class="non-fixed-content-bcf row">
         <div class="col-xs-6">
           <p class=athletesLeft></p>
         </div>
@@ -86,7 +85,7 @@
           <p class=athletesRight></p>
         </div>
       </div>
-{% include "footer.html" %}
+{% include "/common/footer.html" %}
     </div>
   </body>
 </html>

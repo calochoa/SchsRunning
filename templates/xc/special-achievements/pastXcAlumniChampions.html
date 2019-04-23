@@ -13,9 +13,27 @@
     <title>Crystal Springs Alumni Race: Past Champions</title>
     <link rel="stylesheet" href="/static/bootstrap-3.4.1-dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="/static/bootstrap-3.4.1-dist/css/jumbotron-narrow.css">
-    <link rel="stylesheet" href="/static/css/signup.css">
+    <link rel="stylesheet" href="/static/css/fixed-header.css">
     <script src="/static/js/jquery-1.11.2.js"></script>
     <script>
+    $(function(){
+        var xcHomeLink = $('<a>');
+        $(xcHomeLink).attr('href', '/santa-clara-high-cross-country');
+        $(xcHomeLink).text('SCHS Cross Country');
+        $('.breadcrumb').append(xcHomeLink);
+    	$('.breadcrumb').append(' / ');
+
+        var csAlumniRaceHomeLink = $('<a>');
+        $(csAlumniRaceHomeLink).attr('href', '/santa-clara-high-cross-country/crystal-springs-alumni-race/');
+        $(csAlumniRaceHomeLink).text('Crystal Springs Alumni Race');
+        $('.breadcrumb').append(csAlumniRaceHomeLink);
+    	$('.breadcrumb').append(' / ');
+
+		var titleStr = 'Past Champions';
+		$('.breadcrumb').append(titleStr);
+		$('.text-muted').text('SCHS Crystal Springs Alumni Race: ' + titleStr);
+    })
+
 	$(function(){
 		$.ajax({
 			url: '/getPastXcAlumniChampions',
@@ -41,7 +59,6 @@
 					$(results).find('p').text(timeStr);
 					$('.jumbotron').append(results);
 				});
-				$('.text-muted').text('Crystal Springs Alumni Race: Past Champions');
 			},
 			error: function(error){
 				console.log(error);
@@ -50,11 +67,12 @@
 	});
     </script>
     <style>
-    	.jumbotron p {margin-bottom: 0px;font-size:18px;}
+      .jumbotron {margin-top:185px;}
+      .jumbotron p {margin-bottom: 0px;font-size:18px;}
 	</style>
   </head>
   <body>
-{% include "xc/body.html" %}
+{% include "/common/container-fh-nav-bc-title.html" %}
   </body>
 </html>
 

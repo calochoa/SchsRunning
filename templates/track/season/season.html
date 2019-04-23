@@ -13,10 +13,11 @@
     <title>SCHS Track &amp; Field Season</title>
     <link rel="stylesheet" href="/static/bootstrap-3.4.1-dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="/static/bootstrap-3.4.1-dist/css/jumbotron-narrow.css">
-    <link rel="stylesheet" href="/static/css/signup.css">
+    <link rel="stylesheet" href="/static/css/fixed-header.css">
     <link rel="stylesheet" href="/static/css/dropdown.css">
     <script src="/static/js/jquery-1.11.2.js"></script>
     <script src="/static/js/utils.js"></script>
+    <script src="/static/js/results.js"></script>
     <script>
 
     var yr = {{yr}};
@@ -48,9 +49,8 @@
 		$(trackHomeLink).attr('href', '/santa-clara-high-track-and-field');
 		$(trackHomeLink).text('SCHS Track & Field');
 		$('.breadcrumb').append(trackHomeLink);
-		var titleStr = year + ' Season';
-		$('.breadcrumb').append(' / ' + titleStr);
-		$('.text-muted').text(titleStr);
+		$('.breadcrumb').append(' / ' + year + ' Season');
+		$('.text-muted').text(year + ' SCHS Track & Field Season');
 	})
 
 	$(function(){
@@ -91,7 +91,8 @@
 				var femaleCount = 0;
 				var maleCount = 0;
 				$.each(resultsObj,function(index, value){
-				    var nameStr = value.LastName + ', ' + value.FirstName;
+					var gradeStr = $.fn.getAbbrGradeName(value.Grade);
+				    var nameStr = value.LastName + ', ' + value.FirstName + ' (' + gradeStr + ')';
 				    var link = '/trackCompetitor?cId=' + value.CompetitorId;
 				    var athleteLinkDiv = $('<div>').append($('<a>').attr('href', link).text(nameStr));
 					var genderStr = value.Gender;
@@ -172,28 +173,28 @@
   </head>
   <body>
     <div class="container">
-{% include "nav.html" %}
-{% include "breadcrumb-title.html" %}
-{% include "dropdown.html" %}
-      <div id="team_img_container" class="jumbotron" style="display: none;">
-        <p><img id="team_img" src="" style="width: 100%;"></p>
-      </div>
-      <div class="row marketing">
-        <div class="col-xs-6">
-          <h4 class="coachesTitle"></h4>
-          <p class="coachesNames"></p>
-          <h4 class="fAthleteTitle"></h4>
-          <p class="fAthleteNames"></p>
-          <h4 class="mAthleteTitle"></h4>
-          <p class="mAthleteNames"></p>
-          <br/>
+{% include "/common/fh-nav-bc-title-dd.html" %}
+	  <div class="non-fixed-content-bcdd">
+        <div id="team_img_container" class="jumbotron" style="display: none;">
+          <p><img id="team_img" src="" style="width: 100%;"></p>
         </div>
-        <div class="col-xs-6">
-          <h4 class="eventTitle"></h4>
-          <p class="eventBySquad"></p>
+        <div class="row">
+          <div class="col-xs-6">
+            <h4 class="coachesTitle"></h4>
+            <p class="coachesNames"></p>
+            <h4 class="fAthleteTitle"></h4>
+            <p class="fAthleteNames"></p>
+            <h4 class="mAthleteTitle"></h4>
+            <p class="mAthleteNames"></p>
+            <br/>
+          </div>
+          <div class="col-xs-6">
+            <h4 class="eventTitle"></h4>
+            <p class="eventBySquad"></p>
+          </div>
         </div>
-      </div>        
-{% include "footer.html" %}
+	  </div>
+{% include "/common/footer.html" %}
     </div>
   </body>
 </html>

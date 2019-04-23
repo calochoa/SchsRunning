@@ -10,12 +10,31 @@
 
 	  gtag('config', 'UA-109364959-1');
 	</script>
-    <title>SCHS XC Coaches</title>
+    <title>SCHS Cross Country Coaches</title>
     <link rel="stylesheet" href="/static/bootstrap-3.4.1-dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="/static/bootstrap-3.4.1-dist/css/jumbotron-narrow.css">
-    <link rel="stylesheet" href="/static/css/signup.css">
+    <link rel="stylesheet" href="/static/css/fixed-header.css">
     <script src="/static/js/jquery-1.11.2.js"></script>
-    <script>        
+    <script>
+    $(function(){
+      	var xcHomeLink = $('<a>');
+      	$(xcHomeLink).attr('href', '/santa-clara-high-cross-country');
+      	$(xcHomeLink).text('SCHS Cross Country');
+      	$('.breadcrumb').append(xcHomeLink);
+		$('.breadcrumb').append(' / Coaches');
+
+		var coachesPhoto = $('<img>');
+		$(coachesPhoto).attr('src', '/static/Uploads/schs_xc_2018_coaches_cropped.jpg');
+		$(coachesPhoto).attr('width', '550');
+		$(coachesPhoto).attr('alt', 'SCHS Cross Country 2018 Coaches');
+		$('.jumbotron').append(coachesPhoto)
+
+		var link = '/santa-clara-high-cross-country/coaches/timeline';
+		var linkTag = $('<a>').attr('href', link).text('Coaches Timeline');
+	    var coachTimelineLinkDiv = $('<div>').attr('class', 'coach').append('&raquo; ').append(linkTag);
+		$('.coaches').append(coachTimelineLinkDiv);
+    })
+
 	$(function(){
 		$.ajax({
 			url: '/getCoaches',
@@ -23,15 +42,16 @@
 			success: function(res){							    				
 				var resultsObj = JSON.parse(res);
 				var count = resultsObj.length
-				$('.text-muted').text('SCHS XC Coaches (' + count + ')');
-
+				$('.text-muted').text('SCHS Cross Country Coaches (' + count + ')');
 				$.each(resultsObj,function(index, value){
-				    var nameStr = value.FirstName + ' ' + value.LastName
-				    var numSeasons = value.NumSeasons
-				    var seasonStr = ' (' + numSeasons + (numSeasons > 1 ? ' seasons' : ' season') + ')'
-				    var displayStr = nameStr + seasonStr + ' ... ' + value.Years
-				    var link = "/xcCoach?coachId=" + value.CoachId
-					$('.runners').append("<div><a href='" + link + "'>" + displayStr + "</a></div><br/>");
+				    var nameStr = value.FirstName + ' ' + value.LastName;
+				    var numSeasons = value.NumSeasons;
+				    var seasonStr = ' (' + numSeasons + (numSeasons > 1 ? ' seasons' : ' season') + ')';
+				    var displayStr = nameStr + seasonStr + ' ... ' + value.Years;
+				    var link = '/xcCoach?coachId=' + value.CoachId;
+				    var linkTag = $('<a>').attr('href', link).text(displayStr);
+				    var coachLinkDiv = $('<div>').attr('class', 'coach').append('&raquo; ').append(linkTag);
+					$('.coaches').append(coachLinkDiv);
 				});
 			},
 			error: function(error){
@@ -40,23 +60,19 @@
 		});
 	});
     </script>
+    <style>
+	  .jumbotron {margin-top:205px;}
+	  .coach {font-size:18px;padding-bottom:10px;}
+	</style>
   </head>
   <body>
     <div class="container">
-{% include "nav.html" %}
-      <div>
-        <h3 class="text-muted"></h3>
-      </div>
-
-      <div class="jumbotron">
-        <p><img src="/static/Uploads/schs_xc_2018_coaches_cropped.jpg" alt="SCHS XC 2018 Coaches" width="550"></p>
-      </div>
-      
+{% include "/common/fh-nav-bc-title.html" %}
+{% include "/common/main.html" %}
       <div class="row marketing">
-        <p class=runners>
-        </p>
+        <p class=coaches></p>
       </div>
-{% include "footer.html" %}
+{% include "/common/footer.html" %}
     </div>
   </body>
 </html>

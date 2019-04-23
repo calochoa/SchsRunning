@@ -10,13 +10,17 @@ xc_runners_seo_app = Blueprint(
 )    
 
 
-@xc_runners_seo_app.route('/boys',methods=['GET'])
-def xcBoyRunners():
-    return render_template('xc/runners/runners.html', gId=2)
+@xc_runners_seo_app.route('/',methods=['GET'])
+def xc_runners():
+    return render_template('xc/runners/runners.html', gId='2,3')
 
-@xc_runners_seo_app.route('/girls',methods=['GET'])
-def xcGirlRunners():
-    return render_template('xc/runners/runners.html', gId=3)
+@xc_runners_seo_app.route('/males',methods=['GET'])
+def xc_male_runners():
+    return render_template('xc/runners/runners.html', gId='2')
+
+@xc_runners_seo_app.route('/females',methods=['GET'])
+def xc_female_runners():
+    return render_template('xc/runners/runners.html', gId='3')
 
 def getXcRunnerData(runner_id):
     return render_template('xc/runners/runner.html', rId=runner_id)

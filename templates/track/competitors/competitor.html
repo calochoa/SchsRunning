@@ -7,12 +7,13 @@
 	  window.dataLayer = window.dataLayer || [];
 	  function gtag(){dataLayer.push(arguments);}
 	  gtag('js', new Date());
+
 	  gtag('config', 'UA-109364959-1');
 	</script>
     <title>SCHS Track &amp; Field Competitor Bio</title>
     <link rel="stylesheet" href="/static/bootstrap-3.4.1-dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="/static/bootstrap-3.4.1-dist/css/jumbotron-narrow.css">
-    <link rel="stylesheet" href="/static/css/signup.css">
+    <link rel="stylesheet" href="/static/css/fixed-header.css">
     <style>
 	    .competitorResults p {
 	    	font-size:18px;
@@ -93,7 +94,7 @@
 				var athleteLink = $('<a>');
 				$(athleteLink).attr('href', '/santa-clara-high-track-and-field/athletes/' + athleteId);
 				$(athleteLink).text(fullName + ' (All Records)');
-				$('.career').append(athleteLink);
+				$('.filter').append(athleteLink);
 				$('.raceHeader').text(year + ' Season Best Track Times');
 				$('.fieldHeader').text(year + ' Season Best Field Marks');
 				$(document).ready(function() {
@@ -109,10 +110,8 @@
   </head>
   <body>
     <div class="container">
-{% include "nav.html" %}
-{% include "breadcrumb-title.html" %}
-      <div><p class="career"></p></div>
-      <div class="row marketing">
+{% include "/common/fh-nav-bc-title-filter.html" %}
+      <div class="non-fixed-content-bcf row">
         <div class="col-xs-6">
         	<h4 class="raceHeader"></h4>
         	<div class="raceResults">No Track Times</div>
@@ -122,7 +121,7 @@
         	<div class="fieldResults">No Field Marks</div>
 		</div>
       </div>
-{% include "footer.html" %}
+{% include "/common/footer.html" %}
     </div>
   </body>
 </html>

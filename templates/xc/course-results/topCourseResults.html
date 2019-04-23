@@ -10,10 +10,10 @@
 
 	  gtag('config', 'UA-109364959-1');
 	</script>
-    <title>SCHS XC Course Results</title>
+    <title>SCHS Cross Country Top Individual Results</title>
     <link rel="stylesheet" href="/static/bootstrap-3.4.1-dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="/static/bootstrap-3.4.1-dist/css/jumbotron-narrow.css">
-    <link rel="stylesheet" href="/static/css/signup.css">
+    <link rel="stylesheet" href="/static/css/fixed-header.css">
     <script src="/static/js/jquery-1.11.2.js"></script>
     <script src="/static/js/utils.js"></script>
     <script>
@@ -26,7 +26,21 @@
     var genderId = gId && gId != 0 ? gId : urlParams.gId;
     var limit = li && li != 0 ? li : urlParams.limit;
     var grade = gr ? gr : urlParams.grade;
-            
+
+    $(function(){
+        var xcHomeLink = $('<a>');
+        $(xcHomeLink).attr('href', '/santa-clara-high-cross-country');
+        $(xcHomeLink).text('SCHS Cross Country');
+        $('.breadcrumb').append(xcHomeLink);
+		$('.breadcrumb').append(' / ');
+
+        var xcTopIndividualHomeLink = $('<a>');
+        $(xcTopIndividualHomeLink).attr('href', '/santa-clara-high-cross-country/course-results/top-individual');
+        $(xcTopIndividualHomeLink).text('Top Individual Results');
+        $('.breadcrumb').append(xcTopIndividualHomeLink);
+		$('.breadcrumb').append(' / ');
+    })
+
 	$(function(){
 		$.ajax({
 			url: '/getTopCourseResults',
@@ -76,12 +90,13 @@
 			},
 			success: function(res){
 				var resultsObj = JSON.parse(res);
-				var courseObj = resultsObj[0]
-				var genderStr = (genderId && genderId == 3) ? 'Girls' : 'Boys'
-				var courseStr = courseObj.CourseName + ' (' + courseObj.CourseDistance + 'M)'
-				var gradeStr = grade == 9 ? 'Freshman ' : (grade == 10 ? 'Sophomore ' : (grade == 11 ? 'Junior ' : (grade == 12 ? 'Senior ' : '')))
-				var topStr = limit > 0 ? 'Top ' + limit : 'No Results for'
-				var titleStr =  topStr + ' ' + gradeStr + genderStr + ' - ' + courseStr
+				var courseObj = resultsObj[0];
+				var genderStr = (genderId && genderId == 3) ? 'Girls' : 'Boys';
+				var courseStr = courseObj.CourseName + ' (' + courseObj.CourseDistance + 'M)';
+				var gradeStr = grade == 9 ? 'Freshman ' : (grade == 10 ? 'Sophomore ' : (grade == 11 ? 'Junior ' : (grade == 12 ? 'Senior ' : '')));
+				var topStr = limit > 0 ? 'Top ' + limit : 'No Results for';
+				var titleStr =  topStr + ' ' + gradeStr + genderStr + ' - ' + courseStr;
+				$('.breadcrumb').append(gradeStr + genderStr + ' - ' + courseStr);
 				$('.text-muted').text(titleStr);
 				$(document).ready(function() {
 					document.title = titleStr + ' - ' + document.title;
@@ -94,11 +109,12 @@
 	}
     </script>
     <style>
-    	.jumbotron p {margin-bottom: 0px;font-size:18px;}
+      .jumbotron {margin-top:185px;}
+      .jumbotron p {margin-bottom: 0px;font-size:18px;}
 	</style>
   </head>
   <body>
-{% include "xc/body.html" %}
+{% include "/common/container-fh-nav-bc-title.html" %}
   </body>
 </html>
 

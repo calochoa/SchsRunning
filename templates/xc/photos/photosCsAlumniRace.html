@@ -10,13 +10,30 @@
 
 	  gtag('config', 'UA-109364959-1');
 	</script>
-    <title>SCHS XC Photos: Crystal Springs Alumni Race</title>
+    <title>SCHS Cross Country Photos: Crystal Springs Alumni Race</title>
     <link rel="stylesheet" href="/static/bootstrap-3.4.1-dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="/static/bootstrap-3.4.1-dist/css/jumbotron-narrow.css">
-    <link rel="stylesheet" href="/static/css/signup.css">
+    <link rel="stylesheet" href="/static/css/fixed-header.css">
     <link rel="stylesheet" href="/static/css/lightbox.css">
     <script src="/static/js/lightbox-plus-jquery.js"></script>
     <script>
+      $(function(){
+        var xcHomeLink = $('<a>');
+        $(xcHomeLink).attr('href', '/santa-clara-high-cross-country');
+        $(xcHomeLink).text('SCHS Cross Country');
+        $('.breadcrumb').append(xcHomeLink);
+        $('.breadcrumb').append(' / ');
+
+        var photosLink = $('<a>');
+        $(photosLink).attr('href', '/santa-clara-high-cross-country/photos/');
+        $(photosLink).text('Photos');
+        $('.breadcrumb').append(photosLink);
+        var titleStr = 'Crystal Springs Alumni Race'
+        $('.breadcrumb').append(' / ' + titleStr);
+
+        $('.text-muted').text('SCHS XC Photos: ' + titleStr);
+      })
+
     	$(function(){
     		var photos = ["2018-07-28 [3]", "2017-07-29", "2016-06-18", "2015-08-08", "2014-05-04", "2013-05-11", "2012-07-21"]
     		var dates = ["07/28/2018", "07/29/2017", "06/18/2016", "08/08/2015", "05/04/2014", "05/11/2013", "07/21/2012"]
@@ -44,12 +61,14 @@
     				+ 'style="width: 100%;""/></a></p><br/>'    			
     			);
 			}
-      $('.text-muted').text('SCHS XC Photos: Crystal Springs Alumni Race');
 		});
     </script>
+    <style>
+      .jumbotron {margin-top:185px;}
+    </style>
   </head>
   <body>
-{% include "xc/body.html" %}
+{% include "/common/container-fh-nav-bc-title.html" %}
   </body>
 </html>
 

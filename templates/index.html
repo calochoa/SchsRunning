@@ -13,64 +13,65 @@
     <title>SCHS Running</title>
     <link rel="stylesheet" href="/static/bootstrap-3.4.1-dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="/static/bootstrap-3.4.1-dist/css/jumbotron-narrow.css">
+    <link rel="stylesheet" href="/static/css/fixed-header.css">
   </head>
   <body>
-
     <div class="container">
-{% include "nav_active_home.html" %}
-      <div>
-        <h3 class="text-muted">Santa Clara High School Running</h3>
-      </div>
-
-      <div class="jumbotron">
-        <p><img src="/static/Uploads/schs_xc_2018_coaches_cropped.jpg" alt="SCHS XC 2018 Coaches" width="550"></p>
-      </div>
-
-      <div class="row marketing">
-        <div class="col-xs-6">
-          <h4 style="color:red">Latest Updates</h4>
-          <p>
-            <div>&raquo; 04/16/19 - added <a href="/santa-clara-high-track-and-field/events/">Track Results by Event</a></div>
-            <div>&raquo; 04/12/19 - added <a href="/santa-clara-high-track-and-field/season/2010">2010</a> thru <a href="/santa-clara-high-track-and-field/season/2017">2017</a> Track Seasons</div>
-            <div>&raquo; 03/29/19 - added <a href="/workouts/quickie-workouts/">Quickie Workouts</a>!!</div>
-            <div>&raquo; 03/22/19 - added <a href="/workouts/quickies/">QUICKIES</a> &amp; <a href="/workouts/quickies/faq">FAQ</a>!!</div>
-            <div>&raquo; 03/20/19 - added <a href="/workouts/bodyweight-exercises/">Bodyweight Exercises</a></div>
-            <div>&raquo; 03/19/19 - added <a href="/santa-clara-high-track-and-field/coaches/">Track Coaches/Timeline</a></div>
-            <div>&raquo; 03/14/19</div>
-            <div>&nbsp;&nbsp;- added Season Rank to <a href="/santa-clara-high-track-and-field#season-results">Season Results</a></div>
-            <div>&nbsp;&nbsp;- added PR to <a href="/santa-clara-high-track-and-field/athletes/">Track Results by Athlete</a></div>
-            <div>&raquo; 03/13/19 - added <a href="/santa-clara-high-track-and-field/athletes/">Track Results by Athlete</a></div>
-            <div>&raquo; 03/12/19 - added <a href="/santa-clara-high-track-and-field/season/2018">2018 Track Season</a></div>
-            <div>&raquo; 03/07/19 - added <a href="/santa-clara-high-track-and-field/hall-of-fame/">Track &amp; Field Hall of Fame</a></div>
-          </p>
-        </div>
-
-        <div class="col-xs-6">
-          <h4>SCHS Cross Country</h4>
-          <p>
-            <a href="/santa-clara-high-cross-country">XC Home</a>
-          </p>
-          <h4>SCHS Track &amp; Field</h4>
-          <p>
-            <a href="/santa-clara-high-track-and-field">Track Home</a>
-          </p>
-          <h4>Workouts</h4>
-          <p>
-            <a href="/workouts">Get Fit!</a>
-          </p>
-          <h4>Related Sites</h4>
-          <p>
-            <a href="https://www.athletic.net/TrackAndField/California/CentralCoast.aspx">Athletic Track &amp; Field</a>, 
-            <a href="https://www.xcstats.com/">XC Stats</a>, 
-            <a href="http://www.prepcaltrack.com/">Prep Cal Track</a>, 
-            <a href="http://www.runnerspace.com/">Runner Space</a>, 
-            <a href="http://www.lynbrooksports.com">Lynbrook HS XC/Track</a> ...
-            <a href="/related-sites">All Sites</a>
-          </p>
+      <div class="fixed-header">
+{% include "/common/nav_active_home.html" %}
+        <div>
+          <h3 class="text-muted">Santa Clara High School Running</h3>
         </div>
       </div>
-
-{% include "footer.html" %}
+      <div class="non-fixed-content">
+        <div class="jumbotron">
+          <p><img src="/static/Uploads/schs_xc_2018_coaches_cropped.jpg" alt="SCHS XC 2018 Coaches" width="550"></p>
+        </div>
+        <div class="row marketing">
+          <div class="col-xs-6">
+            <h4 style="color:red">Latest Updates</h4>
+            <p>
+              <div>&raquo; 04/22/19 - improve site navigation</div>
+              <div>&raquo; 04/16/19 - added <a href="/santa-clara-high-track-and-field/events/">Track Results by Event</a></div>
+              <div>&raquo; 04/12/19 - added <a href="/santa-clara-high-track-and-field/season/2010">2010</a> thru <a href="/santa-clara-high-track-and-field/season/2017">2017</a> Track Seasons</div>
+              <div>&raquo; 03/29/19 - added <a href="/workouts/quickie-workouts/">Quickie Workouts</a>!!</div>
+              <div>&raquo; 03/22/19 - added <a href="/workouts/quickies/">QUICKIES</a> &amp; <a href="/workouts/quickies/faq">FAQ</a>!!</div>
+              <div>&raquo; 03/20/19 - added <a href="/workouts/bodyweight-exercises/">Bodyweight Exercises</a></div>
+              <div>&raquo; 03/19/19 - added <a href="/santa-clara-high-track-and-field/coaches/">Track Coaches/Timeline</a></div>
+              <div>&raquo; 03/14/19</div>
+              <div>&nbsp;&nbsp;- added Season Rank to <a href="/santa-clara-high-track-and-field#season-results">Season Results</a></div>
+              <div>&nbsp;&nbsp;- added PR to <a href="/santa-clara-high-track-and-field/athletes/">Track Results by Athlete</a></div>
+              <div>&raquo; 03/13/19 - added <a href="/santa-clara-high-track-and-field/athletes/">Track Results by Athlete</a></div>
+              <div>&raquo; 03/12/19 - added <a href="/santa-clara-high-track-and-field/season/2018">2018 Track Season</a></div>
+              <div>&raquo; 03/07/19 - added <a href="/santa-clara-high-track-and-field/hall-of-fame/">Track &amp; Field Hall of Fame</a></div>
+            </p>
+          </div>
+          <div class="col-xs-6">
+            <h4>SCHS Cross Country</h4>
+            <p>
+              <a href="/santa-clara-high-cross-country">XC Home</a>
+            </p>
+            <h4>SCHS Track &amp; Field</h4>
+            <p>
+              <a href="/santa-clara-high-track-and-field">Track Home</a>
+            </p>
+            <h4>Workouts</h4>
+            <p>
+              <a href="/workouts">Get Fit!</a>
+            </p>
+            <h4>Related Sites</h4>
+            <p>
+              <a href="https://www.athletic.net/TrackAndField/California/CentralCoast.aspx">Athletic Track &amp; Field</a>, 
+              <a href="https://www.xcstats.com/">XC Stats</a>, 
+              <a href="http://www.prepcaltrack.com/">Prep Cal Track</a>, 
+              <a href="http://www.runnerspace.com/">Runner Space</a>, 
+              <a href="http://www.lynbrooksports.com">Lynbrook HS XC/Track</a> ...
+              <a href="/related-sites">All Sites</a>
+            </p>
+          </div>
+        </div>
+      </div>
+{% include "/common/footer.html" %}
     </div>
   </body>
 </html>

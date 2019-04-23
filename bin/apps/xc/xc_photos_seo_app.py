@@ -10,6 +10,10 @@ xc_photos_seo_app = Blueprint(
 )    
 
 
+@xc_photos_seo_app.route('/',methods=['GET'])
+def xc_photos_home():
+    return render_template('xc/photos/photos.html')
+
 @xc_photos_seo_app.route('/team-timeline/',methods=['GET'])
 def getXcTeamTimelinePhotos():
     return render_template('xc/photos/photosTeamTimeline.html')

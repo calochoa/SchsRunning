@@ -10,16 +10,30 @@
 
 	  gtag('config', 'UA-109364959-1');
 	</script>
-    <title>SCHS XC Coach</title>
+    <title>SCHS Cross Country Coach</title>
     <link rel="stylesheet" href="/static/bootstrap-3.4.1-dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="/static/bootstrap-3.4.1-dist/css/jumbotron-narrow.css">
-    <link rel="stylesheet" href="/static/css/signup.css">
+    <link rel="stylesheet" href="/static/css/fixed-header.css">
     <script src="/static/js/jquery-1.11.2.js"></script>
     <script src="/static/js/utils.js"></script>
     <script>
     var cId = {{coachId}};
     var urlParams = parseURL();
     var coachId = cId ? cId : urlParams.coachId;
+
+    $(function(){
+      	var xcHomeLink = $('<a>');
+      	$(xcHomeLink).attr('href', '/santa-clara-high-cross-country');
+      	$(xcHomeLink).text('SCHS Cross Country');
+      	$('.breadcrumb').append(xcHomeLink);
+		$('.breadcrumb').append(' / ');
+
+		var coachesLink = $('<a>');
+		$(coachesLink).attr('href', '/santa-clara-high-cross-country/coaches/');
+		$(coachesLink).text('Coaches');
+		$('.breadcrumb').append(coachesLink);
+		$('.breadcrumb').append(' / ');
+    })
 
 	$(function(){
 		$.ajax({
@@ -49,6 +63,7 @@
 					$('.jumbotron').append(results);
 					coachStr =  value.FirstName + ' ' + value.LastName
 				});
+				$('.breadcrumb').append(coachStr);
 				$('.text-muted').text('SCHS XC Coach: ' + coachStr + seasonStr);
 				$(document).ready(function() {
 					document.title = coachStr + ' - ' + document.title;
@@ -61,11 +76,12 @@
 	});
     </script>
     <style>
-    	.jumbotron p {margin-bottom: 0px;}
+	  .jumbotron {margin-top:185px;}
+      .jumbotron p {margin-bottom: 0px;}
 	</style>
   </head>
   <body>
-{% include "xc/body.html" %}
+{% include "/common/container-fh-nav-bc-title.html" %}
   </body>
 </html>
 

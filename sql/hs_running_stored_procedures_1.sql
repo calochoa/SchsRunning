@@ -136,7 +136,7 @@ BEGIN
 
 -- this part is necessary to distinguish between a competitor in xc vs track season:  AND YEAR(`Race`.`date`)=`year`
 SELECT `time`, `pace`, `grade`, `date`, `racename`, `coursename`, `coursedistance`, 
-	`racecondition`, `firstname`, `lastname`, `raceid`
+	`racecondition`, `firstname`, `lastname`, `raceid`, `genderId`
 FROM `Result` NATURAL JOIN `Competitor` NATURAL JOIN `Athlete` NATURAL JOIN `Race` 
 	NATURAL JOIN `RaceName` NATURAL JOIN `RaceCondition` NATURAL JOIN `Course`
 WHERE `athleteid`=`inputAthleteId` AND YEAR(`Race`.`date`)=`year`
@@ -154,7 +154,7 @@ SET collation_connection = 'utf8mb4_unicode_ci';
 
 DELIMITER //
 CREATE PROCEDURE `GetXcRunners`(
-	IN `inputGenderId` INT
+	IN `inputGenderIds` VARCHAR(15)
 )
 BEGIN
 
@@ -163,7 +163,7 @@ SELECT `athleteid`, `firstname`, `lastname`,
 	GROUP_CONCAT(DISTINCT `year` ORDER BY `year` ASC SEPARATOR ", ") `years`
 FROM `Competitor` NATURAL JOIN `Athlete` NATURAL JOIN `Gender` 
 	NATURAL JOIN `Result` NATURAL JOIN `Race` 
-WHERE `genderid`=`inputGenderId` AND YEAR(`Race`.`date`)=`year`
+WHERE FIND_IN_SET(`genderId`, `inputGenderIds`) AND YEAR(`Race`.`date`)=`year`
 GROUP BY `athleteid`
 ORDER BY `lastname`, `firstname`;
 
@@ -256,7 +256,7 @@ BEGIN
 
 -- this part is necessary to distinguish between a competitor in xc vs track season:  AND YEAR(`Race`.`date`)=`year`
 SELECT `time`, `pace`, `grade`, `date`, `racename`, `coursename`, `coursedistance`, 
-	`racecondition`, `firstname`, `lastname`, `year`, `raceid`
+	`racecondition`, `firstname`, `lastname`, `year`, `raceid`, `athleteId`
 FROM `Result` NATURAL JOIN `Competitor` NATURAL JOIN `Athlete` NATURAL JOIN `Race` 
 	NATURAL JOIN `RaceName` NATURAL JOIN `RaceCondition` NATURAL JOIN `Course`
 WHERE `competitorId`=`inputCompetitorId` AND YEAR(`Race`.`date`)=`year`
@@ -1581,7 +1581,7 @@ CALL `GetTopXcIndividual`(1,2,25);
 CALL `GetCourseInfo`(25);
 CALL `GetTopTeamCourse`(1,2,15);
 CALL `GetXcRunnerResults`(1);
-CALL `GetXcRunners`(2);
+CALL `GetXcRunners`("2,3");
 CALL `GetXcResultsByRaceCompetitor`("1000173,1000160,1000075,1000183,1000131,1000088,1000139,1000149,1000259,1000248,1000062,1000122,1000239,1000003,1000101",
 "1000259.11,1000179.12,1000348.12,1000257.11,1000167.11,1000179.11,1000259.10,1000348.11,1000257.10,1000065.11,1000261.11,1000212.12,1000193.10,1000356.10,1000107.11,1000041.12,1000257.12,1000071.12,1000340.9,1000334.9,1000345.12,1000142.12,1.12,1000197.11,1000239.12,1000261.12,1000193.11,1000296.10,1000107.12,1000276.9,1000115.12,1000179.9,1000197.12,1000357.11,1000348.9,1000179.10,1000348.10,1000259.9,1000150.10,1000257.9,1000063.12,1000220.11,1000122.12,1000267.11,1000373.10,1000220.10,1000063.11,1000267.10,1000122.11,1000346.11,1000261.10,1000305.12,1000356.9,1000212.11,1000311.12,1.11,1000345.11,1000006.12,1000331.12,1000357.9,1000300.12,1000220.9,1000063.10,1000122.10,1000053.10,1000289.12,1000298.12,1000043.11,1000159.12,1000199.11,1000193.12,1000239.9,1000345.9,1000047.11,1.9");
 CALL `GetXcCompetitorsByYear`(2003,2);

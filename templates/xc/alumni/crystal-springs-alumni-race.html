@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-109364959-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-109364959-1');
+  </script>
+    <title>SCHS Cross Country Crystal Springs Alumni Race</title>
+    <link rel="stylesheet" href="/static/bootstrap-3.4.1-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/bootstrap-3.4.1-dist/css/jumbotron-narrow.css">
+    <link rel="stylesheet" href="/static/css/fixed-header.css">
+    <script src="/static/js/jquery-1.11.2.js"></script>
+    <script>
+    $(function(){
+      var xcHomeLink = $('<a>');
+      $(xcHomeLink).attr('href', '/santa-clara-high-cross-country');
+      $(xcHomeLink).text('SCHS Cross Country');
+      $('.breadcrumb').append(xcHomeLink);
+      var titleStr = 'Crystal Springs Alumni Race'
+      $('.breadcrumb').append(' / ' + titleStr);
+      $('.text-muted').text('SCHS Cross Country ' + titleStr);
+    })
+    </script>
+  </head>
+  <body>
+    <div class="container">
+{% include "/common/fh-nav-bc-title.html" %}
+      <div class="non-fixed-content-bc row marketing">
+        <div class="col-xs-6">
+          <h4><a href="/santa-clara-high-cross-country/special-achievements/past-crystal-springs-alumni-race-champions">Past Alumni Champions</a></h4>
+          <h4><a href="/santa-clara-high-cross-country/photos/crystal-springs-alumni-race/">Photos</a> + <a href="/santa-clara-high-cross-country/videos/crystal-springs-alumni-race/">Videos</a></h4>
+          <h3>Results</h3>
+          <h4>&raquo; <a href="/santa-clara-high-cross-country/race-results/7th-annual-crystal-springs-alumni-race-2018/">2018</a></h4>
+          <h4>&raquo; <a href="/santa-clara-high-cross-country/race-results/6th-annual-crystal-springs-alumni-race-2017/">2017</a></h4>
+          <h4>&raquo; <a href="/santa-clara-high-cross-country/race-results/5th-annual-crystal-springs-alumni-race-2016/">2016</a></h4>
+          <h4>&raquo; <a href="/santa-clara-high-cross-country/race-results/4th-annual-crystal-springs-alumni-race-2015/">2015</a></h4>
+          <h4>&raquo; <a href="/santa-clara-high-cross-country/race-results/3rd-annual-crystal-springs-alumni-race-2014/">2014</a></h4>
+          <h4>&raquo; <a href="/santa-clara-high-cross-country/race-results/2nd-annual-crystal-springs-alumni-race-2013/">2013</a></h4>
+          <h4>&raquo; <a href="/santa-clara-high-cross-country/race-results/1st-annual-crystal-springs-alumni-race-2012/">2012</a></h4>
+        </div>
+      </div>
+{% include "/common/footer.html" %}
+    </div>
+  </body>
+</html>
+

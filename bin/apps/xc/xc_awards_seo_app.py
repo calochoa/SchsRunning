@@ -10,6 +10,10 @@ xc_awards_seo_app = Blueprint(
 )    
 
 
+@xc_awards_seo_app.route('/',methods=['GET'])
+def xc_awards_home():
+    return render_template('xc/awards/awards.html')
+
 def getXcAwardsTimelineData(squad_id):
     return render_template('xc/awards/awardsTimeline.html', squadId=squad_id)
 

@@ -10,16 +10,30 @@
 
 	  gtag('config', 'UA-109364959-1');
 	</script>
-    <title>SCHS XC Awards Timeline</title>
+    <title>SCHS Cross Country Awards Timeline</title>
     <link rel="stylesheet" href="/static/bootstrap-3.4.1-dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="/static/bootstrap-3.4.1-dist/css/jumbotron-narrow.css">
-    <link rel="stylesheet" href="/static/css/signup.css">
+    <link rel="stylesheet" href="/static/css/fixed-header.css">
     <script src="/static/js/jquery-1.11.2.js"></script>
     <script src="/static/js/utils.js"></script>
     <script>
     var sId = {{squadId}};
     var urlParams = parseURL();
     var squadId = sId || sId==0 ? sId : urlParams.squadId;
+
+    $(function(){
+      var xcHomeLink = $('<a>');
+      $(xcHomeLink).attr('href', '/santa-clara-high-cross-country');
+      $(xcHomeLink).text('SCHS Cross Country');
+      $('.breadcrumb').append(xcHomeLink);
+      $('.breadcrumb').append(' / ');
+
+      var xcAwardsHomeLink = $('<a>');
+      $(xcAwardsHomeLink).attr('href', '/santa-clara-high-cross-country/awards/');
+      $(xcAwardsHomeLink).text('Awards');
+      $('.breadcrumb').append(xcAwardsHomeLink);
+      $('.breadcrumb').append(' / ');
+    })
 
 	$(function(){
 		$.ajax({
@@ -42,16 +56,25 @@
 				var results = '';
 				var timelineStr = '';
 				$.each(resultsObj,function(index, value){
-					timelineStr = value.SquadName
-					var squadStr = squadId == 0 ? value.SquadName : ''
-					var titleStr = value.Year + ' ' + squadStr + ' ' + value.AwardName
-				    var nameStr = value.FirstName + ' ' + value.LastName
+					timelineStr = value.SquadName;
+					var squadStr = squadId == 0 ? value.SquadName : '';
+					var titleStr = value.Year + ' ' + squadStr + ' ' + value.AwardName;
+				    var nameStr = value.FirstName + ' ' + value.LastName;
 					results = $(div).clone();
 					$(results).find('a').attr('href', '/xcRunner?rId=' + value.RunnerId);
 					$(results).find('h4').text(titleStr);
 					$(results).find('p').text(nameStr);
 					$('.jumbotron').append(results);
 				});
+				if (squadId == 0) {
+					$('.breadcrumb').append('Timeline');
+				} else {
+			     	var awardsTimelineLink = '/santa-clara-high-cross-country/awards/timeline/' + 0;
+      				var awardsTimelineLinkTag = $('<a>').attr('href', awardsTimelineLink).text('Timeline');
+      				$('.breadcrumb').append(awardsTimelineLinkTag);
+      				$('.breadcrumb').append(' / ');
+      				$('.breadcrumb').append(timelineStr);
+				}
 				timelineStr = (squadId == 0 ? '' : ' - ' + timelineStr)
 				$('.text-muted').text('SCHS XC Awards Timeline ' + timelineStr);
 				$(document).ready(function() {
@@ -65,11 +88,12 @@
 	});
     </script>
     <style>
-    	.jumbotron p {margin-bottom: 0px;}
+      .jumbotron {margin-top:185px;}
+      .jumbotron p {margin-bottom: 0px;}
 	</style>
   </head>
   <body>
-{% include "xc/body.html" %}
+{% include "/common/container-fh-nav-bc-title.html" %}
   </body>
 </html>
 
