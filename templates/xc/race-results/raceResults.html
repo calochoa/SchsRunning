@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="/static/bootstrap-3.4.1-dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="/static/bootstrap-3.4.1-dist/css/jumbotron-narrow.css">
     <link rel="stylesheet" href="/static/css/fixed-header.css">
+    <link rel="stylesheet" href="/static/css/dropdown.css">
     <script src="/static/js/jquery-1.11.2.js"></script>
     <script src="/static/js/utils.js"></script>
     <script src="/static/js/results.js"></script>
@@ -61,7 +62,7 @@
 					raceStr = value.RaceName;
 					docTitleStr = value.Date.slice(0, 4) + ' ' + raceStr;
 					year = value.Year;
-					titleStr = value.Date + ' - ' + raceStr + ': ' + value.CourseName + ', ' + value.CourseDistance + 'M' + (value.RaceCondition.localeCompare('unknown') ? ' *' + value.RaceCondition + '*' : '');
+					titleStr = raceStr + ': ' + value.CourseName + ', ' + value.CourseDistance + 'M' + (value.RaceCondition.localeCompare('unknown') ? ' *' + value.RaceCondition + '*' : '') + ' (' + value.Date + ')';
 				    var resultStr = value.Rank + '. ' + value.FirstName + ' ' + value.LastName + ' (' + value.Year + ')'
 					var runnerId = parseInt(value.CompetitorId)
 					var gradeStr = value.Grade == 0 ? (runnerId >= 100000 && runnerId < 1000000 ? 'Special Guest' : 'Alumni' ) : value.Grade + 'th grade'
@@ -93,18 +94,51 @@
 					var raceLinkTag = $('<a>').attr('href', raceLink).text(raceStr);
 					$('.breadcrumb').append(raceLinkTag);
 					$('.breadcrumb').append(' / ' + year);
+					$('.text-muted').text(titleStr.replace('Crystal Springs Alumni Race', $.fn.getAlumniRaceName(year) + ' Alumni Race'));
 				}
 
 
-				$(document).ready(function() {
-					document.title = docTitleStr + ' - ' + document.title;
-				});
+				$.fn.setDocTitle(docTitleStr);
 			},
 			error: function(error){
 				console.log(error);
 			}
 		});
 	});
+
+	$.fn.setDocTitle = function(docTitleStr) {
+		$(document).ready(function() {
+			document.title = docTitleStr + ' - ' + document.title;
+		});
+	}
+
+	$.fn.getAlumniRaceName = function(year) {
+		var alumniRaceNo = '';
+		if (year == 2012) {
+			alumniRaceNo = '1st';
+		} else if (year == 2013) {
+			alumniRaceNo = '2nd';
+		} else if (year == 2014) {
+			alumniRaceNo = '3rd';
+		} else if (year == 2015) {
+			alumniRaceNo = '4th';
+		} else if (year == 2016) {
+			alumniRaceNo = '5th';
+		} else if (year == 2017) {
+			alumniRaceNo = '6th';
+		} else if (year == 2018) {
+			alumniRaceNo = '7th';
+		}
+		return alumniRaceNo + ' Annual';
+	}
+
+	$(function(){
+		if (raceId < 1000000) {
+			$.get("/santa-clara-high-cross-country/race-results/alumni-race-dropdown-menus", function(data){
+			    $(".dropdown-list").append(data);
+			});
+		}
+	})
     </script>
     <style>
       .jumbotron {margin-top:185px;}
@@ -112,7 +146,7 @@
 	</style>
   </head>
   <body>
-{% include "/common/container-fh-nav-bc-title.html" %}
+{% include "/common/container-fh-nav-bc-title-dd.html" %}
   </body>
 </html>
 

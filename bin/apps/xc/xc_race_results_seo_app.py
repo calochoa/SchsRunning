@@ -10,6 +10,11 @@ xc_race_results_seo_app = Blueprint(
 )    
 
 
+@xc_race_results_seo_app.route('/alumni-race-dropdown-menus',methods=['GET'])
+def xc_alumni_race_dropdown_menus():
+    return render_template('xc/race-results/alumni-race-dropdown-menus.html')
+
+
 def getXcRaceResultsData(race_id, gender_id=0):
     return render_template('xc/race-results/raceResults.html', raceId=race_id, genderId=gender_id)
 

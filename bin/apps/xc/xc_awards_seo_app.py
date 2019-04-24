@@ -10,6 +10,11 @@ xc_awards_seo_app = Blueprint(
 )    
 
 
+@xc_awards_seo_app.route('/awards-dropdown-menus',methods=['GET'])
+def xc_awards_dropdown_menus():
+    return render_template('xc/awards/awards-dropdown-menus.html')
+
+
 @xc_awards_seo_app.route('/',methods=['GET'])
 def xc_awards_home():
     return render_template('xc/awards/awards.html')

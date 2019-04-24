@@ -10,6 +10,15 @@ xc_course_results_seo_app = Blueprint(
 )    
 
 
+@xc_course_results_seo_app.route('/top-individual-dropdown-menus',methods=['GET'])
+def xc_top_individual_dropdown_menus():
+    return render_template('xc/course-results/top-individual-dropdown-menus.html')
+
+@xc_course_results_seo_app.route('/top-team-dropdown-menus',methods=['GET'])
+def xc_top_team_dropdown_menus():
+    return render_template('xc/course-results/top-team-dropdown-menus.html')
+
+
 @xc_course_results_seo_app.route('/top-team')
 def top_team_home():
     return render_template('xc/course-results/top-team.html')

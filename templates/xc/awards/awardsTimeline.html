@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="/static/bootstrap-3.4.1-dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="/static/bootstrap-3.4.1-dist/css/jumbotron-narrow.css">
     <link rel="stylesheet" href="/static/css/fixed-header.css">
+    <link rel="stylesheet" href="/static/css/dropdown.css">
     <script src="/static/js/jquery-1.11.2.js"></script>
     <script src="/static/js/utils.js"></script>
     <script>
@@ -86,6 +87,10 @@
 			}
 		});
 	});
+
+	$.get("/santa-clara-high-cross-country/awards/awards-dropdown-menus", function(data){
+	    $(".dropdown-list").append(data);
+	});
     </script>
     <style>
       .jumbotron {margin-top:185px;}
@@ -93,7 +98,7 @@
 	</style>
   </head>
   <body>
-{% include "/common/container-fh-nav-bc-title.html" %}
+{% include "/common/container-fh-nav-bc-title-dd.html" %}
   </body>
 </html>
 
