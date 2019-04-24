@@ -342,8 +342,8 @@ def get_track_competitor_results():
         more_results = True
         while more_results:
             mysql_rows = cursor.fetchall()
-            all_rank_dict_list = __get_all_ranking_dict_list(competitor_id, mysql_rows)
-            for all_rank_dict in all_rank_dict_list:
+            all_rank_dict = __get_all_ranking_dict(competitor_id, mysql_rows)
+            if all_rank_dict:
                 grade_rank, grade_rank_total = __get_all_grade_ranking(competitor_id, mysql_rows, all_rank_dict['Grade'])
                 all_rank_dict['GradeRank'] = grade_rank
                 all_rank_dict['GradeRankTotal'] = grade_rank_total
@@ -362,7 +362,7 @@ def get_track_competitor_results():
         return render_template('error.html', error=str(e))
 
 
-def __get_all_ranking_dict_list(competitor_id, mysql_rows):
+def __get_all_ranking_dict(competitor_id, mysql_rows):
     # misc data to return
     year = 0
     squad_id = 0
@@ -371,7 +371,7 @@ def __get_all_ranking_dict_list(competitor_id, mysql_rows):
     last_rank = 0
     last_measurement = 0
     current_measurement = 0
-    all_rank_dict_list = []
+    all_rank_dict = {}
     all_rank_total = 0
     event_id = 0
     for row in mysql_rows:
@@ -395,8 +395,8 @@ def __get_all_ranking_dict_list(competitor_id, mysql_rows):
             current_rank, last_rank, current_measurement, last_measurement
         )
 
-        if competitor_id == result_competitor_id:
-            all_rank_dict_list.append({
+        if competitor_id == result_competitor_id and not all_rank_dict:
+            all_rank_dict = {
                 'Event': str(row[0]),
                 'EventId': event_id,
                 'FullName': str(row[2]),
@@ -409,13 +409,13 @@ def __get_all_ranking_dict_list(competitor_id, mysql_rows):
                 'AthleteId': row[10],
                 'GenderId': row[11],
                 'AllRank': __get_rank(current_rank, event_id),
-            })
+            }
 
-    for i, all_rank_dict in enumerate(all_rank_dict_list):
+    if all_rank_dict:
         # need to divide the total by 4 for relay events because there are 4 people with the same results
-        all_rank_dict_list[i]['AllTotal'] = __get_rank_total(all_rank_total, event_id)
+        all_rank_dict['AllTotal'] = __get_rank_total(all_rank_total, event_id)
 
-    return all_rank_dict_list
+    return all_rank_dict
 
 
 def __get_rank_total(rank_total, event_id):
@@ -539,15 +539,15 @@ def get_track_athlete_results():
         for athlete_result_metadata_dict in athlete_result_metadata_dict_tuple:
             # construct personal record key
             event_id = athlete_result_metadata_dict[0]
-            event_sub_type_id = athlete_result_metadata_dict[4]
+            event_sub_type_id = athlete_result_metadata_dict[3]
             event_id_str = '0{0}'.format(event_id) if event_id < 10 else event_id
             pr_key = '{0}.{1}'.format(event_sub_type_id, event_id_str)
 
-            competitor_id = athlete_result_metadata_dict[3]
+            competitor_id = athlete_result_metadata_dict[2]
             mysql_rows = event_to_result_dict.get(event_id)
             # calculate the rankings by looking up the competitor id in the event specific results 
-            all_rank_dict_list = __get_all_ranking_dict_list(competitor_id, mysql_rows)
-            for all_rank_dict in all_rank_dict_list:
+            all_rank_dict = __get_all_ranking_dict(competitor_id, mysql_rows)
+            if all_rank_dict:
                 grade_rank, grade_rank_total = __get_all_grade_ranking(competitor_id, mysql_rows, all_rank_dict['Grade'])
                 all_rank_dict['GradeRank'] = grade_rank
                 all_rank_dict['GradeRankTotal'] = grade_rank_total
