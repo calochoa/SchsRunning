@@ -10,6 +10,11 @@ xc_special_achievements_seo_app = Blueprint(
 )    
 
 
+@xc_special_achievements_seo_app.route('/special-achievements-dropdown-menus',methods=['GET'])
+def xc_special_achievements_dropdown_menus():
+    return render_template('xc/special-achievements/special-achievements-dropdown-menus.html')
+
+
 @xc_special_achievements_seo_app.route('/',methods=['GET'])
 def xc_special_achievements_home():
     return render_template('xc/special-achievements/special-achievements.html')
