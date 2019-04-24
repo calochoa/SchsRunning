@@ -1064,77 +1064,82 @@ BEGIN
 
 SELECT `t1`.*,@`rownum` := @`rownum` + 1 AS `myrank`
 FROM (
-	SELECT `event`, `eventId`, CONCAT(`firstname`, " ", `lastname`) AS `fullName`,
-	`time` AS `result1`, `raceTimeTypeId` AS `result2`, `grade`, `competitorid`, `year`, 
-    `squadName`, `squadId`, `Athlete`.`athleteId`, `genderId`
-	FROM `RaceResult` NATURAL JOIN `Event` NATURAL JOIN `Competitor` 
-		NATURAL JOIN `Athlete` NATURAL JOIN `Squad` 
-	WHERE `eventId`=`inputEventId` AND `genderId`=`inputGenderId` 
-	ORDER BY `RaceResult`.`time`, `lastname`, `firstname`
-) `t1`, (SELECT @`rownum` := 0) `r`
-UNION
-SELECT `t1`.*,@`rownum` := @`rownum` + 1 AS `myrank`
-FROM (
-	SELECT `event`, `eventId`, CONCAT(`firstname`, " ", `lastname`) AS `fullName`, 
-		`footPartOfDistance` AS `result1`, `inchPartOfDistance` AS `result2`, 
-		`grade`, `competitorid`, `year`, `squadName`, `squadId`, `Athlete`.`athleteId`, `genderId`
-	FROM `FieldResult` NATURAL JOIN `Event` NATURAL JOIN `Competitor` 
-		NATURAL JOIN `Athlete` NATURAL JOIN `Squad` 
-	WHERE `eventId`=`inputEventId` AND `genderId`=`inputGenderId` 
-	ORDER BY `footPartOfDistance` DESC, `inchPartOfDistance` DESC, `year`, `lastname`, `firstname`
-) `t1`, (SELECT @`rownum` := 0) `r`
-UNION
-SELECT `t1`.*,@`rownum` := @`rownum` + 1 AS `myrank`
-FROM (
-	SELECT `event`, `eventId`, CONCAT(`firstname`, " ", `lastname`) AS `fullName`, 
-		`RelayResult`.`time` AS `result1`, `raceTimeTypeId` AS `result2`, 
-		`grade`, `competitorid`, `RelayResult`.`year`, `squadName`, `squadId`, 
-        `Athlete`.`athleteId`, `genderId`
-	FROM `RelayResult` NATURAL JOIN `Event` NATURAL JOIN `Squad` 
-		JOIN `Competitor` ON (`Competitor`.`competitorId`=`competitorId1`) 
-		JOIN `Athlete`ON (`Athlete`.`athleteId`=`Competitor`.`athleteId`) 
-	WHERE `eventId`=`inputEventId`AND `genderId`=`inputGenderId` 
-	ORDER BY `RelayResult`.`time`, `lastname`, `firstname`
-) `t1`, (SELECT @`rownum` := 0) `r`
-UNION
-SELECT `t1`.*,@`rownum` := @`rownum` + 1 AS `myrank`
-FROM (
-	SELECT `event`, `eventId`, CONCAT(`firstname`, " ", `lastname`) AS `fullName`, 
-		`RelayResult`.`time` AS `result1`, `raceTimeTypeId` AS `result2`, 
-		`grade`, `competitorid`, `RelayResult`.`year`, `squadName`, `squadId`, 
-        `Athlete`.`athleteId`, `genderId`
-	FROM `RelayResult` NATURAL JOIN `Event` NATURAL JOIN `Squad` 
-		JOIN `Competitor` ON (`Competitor`.`competitorId`=`competitorId2`) 
-		JOIN `Athlete`ON (`Athlete`.`athleteId`=`Competitor`.`athleteId`) 
-	WHERE `eventId`=`inputEventId` AND `genderId`=`inputGenderId` 
-	ORDER BY `RelayResult`.`time`, `lastname`, `firstname`
-) `t1`, (SELECT @`rownum` := 0) `r`
-UNION
-SELECT `t1`.*,@`rownum` := @`rownum` + 1 AS `myrank`
-FROM (
-	SELECT `event`, `eventId`, CONCAT(`firstname`, " ", `lastname`) AS `fullName`, 
-		`RelayResult`.`time` AS `result1`, `raceTimeTypeId` AS `result2`, 
-		`grade`, `competitorid`, `RelayResult`.`year`, `squadName`, `squadId`, 
-        `Athlete`.`athleteId`, `genderId`
-	FROM `RelayResult` NATURAL JOIN `Event` NATURAL JOIN `Squad` 
-		JOIN `Competitor` ON (`Competitor`.`competitorId`=`competitorId3`) 
-		JOIN `Athlete`ON (`Athlete`.`athleteId`=`Competitor`.`athleteId`) 
-	WHERE `eventId`=`inputEventId` AND `genderId`=`inputGenderId` 
-	ORDER BY `RelayResult`.`time`, `lastname`, `firstname`
-) `t1`, (SELECT @`rownum` := 0) `r`
-UNION
-SELECT `t1`.*,@`rownum` := @`rownum` + 1 AS `myrank`
-FROM (
-	SELECT `event`, `eventId`, CONCAT(`firstname`, " ", `lastname`) AS `fullName`, 
-		`RelayResult`.`time` AS `result1`, `raceTimeTypeId` AS `result2`, 
-		`grade`, `competitorid`, `RelayResult`.`year`, `squadName`, `squadId`, 
-        `Athlete`.`athleteId`, `genderId`
-	FROM `RelayResult` NATURAL JOIN `Event` NATURAL JOIN `Squad` 
-		JOIN `Competitor` ON (`Competitor`.`competitorId`=`competitorId4`) 
-		JOIN `Athlete`ON (`Athlete`.`athleteId`=`Competitor`.`athleteId`) 
-	WHERE `eventId`=`inputEventId` AND `genderId`=`inputGenderId` 
-	ORDER BY `RelayResult`.`time`, `lastname`, `firstname`
+	SELECT `t1`.*
+	FROM (
+		SELECT `event`, `eventId`, CONCAT(`firstname`, " ", `lastname`) AS `fullName`,
+		`time` AS `result1`, `raceTimeTypeId` AS `result2`, `grade`, `competitorid`, `year`, 
+		`squadName`, `squadId`, `Athlete`.`athleteId`, `genderId`
+		FROM `RaceResult` NATURAL JOIN `Event` NATURAL JOIN `Competitor` 
+			NATURAL JOIN `Athlete` NATURAL JOIN `Squad` 
+		WHERE `eventId`=`inputEventId` AND `genderId`=`inputGenderId` 
+		ORDER BY `RaceResult`.`time`, `lastname`, `firstname`
+	) `t1`
+	UNION
+	SELECT `t1`.*
+	FROM (
+		SELECT `event`, `eventId`, CONCAT(`firstname`, " ", `lastname`) AS `fullName`, 
+			`footPartOfDistance` AS `result1`, `inchPartOfDistance` AS `result2`, 
+			`grade`, `competitorid`, `year`, `squadName`, `squadId`, `Athlete`.`athleteId`, `genderId`
+		FROM `FieldResult` NATURAL JOIN `Event` NATURAL JOIN `Competitor` 
+			NATURAL JOIN `Athlete` NATURAL JOIN `Squad` 
+		WHERE `eventId`=`inputEventId` AND `genderId`=`inputGenderId` 
+		ORDER BY `footPartOfDistance` DESC, `inchPartOfDistance` DESC, `year`, `lastname`, `firstname`
+	) `t1`
+	UNION
+	SELECT `t1`.*
+	FROM (
+		SELECT `event`, `eventId`, CONCAT(`firstname`, " ", `lastname`) AS `fullName`, 
+			`RelayResult`.`time` AS `result1`, `raceTimeTypeId` AS `result2`, 
+			`grade`, `competitorid`, `RelayResult`.`year`, `squadName`, `squadId`, 
+			`Athlete`.`athleteId`, `genderId`
+		FROM `RelayResult` NATURAL JOIN `Event` NATURAL JOIN `Squad` 
+			JOIN `Competitor` ON (`Competitor`.`competitorId`=`competitorId1`) 
+			JOIN `Athlete`ON (`Athlete`.`athleteId`=`Competitor`.`athleteId`) 
+		WHERE `eventId`=`inputEventId` AND `genderId`=`inputGenderId` 
+			AND `RelayResult`.`year`=`Competitor`.`year` 
+	) `t1`
+	UNION
+	SELECT `t1`.*
+	FROM (
+		SELECT `event`, `eventId`, CONCAT(`firstname`, " ", `lastname`) AS `fullName`, 
+			`RelayResult`.`time` AS `result1`, `raceTimeTypeId` AS `result2`, 
+			`grade`, `competitorid`, `RelayResult`.`year`, `squadName`, `squadId`, 
+			`Athlete`.`athleteId`, `genderId`
+		FROM `RelayResult` NATURAL JOIN `Event` NATURAL JOIN `Squad` 
+			JOIN `Competitor` ON (`Competitor`.`competitorId`=`competitorId2`) 
+			JOIN `Athlete`ON (`Athlete`.`athleteId`=`Competitor`.`athleteId`) 
+		WHERE `eventId`=`inputEventId` AND `genderId`=`inputGenderId` 
+			AND `RelayResult`.`year`=`Competitor`.`year` 
+	) `t1`
+	UNION
+	SELECT `t1`.*
+	FROM (
+		SELECT `event`, `eventId`, CONCAT(`firstname`, " ", `lastname`) AS `fullName`, 
+			`RelayResult`.`time` AS `result1`, `raceTimeTypeId` AS `result2`, 
+			`grade`, `competitorid`, `RelayResult`.`year`, `squadName`, `squadId`, 
+			`Athlete`.`athleteId`, `genderId`
+		FROM `RelayResult` NATURAL JOIN `Event` NATURAL JOIN `Squad` 
+			JOIN `Competitor` ON (`Competitor`.`competitorId`=`competitorId3`) 
+			JOIN `Athlete`ON (`Athlete`.`athleteId`=`Competitor`.`athleteId`) 
+		WHERE `eventId`=`inputEventId` AND `genderId`=`inputGenderId` 
+			 AND `RelayResult`.`year`=`Competitor`.`year` 
+	) `t1`
+	UNION
+	SELECT `t1`.*
+	FROM (
+		SELECT `event`, `eventId`, CONCAT(`firstname`, " ", `lastname`) AS `fullName`, 
+			`RelayResult`.`time` AS `result1`, `raceTimeTypeId` AS `result2`, 
+			`grade`, `competitorid`, `RelayResult`.`year`, `squadName`, `squadId`, 
+			`Athlete`.`athleteId`, `genderId`
+		FROM `RelayResult` NATURAL JOIN `Event` NATURAL JOIN `Squad` 
+			JOIN `Competitor` ON (`Competitor`.`competitorId`=`competitorId4`) 
+			JOIN `Athlete`ON (`Athlete`.`athleteId`=`Competitor`.`athleteId`) 
+		WHERE `eventId`=`inputEventId` AND `genderId`=`inputGenderId` 
+			 AND `RelayResult`.`year`=`Competitor`.`year` 
+	) `t1`
+	ORDER BY `result1`, `result2`
 ) `t1`, (SELECT @`rownum` := 0) `r`;
+
 
 END //
 DELIMITER ;

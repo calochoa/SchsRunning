@@ -70,7 +70,7 @@
     var allTimeRankDiv = $.fn.getAllTimeRankDiv(eventId, genderId, genderName, allTimeRank, allTimeTotal);
     var rankingsDiv = $('<div>').attr('class', 'rankings').append('Rankings');
     $(rankingsDiv).append(seasonSquadRankDiv);
-    if (grade <=12) {
+    if (grade <=12 && !$.fn.isRelayResult(eventId)) {
       $(rankingsDiv).append(
         $.fn.getAllGradeRankDiv(eventId, genderId, grade, genderName, allGradeRank, allGradeTotal)
       );
@@ -112,4 +112,8 @@
 
   $.fn.isFieldResult = function(eventId) {
     return (eventId >= 29 && eventId <= 37);
+  }
+
+  $.fn.isRelayResult = function(eventId) {
+    return (eventId >= 25 && eventId <= 28) || (eventId == 41)
   }

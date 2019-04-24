@@ -371,6 +371,7 @@ def __get_all_ranking_and_misc(competitor_id, mysql_rows):
     current_measurement = 0
     all_rank_dict = {}
     all_rank_total = 0
+    event_id = 0
     for row in mysql_rows:
         all_rank_total +=1
         result_competitor_id = str(row[6])
@@ -408,13 +409,22 @@ def __get_all_ranking_and_misc(competitor_id, mysql_rows):
                 'SquadId': squad_id,
                 'AthleteId': row[10],
                 'GenderId': row[11],
-                'AllRank': current_rank,
+                'AllRank': __get_rank(current_rank, event_id),
             }
 
     if all_rank_dict:
-        all_rank_dict['AllTotal'] = all_rank_total
+        # need to divide the total by 4 for relay events because there are 4 people with the same results
+        all_rank_dict['AllTotal'] = __get_rank_total(all_rank_total, event_id)
     
     return all_rank_dict, year, squad_id, grade
+
+
+def __get_rank_total(rank_total, event_id):
+    return (rank_total / 4) if __is_relay_event(event_id) else rank_total
+
+
+def __get_rank(rank, event_id):
+    return ((rank + 3) / 4) if __is_relay_event(event_id) else rank
 
 
 def __get_all_grade_ranking(competitor_id, mysql_rows, grade):
@@ -423,6 +433,7 @@ def __get_all_grade_ranking(competitor_id, mysql_rows, grade):
     current_measurement = 0
     grade_rank = 0
     grade_rank_total = 0
+    event_id = 0
     for row in mysql_rows:
         if grade == row[5]:
             grade_rank_total +=1
@@ -444,7 +455,7 @@ def __get_all_grade_ranking(competitor_id, mysql_rows, grade):
             if competitor_id == str(row[6]):
                 grade_rank = current_rank
 
-    return grade_rank, grade_rank_total
+    return __get_rank(grade_rank, event_id), __get_rank_total(grade_rank_total, event_id)
 
 
 def __get_year_squad_ranking(competitor_id, mysql_rows, year, squad_id):
@@ -453,6 +464,7 @@ def __get_year_squad_ranking(competitor_id, mysql_rows, year, squad_id):
     current_measurement = 0
     year_squad_rank = 0
     year_squad_rank_total = 0
+    event_id = 0
     for row in mysql_rows:
         if year == row[7] and squad_id == row[9]:
             year_squad_rank_total +=1
@@ -474,7 +486,7 @@ def __get_year_squad_ranking(competitor_id, mysql_rows, year, squad_id):
             if competitor_id == str(row[6]):
                 year_squad_rank = current_rank
 
-    return year_squad_rank, year_squad_rank_total
+    return __get_rank(year_squad_rank, event_id), __get_rank_total(year_squad_rank_total, event_id)
 
 
 @track_db_app.route('/getTrackAthletes', methods=['GET'])
@@ -509,8 +521,22 @@ def get_track_athlete_results():
         cursor = mydb.cursor()
         cursor.execute('CALL GetTrackAthleteResults({0})'.format(athlete_id))
 
+        metadata_flag = True
         more_results = True
         while more_results:
+            '''
+            # first save all the events, years, squad ids, competitor ids for the athlete
+            if metadata_flag:
+                metadata_flag = False
+                for row in cursor.fetchall():
+                    print (row)
+            else:
+                # save all the results for each of the events that the athlete competed in
+
+        # iterate over the metadata
+            # calculate the rankings by looking up the competitor id in the event specific results 
+            '''
+
             last_rank = 0
             last_measurement = 0
             current_measurement = 0
@@ -725,6 +751,10 @@ def __is_race_event(event_id):
 
 def __is_field_event(event_id):
     return event_id >= 29 and event_id <= 37
+
+
+def __is_relay_event(event_id):
+    return (event_id >= 25 and event_id <= 28) or (event_id == 41)
 
 
 def __get_distance_in_inches(foot_part_of_distance, inch_part_of_distance):
