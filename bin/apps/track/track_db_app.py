@@ -342,13 +342,15 @@ def get_track_competitor_results():
         more_results = True
         while more_results:
             mysql_rows = cursor.fetchall()
-            all_rank_dict, year, squad_id, grade = __get_all_ranking_and_misc(competitor_id, mysql_rows)
-            if all_rank_dict:
-                grade_rank, grade_rank_total = __get_all_grade_ranking(competitor_id, mysql_rows, grade)
+            all_rank_dict_list = __get_all_ranking_dict_list(competitor_id, mysql_rows)
+            for all_rank_dict in all_rank_dict_list:
+                grade_rank, grade_rank_total = __get_all_grade_ranking(competitor_id, mysql_rows, all_rank_dict['Grade'])
                 all_rank_dict['GradeRank'] = grade_rank
                 all_rank_dict['GradeRankTotal'] = grade_rank_total
 
-                year_squad_rank, year_squad_rank_total = __get_year_squad_ranking(competitor_id, mysql_rows, year, squad_id)
+                year_squad_rank, year_squad_rank_total = __get_year_squad_ranking(
+                    competitor_id, mysql_rows, all_rank_dict['Year'], all_rank_dict['SquadId']
+                )
                 all_rank_dict['YearSquadRank'] = year_squad_rank
                 all_rank_dict['YearSquadRankTotal'] = year_squad_rank_total
 
@@ -360,7 +362,7 @@ def get_track_competitor_results():
         return render_template('error.html', error=str(e))
 
 
-def __get_all_ranking_and_misc(competitor_id, mysql_rows):
+def __get_all_ranking_dict_list(competitor_id, mysql_rows):
     # misc data to return
     year = 0
     squad_id = 0
@@ -369,7 +371,7 @@ def __get_all_ranking_and_misc(competitor_id, mysql_rows):
     last_rank = 0
     last_measurement = 0
     current_measurement = 0
-    all_rank_dict = {}
+    all_rank_dict_list = []
     all_rank_total = 0
     event_id = 0
     for row in mysql_rows:
@@ -394,29 +396,26 @@ def __get_all_ranking_and_misc(competitor_id, mysql_rows):
         )
 
         if competitor_id == result_competitor_id:
-            year = row[7]
-            squad_id = row[9]
-            grade = row[5]
-            all_rank_dict = {
+            all_rank_dict_list.append({
                 'Event': str(row[0]),
                 'EventId': event_id,
                 'FullName': str(row[2]),
                 'Result': resultStr,
-                'Grade': grade,
+                'Grade': row[5],
                 'CompetitorId': str(row[6]),
-                'Year': year,
+                'Year': row[7],
                 'Squad': str(row[8]),
-                'SquadId': squad_id,
+                'SquadId': row[9],
                 'AthleteId': row[10],
                 'GenderId': row[11],
                 'AllRank': __get_rank(current_rank, event_id),
-            }
+            })
 
-    if all_rank_dict:
+    for i, all_rank_dict in enumerate(all_rank_dict_list):
         # need to divide the total by 4 for relay events because there are 4 people with the same results
-        all_rank_dict['AllTotal'] = __get_rank_total(all_rank_total, event_id)
-    
-    return all_rank_dict, year, squad_id, grade
+        all_rank_dict_list[i]['AllTotal'] = __get_rank_total(all_rank_total, event_id)
+
+    return all_rank_dict_list
 
 
 def __get_rank_total(rank_total, event_id):
@@ -547,13 +546,15 @@ def get_track_athlete_results():
             competitor_id = athlete_result_metadata_dict[3]
             mysql_rows = event_to_result_dict.get(event_id)
             # calculate the rankings by looking up the competitor id in the event specific results 
-            all_rank_dict, year, squad_id, grade = __get_all_ranking_and_misc(competitor_id, mysql_rows)
-            if all_rank_dict:
-                grade_rank, grade_rank_total = __get_all_grade_ranking(competitor_id, mysql_rows, grade)
+            all_rank_dict_list = __get_all_ranking_dict_list(competitor_id, mysql_rows)
+            for all_rank_dict in all_rank_dict_list:
+                grade_rank, grade_rank_total = __get_all_grade_ranking(competitor_id, mysql_rows, all_rank_dict['Grade'])
                 all_rank_dict['GradeRank'] = grade_rank
                 all_rank_dict['GradeRankTotal'] = grade_rank_total
 
-                year_squad_rank, year_squad_rank_total = __get_year_squad_ranking(competitor_id, mysql_rows, year, squad_id)
+                year_squad_rank, year_squad_rank_total = __get_year_squad_ranking(
+                    competitor_id, mysql_rows, all_rank_dict['Year'], all_rank_dict['SquadId']
+                )
                 all_rank_dict['YearSquadRank'] = year_squad_rank
                 all_rank_dict['YearSquadRankTotal'] = year_squad_rank_total
 

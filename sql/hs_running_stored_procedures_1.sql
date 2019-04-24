@@ -1296,27 +1296,27 @@ CREATE PROCEDURE `GetTrackAthleteResultsPart2`(
 )
 BEGIN
 
-	SELECT `eventId`, `year`, `squadId`, `competitorid`, `eventSubTypeId` 
+	SELECT `eventId`, `year`, `competitorid`, `eventSubTypeId` 
     FROM `RaceResult` NATURAL JOIN `Competitor` NATURAL JOIN `Athlete` NATURAL JOIN `Event` 
     WHERE `RaceResult`.`year`=`Competitor`.`year` AND `athleteid`=`inputAthleteId`
 	UNION
-	SELECT `eventId`, `year`, `squadId`, `competitorid`, `eventSubTypeId` 
+	SELECT `eventId`, `year`, `competitorid`, `eventSubTypeId` 
     FROM `FieldResult` NATURAL JOIN `Competitor` NATURAL JOIN `Athlete` NATURAL JOIN `Event` 
     WHERE `FieldResult`.`year`=`Competitor`.`year` AND `athleteid`=`inputAthleteId`
 	UNION
-	SELECT `eventId`, `RelayResult`.`year`, `squadId`, `competitorid`, `eventSubTypeId` 
+	SELECT `eventId`, `RelayResult`.`year`, `competitorid`, `eventSubTypeId` 
     FROM `RelayResult` JOIN `Competitor` ON (`Competitor`.`competitorId`=`competitorId1`) NATURAL JOIN `Athlete` NATURAL JOIN `Event` 
     WHERE `RelayResult`.`year`=`Competitor`.`year` AND `athleteid`=`inputAthleteId`
 	UNION
-	SELECT `eventId`, `RelayResult`.`year`, `squadId`, `competitorid`, `eventSubTypeId` 
+	SELECT `eventId`, `RelayResult`.`year`, `competitorid`, `eventSubTypeId` 
     FROM `RelayResult` JOIN `Competitor` ON (`Competitor`.`competitorId`=`competitorId2`) NATURAL JOIN `Athlete` NATURAL JOIN `Event` 
     WHERE `RelayResult`.`year`=`Competitor`.`year` AND `athleteid`=`inputAthleteId`
 	UNION
-	SELECT `eventId`, `RelayResult`.`year`, `squadId`, `competitorid`, `eventSubTypeId` 
+	SELECT `eventId`, `RelayResult`.`year`, `competitorid`, `eventSubTypeId` 
     FROM `RelayResult` JOIN `Competitor` ON (`Competitor`.`competitorId`=`competitorId3`) NATURAL JOIN `Athlete` NATURAL JOIN `Event` 
     WHERE `RelayResult`.`year`=`Competitor`.`year` AND `athleteid`=`inputAthleteId`
 	UNION
-	SELECT `eventId`, `RelayResult`.`year`, `squadId`, `competitorid`, `eventSubTypeId` 
+	SELECT `eventId`, `RelayResult`.`year`, `competitorid`, `eventSubTypeId` 
     FROM `RelayResult` JOIN `Competitor` ON (`Competitor`.`competitorId`=`competitorId4`) NATURAL JOIN `Athlete` NATURAL JOIN `Event` 
     WHERE `RelayResult`.`year`=`Competitor`.`year` AND `athleteid`=`inputAthleteId`
 	ORDER BY `year` DESC, `eventSubTypeId`, `eventId`;
