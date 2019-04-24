@@ -14,17 +14,17 @@
     <link rel="stylesheet" href="/static/bootstrap-3.4.1-dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="/static/bootstrap-3.4.1-dist/css/jumbotron-narrow.css">
     <link rel="stylesheet" href="/static/css/fixed-header.css">
-    <style>
-	    .competitorResults p {
-	    	font-size:18px;
-		}
-    </style>
+    <link rel="stylesheet" href="/static/css/competitor.css">
+    <link rel="stylesheet" href="/static/css/rankings.css">
     <script src="/static/js/jquery-1.11.2.js"></script>
     <script src="/static/js/utils.js"></script>
+    <script src="/static/js/results.js"></script>
+    <script src="/static/js/competitor.js"></script>
     <script>
     var cId = '{{competitorId}}';
     var urlParams = parseURL();
     var competitorId = cId ? cId : urlParams.cId;
+
 	$(function(){
 		var trackHomeLink = $('<a>');
 		$(trackHomeLink).attr('href', '/santa-clara-high-track-and-field');
@@ -32,6 +32,7 @@
 		$('.breadcrumb').append(trackHomeLink);
 		$('.breadcrumb').append(' / ');
 	})
+
 	$(function(){
 		$.ajax({
 			url: '/getTrackCompetitorResults',
@@ -42,7 +43,7 @@
 			success: function(res){
 				var div = $('<div>')
 				    .attr('class', 'list-group')
-				    .append($('<a>')
+				    .append($('<div>')
 				        .attr('class', 'list-group-item active')
 				        .append($('<h4>')
 				            .attr('class', 'list-group-item-heading'),
@@ -50,56 +51,29 @@
 				            .attr('class', 'list-group-item-text')));
 							    				
 				var resultsObj = JSON.parse(res);
-				var results = '';
 				var fullName = '';
 				var titleStr = '';
 				var year = '';
 				var athleteId = '';
-				var raceResults = '';
-				var fieldResults = '';
 				$.each(resultsObj,function(index, value){
-					fullName = value.FullName
-					titleStr = fullName + (value.Grade > 12 ? '' : ' (' + value.Grade + 'th grade)');
+					fullName = value.FullName;
+					var grade = value.Grade;
+					titleStr = fullName + (grade > 12 ? '' : ' (' + grade + 'th grade)');
 					year = value.Year;
 					athleteId = value.AthleteId;
-					results = $(div).clone();
-					$(results).find('a').attr(
-						'href', '/santa-clara-high-track-and-field/results/' + value.EventId + '/' + value.SquadId + '/' + value.Year + '/'
-					);
-					$(results).find('h4').text(value.Event + ' - ' + value.Result);
-					$(results).find('p').text(value.Squad + ' Rank: ' + value.Rank);
 					eventId = value.EventId;
-					if ((eventId >= 1 && eventId <= 28) || (eventId >= 38 && eventId <= 41)) {
-						if (raceResults == '') {
-							// remove placeholder text bc a race result will be appended
-							$('.raceResults').text('');
-							raceResults = 'yay!'
-						}
-						$('.raceResults').append(results);
-					} else if (eventId >= 29 && eventId <= 37) {
-						if (fieldResults == '') {
-							// remove placeholder text bc a field result will be appended
-							$('.fieldResults').text('');
-							fieldResults = 'yay!'
-						}
-						$('.fieldResults').append(results);
-					}
+					var resultDiv = $.fn.getResultDiv(
+						div, value.Event, value.Result, eventId, value.SquadId, year, value.Squad, 
+						value.YearSquadRank, value.YearSquadRankTotal, grade, value.GenderId, 
+						value.GradeRank, value.GradeRankTotal, value.AllRank, value.AllTotal
+					);
+					$.fn.addResults(eventId, resultDiv);
 				});
-				var seasonLink = $('<a>');
-				$(seasonLink).attr('href', '/santa-clara-high-track-and-field/season/' + year);
-				$(seasonLink).text(year + ' Season');
-				$('.breadcrumb').append(seasonLink);
-				$('.breadcrumb').append(' / ' + titleStr);
-				$('.text-muted').append(titleStr);
-				var athleteLink = $('<a>');
-				$(athleteLink).attr('href', '/santa-clara-high-track-and-field/athletes/' + athleteId);
-				$(athleteLink).text(fullName + ' (All Records)');
-				$('.filter').append(athleteLink);
-				$('.raceHeader').text(year + ' Season Best Track Times');
-				$('.fieldHeader').text(year + ' Season Best Field Marks');
-				$(document).ready(function() {
-					document.title = fullName + ' - ' + year + ' ' + document.title;
-				});
+				$.fn.setDocTitle(fullName, year);
+				$.fn.addToBreadcrumb(year, titleStr);
+				$.fn.setTitle(titleStr);
+				$.fn.setCareer(athleteId, fullName);
+				$.fn.setHeaders(year);
 			},
 			error: function(error){
 				console.log(error);
@@ -120,7 +94,7 @@
         	<h4 class="fieldHeader"></h4>
         	<div class="fieldResults">No Field Marks</div>
 		</div>
-      </div>
+      </div>	  	
 {% include "/common/footer.html" %}
     </div>
   </body>

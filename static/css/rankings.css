@@ -12,3 +12,12 @@
 	color: #FFF;
 	text-decoration: underline;
 }
+
+.seasonGrade {
+	font-size:18px;
+	padding-bottom: 15px;
+}
+
+.recordsHeader {
+  font-size:20px;
+}

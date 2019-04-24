@@ -47,15 +47,9 @@ def get_track_hall_of_fame_race_results():
         for row in cursor.fetchall():
             current_rank = row[0]
             current_time = Utils.format_track_time(row[4])
-            if last_rank > 0:
-                if current_time == last_time:
-                    current_rank = last_rank
-                else:
-                    last_rank = current_rank
-                    last_time = current_time
-            else:
-                last_rank = current_rank
-                last_time = current_time
+            current_rank, last_rank, current_time, last_time = __get_rank_measurement_metadata(
+                current_rank, last_rank, current_time, last_time
+            )
 
             if last_rank > max_rank_in_hall_of_fame:
                 break
@@ -93,15 +87,9 @@ def get_track_hall_of_fame_relay_results():
         for row in cursor.fetchall():
             current_rank = row[0]
             current_time = Utils.format_track_time(row[2])
-            if last_rank > 0:
-                if current_time == last_time:
-                    current_rank = last_rank
-                else:
-                    last_rank = current_rank
-                    last_time = current_time
-            else:
-                last_rank = current_rank
-                last_time = current_time
+            current_rank, last_rank, current_time, last_time = __get_rank_measurement_metadata(
+                current_rank, last_rank, current_time, last_time
+            )
 
             if last_rank > max_rank_in_hall_of_fame:
                 break
@@ -148,16 +136,10 @@ def get_track_hall_of_fame_field_results():
             current_rank = row[0]
             foot_part_of_distance = int(row[4])
             inch_part_of_distance = float(row[5])
-            current_distance_in_inches = (12 * foot_part_of_distance) + inch_part_of_distance
-            if last_rank > 0:
-                if current_distance_in_inches == last_distance:
-                    current_rank = last_rank
-                else:
-                    last_rank = current_rank
-                    last_distance = current_distance_in_inches
-            else:
-                last_rank = current_rank
-                last_distance = current_distance_in_inches
+            current_distance_in_inches = __get_distance_in_inches(foot_part_of_distance, inch_part_of_distance)
+            current_rank, last_rank, current_distance_in_inches, last_distance = __get_rank_measurement_metadata(
+                current_rank, last_rank, current_distance_in_inches, last_distance
+            )
 
             if last_rank > max_rank_in_hall_of_fame:
                 break
@@ -243,15 +225,9 @@ def get_track_race_results():
         for row in cursor.fetchall():
             current_rank = row[0]
             current_time = Utils.format_track_time(row[4])
-            if last_rank > 0:
-                if current_time == last_time:
-                    current_rank = last_rank
-                else:
-                    last_rank = current_rank
-                    last_time = current_time
-            else:
-                last_rank = current_rank
-                last_time = current_time
+            current_rank, last_rank, current_time, last_time = __get_rank_measurement_metadata(
+                current_rank, last_rank, current_time, last_time
+            )
 
             race_results_dict.append({
                 'Rank': current_rank,
@@ -287,16 +263,10 @@ def get_track_field_results():
             current_rank = row[0]
             foot_part_of_distance = int(row[4])
             inch_part_of_distance = float(row[5])
-            current_distance_in_inches = (12 * foot_part_of_distance) + inch_part_of_distance
-            if last_rank > 0:
-                if current_distance_in_inches == last_distance:
-                    current_rank = last_rank
-                else:
-                    last_rank = current_rank
-                    last_distance = current_distance_in_inches
-            else:
-                last_rank = current_rank
-                last_distance = current_distance_in_inches
+            current_distance_in_inches = __get_distance_in_inches(foot_part_of_distance, inch_part_of_distance)
+            current_rank, last_rank, current_distance_in_inches, last_distance = __get_rank_measurement_metadata(
+                current_rank, last_rank, current_distance_in_inches, last_distance
+            )
 
             field_results_dict.append({
                 'Rank': current_rank,
@@ -331,15 +301,9 @@ def get_track_relay_results():
         for row in cursor.fetchall():
             current_rank = row[0]
             current_time = Utils.format_track_time(row[2])
-            if last_rank > 0:
-                if current_time == last_time:
-                    current_rank = last_rank
-                else:
-                    last_rank = current_rank
-                    last_time = current_time
-            else:
-                last_rank = current_rank
-                last_time = current_time
+            current_rank, last_rank, current_time, last_time = __get_rank_measurement_metadata(
+                current_rank, last_rank, current_time, last_time
+            )
 
             relay_results_dict.append({
                 'Rank': current_rank,
@@ -375,57 +339,142 @@ def get_track_competitor_results():
         cursor.execute('CALL GetTrackCompetitorResults("{0}")'.format(competitor_id))
 
         competitor_results_dict = []
-
         more_results = True
         while more_results:
-            last_rank = 0
-            last_measurement = 0
-            current_measurement = 0
-            for row in cursor.fetchall():
-                result_competitor_id = str(row[6])
-                current_rank = row[11]
-                event_id = row[1]
-                resultStr = 'Unknown'
-                if (event_id >= 1 and event_id <= 28) or (event_id >= 38 and event_id <= 41):
-                    current_measurement = Utils.format_track_time(row[3])
-                    resultStr = '{0}{1}'.format(current_measurement, row[4])
-                elif event_id >= 29 and event_id <= 37:
-                    foot_part_of_distance = int(row[3])
-                    inch_part_of_distance = float(row[4])
-                    current_measurement = (12 * foot_part_of_distance) + inch_part_of_distance
-                    if str(inch_part_of_distance).endswith('.0'):
-                        inch_part_of_distance = int(inch_part_of_distance)
-                    resultStr = '{0}\' {1}"'.format(foot_part_of_distance, inch_part_of_distance)
+            mysql_rows = cursor.fetchall()
+            all_rank_dict, year, squad_id, grade = __get_all_ranking_and_misc(competitor_id, mysql_rows)
+            if all_rank_dict:
+                grade_rank, grade_rank_total = __get_all_grade_ranking(competitor_id, mysql_rows, grade)
+                all_rank_dict['GradeRank'] = grade_rank
+                all_rank_dict['GradeRankTotal'] = grade_rank_total
 
-                if last_rank > 0:
-                    if current_measurement == last_measurement:
-                        current_rank = last_rank
-                    else:
-                        last_rank = current_rank
-                        last_measurement = current_measurement
-                else:
-                    last_rank = current_rank
-                    last_measurement = current_measurement
+                year_squad_rank, year_squad_rank_total = __get_year_squad_ranking(competitor_id, mysql_rows, year, squad_id)
+                all_rank_dict['YearSquadRank'] = year_squad_rank
+                all_rank_dict['YearSquadRankTotal'] = year_squad_rank_total
 
-                if competitor_id == result_competitor_id:
-                    competitor_results_dict.append({
-                        'Event': str(row[0]),
-                        'EventId': event_id,
-                        'FullName': str(row[2]),
-                        'Result': resultStr,
-                        'Grade': row[5],
-                        'CompetitorId': str(row[6]),
-                        'Year': row[7],
-                        'Squad': str(row[8]),
-                        'SquadId': row[9],
-                        'AthleteId': row[10],
-                        'Rank': current_rank,
-                    })
+                competitor_results_dict.append(all_rank_dict)
             more_results = cursor.nextset()
 
         return json.dumps(competitor_results_dict)
     except Exception as e:
         return render_template('error.html', error=str(e))
+
+
+def __get_all_ranking_and_misc(competitor_id, mysql_rows):
+    # misc data to return
+    year = 0
+    squad_id = 0
+    grade = 0
+
+    last_rank = 0
+    last_measurement = 0
+    current_measurement = 0
+    all_rank_dict = {}
+    all_rank_total = 0
+    for row in mysql_rows:
+        all_rank_total +=1
+        result_competitor_id = str(row[6])
+        current_rank = row[12]
+        event_id = row[1]
+        resultStr = 'Unknown'
+        if __is_race_event(event_id):
+            current_measurement = Utils.format_track_time(row[3])
+            resultStr = '{0}{1}'.format(current_measurement, row[4])
+        elif __is_field_event(event_id):
+            foot_part_of_distance = int(row[3])
+            inch_part_of_distance = float(row[4])
+            current_measurement = __get_distance_in_inches(foot_part_of_distance, inch_part_of_distance)
+            if str(inch_part_of_distance).endswith('.0'):
+                inch_part_of_distance = int(inch_part_of_distance)
+            resultStr = '{0}\' {1}"'.format(foot_part_of_distance, inch_part_of_distance)
+
+        current_rank, last_rank, current_measurement, last_measurement = __get_rank_measurement_metadata(
+            current_rank, last_rank, current_measurement, last_measurement
+        )
+
+        if competitor_id == result_competitor_id:
+            year = row[7]
+            squad_id = row[9]
+            grade = row[5]
+            all_rank_dict = {
+                'Event': str(row[0]),
+                'EventId': event_id,
+                'FullName': str(row[2]),
+                'Result': resultStr,
+                'Grade': grade,
+                'CompetitorId': str(row[6]),
+                'Year': year,
+                'Squad': str(row[8]),
+                'SquadId': squad_id,
+                'AthleteId': row[10],
+                'GenderId': row[11],
+                'AllRank': current_rank,
+            }
+
+    if all_rank_dict:
+        all_rank_dict['AllTotal'] = all_rank_total
+    
+    return all_rank_dict, year, squad_id, grade
+
+
+def __get_all_grade_ranking(competitor_id, mysql_rows, grade):
+    last_rank = 0
+    last_measurement = 0
+    current_measurement = 0
+    grade_rank = 0
+    grade_rank_total = 0
+    for row in mysql_rows:
+        if grade == row[5]:
+            grade_rank_total +=1
+            current_rank = grade_rank_total
+            event_id = row[1]
+            if __is_race_event(event_id):
+                current_measurement = Utils.format_track_time(row[3])
+            elif __is_field_event(event_id):
+                foot_part_of_distance = int(row[3])
+                inch_part_of_distance = float(row[4])
+                current_measurement = __get_distance_in_inches(foot_part_of_distance, inch_part_of_distance)
+                if str(inch_part_of_distance).endswith('.0'):
+                    inch_part_of_distance = int(inch_part_of_distance)
+
+            current_rank, last_rank, current_measurement, last_measurement = __get_rank_measurement_metadata(
+                current_rank, last_rank, current_measurement, last_measurement
+            )
+
+            if competitor_id == str(row[6]):
+                grade_rank = current_rank
+
+    return grade_rank, grade_rank_total
+
+
+def __get_year_squad_ranking(competitor_id, mysql_rows, year, squad_id):
+    last_rank = 0
+    last_measurement = 0
+    current_measurement = 0
+    year_squad_rank = 0
+    year_squad_rank_total = 0
+    for row in mysql_rows:
+        if year == row[7] and squad_id == row[9]:
+            year_squad_rank_total +=1
+            current_rank = year_squad_rank_total
+            event_id = row[1]
+            if __is_race_event(event_id):
+                current_measurement = Utils.format_track_time(row[3])
+            elif __is_field_event(event_id):
+                foot_part_of_distance = int(row[3])
+                inch_part_of_distance = float(row[4])
+                current_measurement = __get_distance_in_inches(foot_part_of_distance, inch_part_of_distance)
+                if str(inch_part_of_distance).endswith('.0'):
+                    inch_part_of_distance = int(inch_part_of_distance)
+
+            current_rank, last_rank, current_measurement, last_measurement = __get_rank_measurement_metadata(
+                current_rank, last_rank, current_measurement, last_measurement
+            )
+
+            if competitor_id == str(row[6]):
+                year_squad_rank = current_rank
+
+    return year_squad_rank, year_squad_rank_total
 
 
 @track_db_app.route('/getTrackAthletes', methods=['GET'])
@@ -474,28 +523,22 @@ def get_track_athlete_results():
                 pr_key = '{0}.{1}'.format(event_sub_type_id, event_id_str)
                 resultStr = 'Unknown'
                 pr_measurement = ''
-                if (event_id >= 1 and event_id <= 28) or (event_id >= 38 and event_id <= 41):
+                if __is_race_event(event_id):
                     pr_measurement = row[3]
                     current_measurement = Utils.format_track_time(pr_measurement)
                     resultStr = '{0}{1}'.format(current_measurement, row[4])
-                elif event_id >= 29 and event_id <= 37:
+                elif __is_field_event(event_id):
                     foot_part_of_distance = int(row[3])
                     inch_part_of_distance = float(row[4])
-                    current_measurement = (12 * foot_part_of_distance) + inch_part_of_distance
+                    current_measurement = __get_distance_in_inches(foot_part_of_distance, inch_part_of_distance)
                     pr_measurement = current_measurement
                     if str(inch_part_of_distance).endswith('.0'):
                         inch_part_of_distance = int(inch_part_of_distance)
                     resultStr = '{0}\' {1}"'.format(row[3], inch_part_of_distance)
 
-                if last_rank > 0:
-                    if current_measurement == last_measurement:
-                        current_rank = last_rank
-                    else:
-                        last_rank = current_rank
-                        last_measurement = current_measurement
-                else:
-                    last_rank = current_rank
-                    last_measurement = current_measurement
+                current_rank, last_rank, current_measurement, last_measurement = __get_rank_measurement_metadata(
+                    current_rank, last_rank, current_measurement, last_measurement
+                )
 
                 result_athlete_id = int(row[10])
                 if result_athlete_id == athlete_id:
@@ -521,10 +564,10 @@ def get_track_athlete_results():
                     pr_result_dict = personal_record_dict.get(pr_key)
                     update_pr = True if pr_result_dict is None else False
                     if pr_result_dict is not None:
-                        if (event_id >= 1 and event_id <= 28) or (event_id >= 38 and event_id <= 41):
+                        if __is_race_event(event_id):
                             if result_dict['PRMeasurement'] <= pr_result_dict['PRMeasurement']:
                                 update_pr = True
-                        elif event_id >= 29 and event_id <= 37:
+                        elif __is_field_event(event_id):
                             if result_dict['PRMeasurement'] >= pr_result_dict['PRMeasurement']:
                                 update_pr = True
                     if update_pr:
@@ -560,15 +603,9 @@ def get_track_race_results_by_event():
         for row in cursor.fetchall():
             current_rank = row[0]
             current_time = Utils.format_track_time(row[3])
-            if last_rank > 0:
-                if current_time == last_time:
-                    current_rank = last_rank
-                else:
-                    last_rank = current_rank
-                    last_time = current_time
-            else:
-                last_rank = current_rank
-                last_time = current_time
+            current_rank, last_rank, current_time, last_time = __get_rank_measurement_metadata(
+                current_rank, last_rank, current_time, last_time
+            )
 
             top_race_results_dict.append({
                 'Rank': current_rank,
@@ -607,16 +644,10 @@ def get_track_field_results_by_event():
             current_rank = row[0]
             foot_part_of_distance = int(row[3])
             inch_part_of_distance = float(row[4])
-            current_distance_in_inches = (12 * foot_part_of_distance) + inch_part_of_distance
-            if last_rank > 0:
-                if current_distance_in_inches == last_distance:
-                    current_rank = last_rank
-                else:
-                    last_rank = current_rank
-                    last_distance = current_distance_in_inches
-            else:
-                last_rank = current_rank
-                last_distance = current_distance_in_inches
+            current_distance_in_inches = __get_distance_in_inches(foot_part_of_distance, inch_part_of_distance)
+            current_rank, last_rank, current_distance_in_inches, last_distance = __get_rank_measurement_metadata(
+                current_rank, last_rank, current_distance_in_inches, last_distance
+            )
 
             top_field_results_dict.append({
                 'Rank': current_rank,
@@ -655,15 +686,9 @@ def get_track_relay_results_by_event():
         for row in cursor.fetchall():
             current_rank = row[0]
             current_time = Utils.format_track_time(row[2])
-            if last_rank > 0:
-                if current_time == last_time:
-                    current_rank = last_rank
-                else:
-                    last_rank = current_rank
-                    last_time = current_time
-            else:
-                last_rank = current_rank
-                last_time = current_time
+            current_rank, last_rank, current_time, last_time = __get_rank_measurement_metadata(
+                current_rank, last_rank, current_time, last_time
+            )
 
             top_relay_results_dict.append({
                 'Rank': current_rank,
@@ -692,3 +717,29 @@ def get_track_relay_results_by_event():
         return json.dumps(top_relay_results_dict)
     except Exception as e:
         return render_template('error.html', error=str(e))
+
+
+def __is_race_event(event_id):
+    return (event_id >= 1 and event_id <= 28) or (event_id >= 38 and event_id <= 41)
+
+
+def __is_field_event(event_id):
+    return event_id >= 29 and event_id <= 37
+
+
+def __get_distance_in_inches(foot_part_of_distance, inch_part_of_distance):
+    return (12 * foot_part_of_distance) + inch_part_of_distance
+
+
+def __get_rank_measurement_metadata(current_rank, last_rank, current_measurement, last_measurement):
+    if last_rank > 0:
+        if current_measurement == last_measurement:
+            current_rank = last_rank
+        else:
+            last_rank = current_rank
+            last_measurement = current_measurement
+    else:
+        last_rank = current_rank
+        last_measurement = current_measurement
+    return current_rank, last_rank, current_measurement, last_measurement
+

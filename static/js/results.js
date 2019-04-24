@@ -44,26 +44,38 @@
       return squadName;
   }
 
-  $.fn.getResultDiv = function(div, event, result, eventId, squadId, year, squad, squadRank, squadTotal, grade, genderId) {
+  $.fn.getResultDiv = function(
+    div, event, result, eventId, squadId, year, squad, squadRank, squadTotal, grade, genderId, 
+    allGradeRank, allGradeTotal, allTimeRank, allTimeTotal
+  ) {
     var results = $(div).clone();
     $(results).find('h4').append(
       $('<div>').attr('class', 'eventMark').append(event + ' - ' + result)
     );
     $(results).find('p').append(
-      $.fn.getRankings(eventId, squadId, year, squad, squadRank, squadTotal, grade, genderId, allGradeRank, allGradeTotal, allTimeRank, allTimeTotal)
+      $.fn.getRankings(
+        eventId, squadId, year, squad, squadRank, squadTotal, grade, genderId, allGradeRank, allGradeTotal, 
+        allTimeRank, allTimeTotal
+      )
     );
     return results;
   }
 
   $.fn.getRankings = function(
-    eventId, squadId, year, squad, squadRank, squadTotal, grade, genderId, allGradeRank, allGradeTotal, allTimeRank, allTimeTotal
+    eventId, squadId, year, squad, squadRank, squadTotal, grade, genderId, allGradeRank, allGradeTotal, 
+    allTimeRank, allTimeTotal
   ) {
     var genderName = $.fn.getGenderName(genderId).trim();
     var seasonSquadRankDiv = $.fn.getSeasonSquadRankDiv(eventId, squadId, year, squad, squadRank, squadTotal);
-    var allGradeRankDiv = $.fn.getAllGradeRankDiv(eventId, genderId, grade, genderName, allGradeRank, allGradeTotal);
     var allTimeRankDiv = $.fn.getAllTimeRankDiv(eventId, genderId, genderName, allTimeRank, allTimeTotal);
     var rankingsDiv = $('<div>').attr('class', 'rankings').append('Rankings');
-    $(rankingsDiv).append(seasonSquadRankDiv).append(allGradeRankDiv).append(allTimeRankDiv);
+    $(rankingsDiv).append(seasonSquadRankDiv);
+    if (grade <=12) {
+      $(rankingsDiv).append(
+        $.fn.getAllGradeRankDiv(eventId, genderId, grade, genderName, allGradeRank, allGradeTotal)
+      );
+    }
+    $(rankingsDiv).append(allTimeRankDiv);
     return rankingsDiv;
   }
 

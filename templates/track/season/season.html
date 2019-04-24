@@ -91,8 +91,9 @@
 				var femaleCount = 0;
 				var maleCount = 0;
 				$.each(resultsObj,function(index, value){
-					var gradeStr = $.fn.getAbbrGradeName(value.Grade);
-				    var nameStr = value.LastName + ', ' + value.FirstName + ' (' + gradeStr + ')';
+					var grade = value.Grade;
+					var gradeStr = grade > 12 ? '' : ' (' + $.fn.getAbbrGradeName(value.Grade) + ')';
+				    var nameStr = value.LastName + ', ' + value.FirstName + gradeStr;
 				    var link = '/trackCompetitor?cId=' + value.CompetitorId;
 				    var athleteLinkDiv = $('<div>').append($('<a>').attr('href', link).text(nameStr));
 					var genderStr = value.Gender;
