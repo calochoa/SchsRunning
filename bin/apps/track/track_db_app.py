@@ -521,87 +521,55 @@ def get_track_athlete_results():
         cursor = mydb.cursor()
         cursor.execute('CALL GetTrackAthleteResults({0})'.format(athlete_id))
 
-        metadata_flag = True
         more_results = True
+        athlete_result_metadata_dict_tuple = ()
+        event_to_result_dict = {}
         while more_results:
-            '''
             # first save all the events, years, squad ids, competitor ids for the athlete
-            if metadata_flag:
-                metadata_flag = False
-                for row in cursor.fetchall():
-                    print (row)
+            if not athlete_result_metadata_dict_tuple:
+                athlete_result_metadata_dict_tuple = cursor.fetchall()
             else:
                 # save all the results for each of the events that the athlete competed in
-
-        # iterate over the metadata
-            # calculate the rankings by looking up the competitor id in the event specific results 
-            '''
-
-            last_rank = 0
-            last_measurement = 0
-            current_measurement = 0
-            for row in cursor.fetchall():
-                result_competitor_id = str(row[6])
-                current_rank = row[13]
-                event_id = row[1]
-                event_sub_type_id = row[12]
-                event_id_str = '0{0}'.format(event_id) if event_id < 10 else event_id
-                pr_key = '{0}.{1}'.format(event_sub_type_id, event_id_str)
-                resultStr = 'Unknown'
-                pr_measurement = ''
-                if __is_race_event(event_id):
-                    pr_measurement = row[3]
-                    current_measurement = Utils.format_track_time(pr_measurement)
-                    resultStr = '{0}{1}'.format(current_measurement, row[4])
-                elif __is_field_event(event_id):
-                    foot_part_of_distance = int(row[3])
-                    inch_part_of_distance = float(row[4])
-                    current_measurement = __get_distance_in_inches(foot_part_of_distance, inch_part_of_distance)
-                    pr_measurement = current_measurement
-                    if str(inch_part_of_distance).endswith('.0'):
-                        inch_part_of_distance = int(inch_part_of_distance)
-                    resultStr = '{0}\' {1}"'.format(row[3], inch_part_of_distance)
-
-                current_rank, last_rank, current_measurement, last_measurement = __get_rank_measurement_metadata(
-                    current_rank, last_rank, current_measurement, last_measurement
-                )
-
-                result_athlete_id = int(row[10])
-                if result_athlete_id == athlete_id:
-                    result_dict = {
-                        'Event': str(row[0]),
-                        'EventId': event_id,
-                        'FullName': str(row[2]),
-                        'Result': resultStr,
-                        'Grade': row[5],
-                        'CompetitorId': str(row[6]),
-                        'Year': row[7],
-                        'Squad': str(row[8]),
-                        'SquadId': row[9],
-                        'GenderId': row[11],
-                        'EventSupTypeId': event_sub_type_id,
-                        'Rank': current_rank,
-                        'PRMeasurement': pr_measurement,
-                        'PR': False,
-                        'AthleteId': result_athlete_id,
-                    }
-                    track_athlete_results.append(result_dict)
-
-                    pr_result_dict = personal_record_dict.get(pr_key)
-                    update_pr = True if pr_result_dict is None else False
-                    if pr_result_dict is not None:
-                        if __is_race_event(event_id):
-                            if result_dict['PRMeasurement'] <= pr_result_dict['PRMeasurement']:
-                                update_pr = True
-                        elif __is_field_event(event_id):
-                            if result_dict['PRMeasurement'] >= pr_result_dict['PRMeasurement']:
-                                update_pr = True
-                    if update_pr:
-                        personal_record_dict[pr_key] = result_dict.copy()
-                        personal_record_dict[pr_key]['PR'] = True
-
+                result_list = cursor.fetchall()
+                if result_list:
+                    event_id = result_list[0][1]
+                    event_to_result_dict[event_id] = result_list
             more_results = cursor.nextset()
 
+        # iterate over the metadata
+        for athlete_result_metadata_dict in athlete_result_metadata_dict_tuple:
+            # construct personal record key
+            event_id = athlete_result_metadata_dict[0]
+            event_sub_type_id = athlete_result_metadata_dict[4]
+            event_id_str = '0{0}'.format(event_id) if event_id < 10 else event_id
+            pr_key = '{0}.{1}'.format(event_sub_type_id, event_id_str)
+
+            competitor_id = athlete_result_metadata_dict[3]
+            mysql_rows = event_to_result_dict.get(event_id)
+            # calculate the rankings by looking up the competitor id in the event specific results 
+            all_rank_dict, year, squad_id, grade = __get_all_ranking_and_misc(competitor_id, mysql_rows)
+            if all_rank_dict:
+                grade_rank, grade_rank_total = __get_all_grade_ranking(competitor_id, mysql_rows, grade)
+                all_rank_dict['GradeRank'] = grade_rank
+                all_rank_dict['GradeRankTotal'] = grade_rank_total
+
+                year_squad_rank, year_squad_rank_total = __get_year_squad_ranking(competitor_id, mysql_rows, year, squad_id)
+                all_rank_dict['YearSquadRank'] = year_squad_rank
+                all_rank_dict['YearSquadRankTotal'] = year_squad_rank_total
+
+                track_athlete_results.append(all_rank_dict)
+
+                # determine which are the personal records
+                pr_result_dict = personal_record_dict.get(pr_key)
+                update_pr = True if pr_result_dict is None else False
+                if pr_result_dict is not None:
+                    if all_rank_dict['AllRank'] <= pr_result_dict['AllRank']:
+                        update_pr = True
+                if update_pr:
+                    personal_record_dict[pr_key] = all_rank_dict.copy()
+                    personal_record_dict[pr_key]['PR'] = True
+
+        # sort and add the personal records
         for pr_key in collections.OrderedDict(sorted(personal_record_dict.items())):
             track_athlete_results.append(personal_record_dict.get(pr_key))
 

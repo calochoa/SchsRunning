@@ -14,13 +14,11 @@
     <link rel="stylesheet" href="/static/bootstrap-3.4.1-dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="/static/bootstrap-3.4.1-dist/css/jumbotron-narrow.css">
     <link rel="stylesheet" href="/static/css/fixed-header.css">
-    <style>
-    .runnerResults p {
-    	font-size:16px;
-	}
-    </style>
+    <link rel="stylesheet" href="/static/css/rankings.css">
     <script src="/static/js/jquery-1.11.2.js"></script>
     <script src="/static/js/utils.js"></script>
+    <script src="/static/js/results.js"></script>
+    <script src="/static/js/athlete.js"></script>
     <script>
     var aId = {{aId}};
     var urlParams = parseURL();
@@ -55,53 +53,38 @@
 				            .attr('class', 'list-group-item-heading'),
 				            $('<p>')
 				            .attr('class', 'list-group-item-text')));
-				var headerDiv = $('<div>').append($('<h4>'));
 				var rankDiv = $('<div>');
 				var lastYear = '';
 				var results = '';
-				var prResults = '';
 				var titleStr = '';
 				var genderStr = '';
 				var genderLinkStr = '';
 				var resultsObj = JSON.parse(res);
 				$.each(resultsObj,function(index, value){
-					genderStr = value.GenderId == 2 ? 'Males' : 'Females';
-					genderLinkStr = value.GenderId == 2 ? 'males' : 'females';
-
-					var gradeStr = value.Grade > 12 ? '' : ' - ' + value.Grade + 'th grade';
-					results = $(div).clone();
-					$(results).find('a').attr(
-						'href', '/santa-clara-high-track-and-field/results/' + value.EventId + '/' + value.SquadId + '/' + value.Year + '/'
+					var genderId = value.GenderId;
+					var grade = value.Grade;
+					genderStr = $.fn.getGenderStr(genderId);
+					genderLinkStr = $.fn.getGenderLinkStr(genderId);
+					var resultDiv = $.fn.getResultDiv(
+						div, value.Event, value.Result, value.EventId, value.SquadId, value.Year, value.Squad, 
+						value.YearSquadRank, value.YearSquadRankTotal, grade, genderId, 
+						value.GradeRank, value.GradeRankTotal, value.AllRank, value.AllTotal
 					);
-					$(results).find('h4').text(value.Event + ' - ' + value.Result);
+
 					if (value.PR) {
-						prResults = $(results).clone()
-						//$(prResults).find('p').append($(rankDiv).clone().text('Lifetime Girls Rank: 10'));
-						$(prResults).find('p').text(value.Year + ' Season' + gradeStr);
-						$('.personalRecords').append(prResults);						
+						$.fn.addPersonalRecord($(resultDiv).clone(), value.Year, grade, $.fn.getGradeName(grade))
 					} else {
-						$(results).find('p').append($(rankDiv).clone().text(value.Squad + ' Rank: ' + value.Rank));
 						if (lastYear != value.Year) {
+							$.fn.addSeasonRecordsHeader(value.Year, grade, $.fn.getAbbrGradeName(grade))
 							lastYear = value.Year;
-							var seasonLink = $('<span>').append($('<a>'));
-							$(seasonLink).find('a').attr('href', '/santa-clara-high-track-and-field/season/' + value.Year);
-							$(seasonLink).find('a').text(value.Year + ' Season');
-							$(seasonLink).append(' Records' + gradeStr);
-							$('.seasonRecords').append($(headerDiv).clone().find('h4').append(seasonLink));
 						}
-						$('.seasonRecords').append(results);
+						$.fn.addSeasonRecord(resultDiv)
 					}
 					titleStr = value.FullName;
 				});
-				var genderLink = $('<a>');
-				$(genderLink).attr('href', '/santa-clara-high-track-and-field/athletes/' + genderLinkStr);
-				$(genderLink).text(genderStr);
-				$('.breadcrumb').append(genderLink);
-				$('.breadcrumb').append(' / ' + titleStr);
-				$('.text-muted').text(titleStr);
-				$(document).ready(function() {
-					document.title = titleStr + ' - ' + document.title;
-				});
+				$.fn.addToBreadcrumb(genderLinkStr, genderStr, titleStr);
+				$.fn.setTitle(titleStr);
+				$.fn.setDocTitle(titleStr);
 			},
 			error: function(error){
 				console.log(error);
@@ -115,7 +98,7 @@
 {% include "/common/fh-nav-bc-title.html" %}
       <div class="non-fixed-content row marketing">
         <div class="col-xs-6">
-        	<h4>Personal Records</h4>
+        	<h4 class="recordsHeader">Personal Records</h4>
         	<div class="personalRecords"></div>
 		</div>
         <div class="col-xs-6">
