@@ -59,6 +59,7 @@ def get_top_course_results():
 
         return json.dumps(top_results_dict)
     except Exception as e:
+        print (e)
         return render_template('error.html',error = str(e))
 
 
@@ -83,6 +84,7 @@ def get_course_info():
 
         return json.dumps(courses_dict)
     except Exception as e:
+        print (e)
         return render_template('error.html',error = str(e))
 
 
@@ -140,6 +142,7 @@ def get_top_team_course_results():
 
         return json.dumps(top_team_course_results_dict)
     except Exception as e:
+        print (e)
         return render_template('error.html',error = str(e))
 
 
@@ -169,6 +172,7 @@ def get_xc_results_by_race_competitor(race_ids,competitor_ids):
 
         return race_competitor_data_dict
     except Exception as e:
+        print (e)
         return render_template('error.html',error = str(e))
 
 
@@ -191,6 +195,7 @@ def get_xc_runners():
 
         return json.dumps(runners_dict)
     except Exception as e:
+        print (e)
         return render_template('error.html',error = str(e))
 
 
@@ -221,6 +226,7 @@ def get_xc_runner_results():
 
         return json.dumps(runner_results_dict)
     except Exception as e:
+        print (e)
         return render_template('error.html',error = str(e))
 
 
@@ -246,6 +252,7 @@ def get_xc_competitors_by_year():
 
         return json.dumps(competitors_dict)
     except Exception as e:
+        print (e)
         return render_template('error.html',error = str(e))
 
 
@@ -269,6 +276,7 @@ def get_xc_races_by_year():
 
         return json.dumps(races_dict)
     except Exception as e:
+        print (e)
         return render_template('error.html',error = str(e))
 
 
@@ -300,6 +308,7 @@ def get_xc_competitor_results():
 
         return json.dumps(competitor_results_dict)
     except Exception as e:
+        print (e)
         return render_template('error.html',error = str(e))
 
 
@@ -335,6 +344,7 @@ def get_xc_race_results():
 
         return json.dumps(race_results_dict)
     except Exception as e:
+        print (e)
         return render_template('error.html',error = str(e))
 
 
@@ -363,5 +373,6 @@ def get_past_xc_alumni_champions():
 
         return json.dumps(alumni_race_dict)
     except Exception as e:
+        print (e)
         return render_template('error.html',error = str(e))
 

@@ -3,7 +3,7 @@ __email__ = "calochoa@gmail.com"
 
 
 from flask import Blueprint, render_template, json, request
-from bin.cache import cache
+from bin.cache import cache as mc_cache
 from iron_cache import *
 import MySQLdb
 
@@ -14,8 +14,7 @@ shared_db_app = Blueprint('shared_db_app', __name__, template_folder='templates'
 
 
 shared_iron_cache = IronCache()
-CACHE_NAME = 'shared_cache'
-KEY_DELIM = '[#]'
+IC_CACHE_NAME = 'shared_cache'
 
 
 # MySQL configurations
@@ -40,23 +39,16 @@ mydb = MySQLdb.connect(
 @shared_db_app.route('/getCoachesByYear',methods=['GET'])
 def get_coaches_by_year():
     try:
-        print (' + + + + ')
-        val = cache.get('foo')
-        print (val)
-        if not val:
-            cache.set('foo', 'barzz')
-            print (' woot ')
-        print (cache.get('foo'))
-        print (' + + + + ')
         year = request.args.get('year', default = 2017, type = int)
         coach_type_ids_str = request.args.get('coachTypeIds', default = '1,2', type = str)
 
-        coaches_by_year_cache_key = 'get_coaches_by_year_{0}{1}{2}'.format(year, KEY_DELIM, coach_type_ids_str)
-        coaches_by_year = shared_iron_cache.get(cache=CACHE_NAME, key=coaches_by_year_cache_key)
+        coaches_by_year_cache_key = Utils.get_cache_key_two('get_coaches_by_year_', year, coach_type_ids_str)
+        coaches_by_year = shared_iron_cache.get(cache=IC_CACHE_NAME, key=coaches_by_year_cache_key)
         return coaches_by_year.value
     except Exception as e:
+        print (e)
         coaches_by_year = db_get_coaches_by_year(year, coach_type_ids_str)
-        shared_iron_cache.put(cache=CACHE_NAME, key=coaches_by_year_cache_key, value=coaches_by_year)
+        shared_iron_cache.put(cache=IC_CACHE_NAME, key=coaches_by_year_cache_key, value=coaches_by_year)
         return coaches_by_year
 
 
@@ -77,6 +69,7 @@ def db_get_coaches_by_year(year, coach_type_ids_str):
 
         return json.dumps(coaches_dict)
     except Exception as e:
+        print (e)
         return render_template('error.html',error = str(e))
 
 
@@ -85,12 +78,13 @@ def get_coach_timeline():
     try:
         coach_type_ids_str = request.args.get('coachTypeIds', default = '1,2', type = str)
 
-        coach_timeline_cache_key = 'get_coach_timeline_{0}'.format(coach_type_ids_str)
-        coach_timeline = shared_iron_cache.get(cache=CACHE_NAME, key=coach_timeline_cache_key)
+        coach_timeline_cache_key = Utils.get_cache_key_one('get_coach_timeline_', coach_type_ids_str)
+        coach_timeline = shared_iron_cache.get(cache=IC_CACHE_NAME, key=coach_timeline_cache_key)
         return coach_timeline.value
     except Exception as e:
+        print (e)
         coach_timeline = db_get_coach_timeline(coach_type_ids_str)
-        shared_iron_cache.put(cache=CACHE_NAME, key=coach_timeline_cache_key, value=coach_timeline)
+        shared_iron_cache.put(cache=IC_CACHE_NAME, key=coach_timeline_cache_key, value=coach_timeline)
         return coach_timeline
 
 
@@ -108,6 +102,7 @@ def db_get_coach_timeline(coach_type_ids_str):
 
         return json.dumps(coach_timeline_dict)
     except Exception as e:
+        print (e)
         return render_template('error.html',error = str(e))
 
 
@@ -117,12 +112,13 @@ def get_coach_by_id():
         coach_id = request.args.get('coachId', default = 1, type = int)
         coach_type_ids_str = request.args.get('coachTypeIds', default = '1,2', type = str)
 
-        coach_by_id_cache_key = 'get_coach_by_id_{0}{1}{2}'.format(coach_id, KEY_DELIM, coach_type_ids_str)
-        coach_by_id = shared_iron_cache.get(cache=CACHE_NAME, key=coach_by_id_cache_key)
+        coach_by_id_cache_key = Utils.get_cache_key_two('get_coach_by_id_', coach_id, coach_type_ids_str)
+        coach_by_id = shared_iron_cache.get(cache=IC_CACHE_NAME, key=coach_by_id_cache_key)
         return coach_by_id.value
     except Exception as e:
+        print (e)
         coach_by_id = db_get_coach_by_id(coach_id, coach_type_ids_str)
-        shared_iron_cache.put(cache=CACHE_NAME, key=coach_by_id_cache_key, value=coach_by_id)
+        shared_iron_cache.put(cache=IC_CACHE_NAME, key=coach_by_id_cache_key, value=coach_by_id)
         return coach_by_id
 
 
@@ -142,6 +138,7 @@ def db_get_coach_by_id(coach_id, coach_type_ids_str):
 
         return json.dumps(coaches_dict)
     except Exception as e:
+        print (e)
         return render_template('error.html',error = str(e))
 
 
@@ -150,12 +147,13 @@ def get_coaches():
     try:
         coach_type_ids_str = request.args.get('coachTypeIds', default = '1,2', type = str)
 
-        coaches_cache_key = 'get_coaches_{0}'.format(coach_type_ids_str)
-        coaches = shared_iron_cache.get(cache=CACHE_NAME, key=coaches_cache_key)
+        coaches_cache_key = Utils.get_cache_key_one('get_coaches_', coach_type_ids_str)
+        coaches = shared_iron_cache.get(cache=IC_CACHE_NAME, key=coaches_cache_key)
         return coaches.value
     except Exception as e:
+        print (e)
         coaches = db_get_coaches(coach_type_ids_str)
-        shared_iron_cache.put(cache=CACHE_NAME, key=coaches_cache_key, value=coaches)
+        shared_iron_cache.put(cache=IC_CACHE_NAME, key=coaches_cache_key, value=coaches)
         return coaches
 
 
@@ -176,6 +174,7 @@ def db_get_coaches(coach_type_ids_str):
 
         return json.dumps(coaches_dict)
     except Exception as e:
+        print (e)
         return render_template('error.html',error = str(e))
 
 
@@ -185,12 +184,13 @@ def get_awards_by_year():
         year = request.args.get('year', default = 2017, type = int)
         sport_id = request.args.get('sportId', default = 1, type = int)
 
-        awards_by_year_cache_key = 'get_awards_by_year_{0}{1}{2}'.format(year, KEY_DELIM, sport_id)
-        awards_by_year = shared_iron_cache.get(cache=CACHE_NAME, key=awards_by_year_cache_key)
+        awards_by_year_cache_key = Utils.get_cache_key_two('get_awards_by_year_', year, sport_id)
+        awards_by_year = shared_iron_cache.get(cache=IC_CACHE_NAME, key=awards_by_year_cache_key)
         return awards_by_year.value
     except Exception as e:
+        print (e)
         awards_by_year = db_get_awards_by_year(year, sport_id)
-        shared_iron_cache.put(cache=CACHE_NAME, key=awards_by_year_cache_key, value=awards_by_year)
+        shared_iron_cache.put(cache=IC_CACHE_NAME, key=awards_by_year_cache_key, value=awards_by_year)
         return awards_by_year
 
 
@@ -215,6 +215,7 @@ def db_get_awards_by_year(year, sport_id):
 
         return json.dumps(awards_dict)
     except Exception as e:
+        print (e)
         return render_template('error.html',error = str(e))
 
 
@@ -230,12 +231,13 @@ def get_award_by_id():
         if squad_id == 0:
             squad_id = '1,2,3,4'
 
-        award_by_id_cache_key = 'get_award_by_id_{0}{1}{2}{3}{4}'.format(award_id, KEY_DELIM, squad_id, KEY_DELIM, sport_id)
-        award_by_id = shared_iron_cache.get(cache=CACHE_NAME, key=award_by_id_cache_key)
+        award_by_id_cache_key = Utils.get_cache_key_three('get_award_by_id_', award_id, squad_id, sport_id)
+        award_by_id = shared_iron_cache.get(cache=IC_CACHE_NAME, key=award_by_id_cache_key)
         return award_by_id.value
     except Exception as e:
+        print (e)
         award_by_id = db_get_award_by_id(award_id, squad_id, sport_id)
-        shared_iron_cache.put(cache=CACHE_NAME, key=award_by_id_cache_key, value=award_by_id)
+        shared_iron_cache.put(cache=IC_CACHE_NAME, key=award_by_id_cache_key, value=award_by_id)
         return award_by_id
 
 
@@ -257,6 +259,7 @@ def db_get_award_by_id(award_id, squad_id, sport_id):
 
         return json.dumps(awards_dict)
     except Exception as e:
+        print (e)
         return render_template('error.html',error = str(e))
 
 
@@ -269,12 +272,13 @@ def get_awards_timeline():
         if squad_id == 0:
             squad_id = '1,2,3,4'
 
-        awards_timeline_cache_key = 'get_awards_timeline_{0}{1}{2}'.format(squad_id, KEY_DELIM, sport_id)
-        awards_timeline = shared_iron_cache.get(cache=CACHE_NAME, key=awards_timeline_cache_key)
+        awards_timeline_cache_key = Utils.get_cache_key_two('get_awards_timeline_', squad_id, sport_id)
+        awards_timeline = shared_iron_cache.get(cache=IC_CACHE_NAME, key=awards_timeline_cache_key)
         return awards_timeline.value
     except Exception as e:
+        print (e)
         awards_timeline = db_get_awards_timeline(squad_id, sport_id)
-        shared_iron_cache.put(cache=CACHE_NAME, key=awards_timeline_cache_key, value=awards_timeline)
+        shared_iron_cache.put(cache=IC_CACHE_NAME, key=awards_timeline_cache_key, value=awards_timeline)
         return awards_timeline
 
 
@@ -296,6 +300,7 @@ def db_get_awards_timeline(squad_id, sport_id):
 
         return json.dumps(awards_dict)
     except Exception as e:
+        print (e)
         return render_template('error.html',error = str(e))
 
 
@@ -307,12 +312,13 @@ def get_special_achievers_by_id():
         
         special_achievement_ids_str = '1,2,3' if spl_achv_id == 0 else str(spl_achv_id)
 
-        special_achievers_by_id_cache_key = 'get_special_achievers_by_id_{0}{1}{2}'.format(special_achievement_ids_str, KEY_DELIM, sport_id)
-        special_achievers_by_id = shared_iron_cache.get(cache=CACHE_NAME, key=special_achievers_by_id_cache_key)
+        special_achievers_by_id_cache_key = Utils.get_cache_key_two('get_special_achievers_by_id_', special_achievement_ids_str, sport_id)
+        special_achievers_by_id = shared_iron_cache.get(cache=IC_CACHE_NAME, key=special_achievers_by_id_cache_key)
         return special_achievers_by_id.value
     except Exception as e:
+        print (e)
         special_achievers_by_id = db_get_special_achievers_by_id(special_achievement_ids_str, sport_id)
-        shared_iron_cache.put(cache=CACHE_NAME, key=special_achievers_by_id_cache_key, value=special_achievers_by_id)
+        shared_iron_cache.put(cache=IC_CACHE_NAME, key=special_achievers_by_id_cache_key, value=special_achievers_by_id)
         return special_achievers_by_id
 
 
@@ -334,5 +340,6 @@ def db_get_special_achievers_by_id(special_achievement_ids_str, sport_id):
             })
         return json.dumps(special_achievers_dict)
     except Exception as e:
+        print (e)
         return render_template('error.html',error = str(e))
 

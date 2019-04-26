@@ -68,6 +68,7 @@ def get_track_hall_of_fame_race_results():
 
         return json.dumps(top_race_results_dict)
     except Exception as e:
+        print (e)
         return render_template('error.html', error=str(e))
 
 
@@ -116,6 +117,7 @@ def get_track_hall_of_fame_relay_results():
 
         return json.dumps(top_relay_results_dict)
     except Exception as e:
+        print (e)
         return render_template('error.html', error=str(e))
 
 
@@ -158,6 +160,7 @@ def get_track_hall_of_fame_field_results():
 
         return json.dumps(top_field_results_dict)
     except Exception as e:
+        print (e)
         return render_template('error.html', error=str(e))
 
 
@@ -182,6 +185,7 @@ def get_track_competitors_by_year():
 
         return json.dumps(competitors_dict)
     except Exception as e:
+        print (e)
         return render_template('error.html', error=str(e))
 
 
@@ -207,6 +211,7 @@ def get_track_events_by_year():
 
         return json.dumps(races_dict)
     except Exception as e:
+        print (e)
         return render_template('error.html', error=str(e))
 
 
@@ -244,6 +249,7 @@ def get_track_race_results():
 
         return json.dumps(race_results_dict)
     except Exception as e:
+        print (e)
         return render_template('error.html', error=str(e))
 
 
@@ -283,6 +289,7 @@ def get_track_field_results():
 
         return json.dumps(field_results_dict)
     except Exception as e:
+        print (e)
         return render_template('error.html', error=str(e))
 
 
@@ -328,6 +335,7 @@ def get_track_relay_results():
 
         return json.dumps(relay_results_dict)
     except Exception as e:
+        print (e)
         return render_template('error.html', error=str(e))
 
 
@@ -359,6 +367,7 @@ def get_track_competitor_results():
 
         return json.dumps(competitor_results_dict)
     except Exception as e:
+        print (e)
         return render_template('error.html', error=str(e))
 
 
@@ -507,6 +516,7 @@ def get_track_athletes():
 
         return json.dumps(track_athletes_dict)
     except Exception as e:
+        print (e)
         return render_template('error.html', error=str(e))
 
 
@@ -576,6 +586,7 @@ def get_track_athlete_results():
 
         return json.dumps(track_athlete_results)
     except Exception as e:
+        print (e)
         return render_template('error.html',error = str(e))
 
 
@@ -616,6 +627,7 @@ def get_track_race_results_by_event():
 
         return json.dumps(top_race_results_dict)
     except Exception as e:
+        print (e)
         return render_template('error.html', error=str(e))
 
 
@@ -658,6 +670,7 @@ def get_track_field_results_by_event():
 
         return json.dumps(top_field_results_dict)
     except Exception as e:
+        print (e)
         return render_template('error.html', error=str(e))
 
 
@@ -711,6 +724,7 @@ def get_track_relay_results_by_event():
 
         return json.dumps(top_relay_results_dict)
     except Exception as e:
+        print (e)
         return render_template('error.html', error=str(e))
 
 
