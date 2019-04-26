@@ -3,12 +3,18 @@ __email__ = "calochoa@gmail.com"
 
 
 from flask import Blueprint, render_template, json, request
+from iron_cache import *
 import MySQLdb
 
 from bin.utils import Utils
 
 
 shared_db_app = Blueprint('shared_db_app', __name__, template_folder='templates')
+
+
+shared_iron_cache = IronCache()
+CACHE_NAME = 'shared_cache'
+KEY_DELIM = '[#]'
 
 
 # MySQL configurations
@@ -36,6 +42,17 @@ def get_coaches_by_year():
         year = request.args.get('year', default = 2017, type = int)
         coach_type_ids_str = request.args.get('coachTypeIds', default = '1,2', type = str)
 
+        coaches_by_year_cache_key = 'get_coaches_by_year_{0}{1}{2}'.format(year, KEY_DELIM, coach_type_ids_str)
+        coaches_by_year = shared_iron_cache.get(cache=CACHE_NAME, key=coaches_by_year_cache_key)
+        return coaches_by_year.value
+    except Exception as e:
+        coaches_by_year = db_get_coaches_by_year(year, coach_type_ids_str)
+        shared_iron_cache.put(cache=CACHE_NAME, key=coaches_by_year_cache_key, value=coaches_by_year)
+        return coaches_by_year
+
+
+def db_get_coaches_by_year(year, coach_type_ids_str):
+    try:
         cursor = mydb.cursor()
         cursor.execute('CALL GetCoachesByYear({0}, "{1}")'.format(year,coach_type_ids_str))
 
@@ -59,6 +76,17 @@ def get_coach_timeline():
     try:
         coach_type_ids_str = request.args.get('coachTypeIds', default = '1,2', type = str)
 
+        coach_timeline_cache_key = 'get_coach_timeline_{0}'.format(coach_type_ids_str)
+        coach_timeline = shared_iron_cache.get(cache=CACHE_NAME, key=coach_timeline_cache_key)
+        return coach_timeline.value
+    except Exception as e:
+        coach_timeline = db_get_coach_timeline(coach_type_ids_str)
+        shared_iron_cache.put(cache=CACHE_NAME, key=coach_timeline_cache_key, value=coach_timeline)
+        return coach_timeline
+
+
+def db_get_coach_timeline(coach_type_ids_str):
+    try:
         cursor = mydb.cursor()
         cursor.execute('CALL GetCoachTimeline("{0}")'.format(coach_type_ids_str))
 
@@ -77,11 +105,22 @@ def get_coach_timeline():
 @shared_db_app.route('/getCoachById',methods=['GET'])
 def get_coach_by_id():
     try:
-        coachId = request.args.get('coachId', default = 1, type = int)
+        coach_id = request.args.get('coachId', default = 1, type = int)
         coach_type_ids_str = request.args.get('coachTypeIds', default = '1,2', type = str)
 
+        coach_by_id_cache_key = 'get_coach_by_id_{0}{1}{2}'.format(coach_id, KEY_DELIM, coach_type_ids_str)
+        coach_by_id = shared_iron_cache.get(cache=CACHE_NAME, key=coach_by_id_cache_key)
+        return coach_by_id.value
+    except Exception as e:
+        coach_by_id = db_get_coach_by_id(coach_id, coach_type_ids_str)
+        shared_iron_cache.put(cache=CACHE_NAME, key=coach_by_id_cache_key, value=coach_by_id)
+        return coach_by_id
+
+
+def db_get_coach_by_id(coach_id, coach_type_ids_str):
+    try:
         cursor = mydb.cursor()
-        cursor.execute('CALL GetCoachById({0}, "{1}")'.format(coachId,coach_type_ids_str))
+        cursor.execute('CALL GetCoachById({0}, "{1}")'.format(coach_id,coach_type_ids_str))
 
         coaches_dict = []
         for row in cursor.fetchall():
@@ -102,6 +141,17 @@ def get_coaches():
     try:
         coach_type_ids_str = request.args.get('coachTypeIds', default = '1,2', type = str)
 
+        coaches_cache_key = 'get_coaches_{0}'.format(coach_type_ids_str)
+        coaches = shared_iron_cache.get(cache=CACHE_NAME, key=coaches_cache_key)
+        return coaches.value
+    except Exception as e:
+        coaches = db_get_coaches(coach_type_ids_str)
+        shared_iron_cache.put(cache=CACHE_NAME, key=coaches_cache_key, value=coaches)
+        return coaches
+
+
+def db_get_coaches(coach_type_ids_str):
+    try:
         cursor = mydb.cursor()
         cursor.execute('CALL GetCoaches("{0}")'.format(coach_type_ids_str))
 
@@ -126,6 +176,17 @@ def get_awards_by_year():
         year = request.args.get('year', default = 2017, type = int)
         sport_id = request.args.get('sportId', default = 1, type = int)
 
+        awards_by_year_cache_key = 'get_awards_by_year_{0}{1}{2}'.format(year, KEY_DELIM, sport_id)
+        awards_by_year = shared_iron_cache.get(cache=CACHE_NAME, key=awards_by_year_cache_key)
+        return awards_by_year.value
+    except Exception as e:
+        awards_by_year = db_get_awards_by_year(year, sport_id)
+        shared_iron_cache.put(cache=CACHE_NAME, key=awards_by_year_cache_key, value=awards_by_year)
+        return awards_by_year
+
+
+def db_get_awards_by_year(year, sport_id):
+    try:
         cursor = mydb.cursor()
         cursor.execute('CALL GetAwardsByYear({0}, {1})'.format(year,sport_id))
 
@@ -151,17 +212,28 @@ def get_awards_by_year():
 @shared_db_app.route('/getAwardById',methods=['GET'])
 def get_award_by_id():
     try:
-        awardId = request.args.get('awardId', default = 0, type = int)
-        squadId = request.args.get('squadId', default = 0, type = int)
-        sportId = request.args.get('sportId', default = 1, type = int)
+        award_id = request.args.get('awardId', default = 0, type = int)
+        squad_id = request.args.get('squadId', default = 0, type = int)
+        sport_id = request.args.get('sportId', default = 1, type = int)
 
-        if awardId == 0 or awardId == 1 or awardId == 2:
-            awardId = '1,2'
-        if squadId == 0:
-            squadId = '1,2,3,4'
+        if award_id == 0 or award_id == 1 or award_id == 2:
+            award_id = '1,2'
+        if squad_id == 0:
+            squad_id = '1,2,3,4'
 
+        award_by_id_cache_key = 'get_award_by_id_{0}{1}{2}{3}{4}'.format(award_id, KEY_DELIM, squad_id, KEY_DELIM, sport_id)
+        award_by_id = shared_iron_cache.get(cache=CACHE_NAME, key=award_by_id_cache_key)
+        return award_by_id.value
+    except Exception as e:
+        award_by_id = db_get_award_by_id(award_id, squad_id, sport_id)
+        shared_iron_cache.put(cache=CACHE_NAME, key=award_by_id_cache_key, value=award_by_id)
+        return award_by_id
+
+
+def db_get_award_by_id(award_id, squad_id, sport_id):
+    try:
         cursor = mydb.cursor()
-        cursor.execute('CALL GetAwardsById("{0}", "{1}", {2})'.format(awardId,squadId,sportId))
+        cursor.execute('CALL GetAwardsById("{0}", "{1}", {2})'.format(award_id,squad_id,sport_id))
         
         awards_dict = []
         for row in cursor.fetchall():
@@ -182,14 +254,25 @@ def get_award_by_id():
 @shared_db_app.route('/getAwardsTimeline',methods=['GET'])
 def get_awards_timeline():
     try:
-        squadId = request.args.get('squadId', default = 0, type = int)
-        sportId = request.args.get('sportId', default = 1, type = int)
+        squad_id = request.args.get('squadId', default = 0, type = int)
+        sport_id = request.args.get('sportId', default = 1, type = int)
 
-        if squadId == 0:
-            squadId = '1,2,3,4'
+        if squad_id == 0:
+            squad_id = '1,2,3,4'
 
+        awards_timeline_cache_key = 'get_awards_timeline_{0}{1}{2}'.format(squad_id, KEY_DELIM, sport_id)
+        awards_timeline = shared_iron_cache.get(cache=CACHE_NAME, key=awards_timeline_cache_key)
+        return awards_timeline.value
+    except Exception as e:
+        awards_timeline = db_get_awards_timeline(squad_id, sport_id)
+        shared_iron_cache.put(cache=CACHE_NAME, key=awards_timeline_cache_key, value=awards_timeline)
+        return awards_timeline
+
+
+def db_get_awards_timeline(squad_id, sport_id):
+    try:
         cursor = mydb.cursor()
-        cursor.execute('CALL GetAwardsTimeline("{0}", {1})'.format(squadId,sportId))
+        cursor.execute('CALL GetAwardsTimeline("{0}", {1})'.format(squad_id,sport_id))
 
         awards_dict = []
         for row in cursor.fetchall():
@@ -210,12 +293,24 @@ def get_awards_timeline():
 @shared_db_app.route('/getSpecialAchieversById',methods=['GET'])
 def get_special_achievers_by_id():
     try:
-        splAchvId = request.args.get('splAchvId', default = 0, type = int)
-        sportId = request.args.get('sportId', default = 1, type = int)
+        spl_achv_id = request.args.get('splAchvId', default = 0, type = int)
+        sport_id = request.args.get('sportId', default = 1, type = int)
         
-        specialAchievementIdsStr = '1,2,3' if splAchvId == 0 else str(splAchvId)
+        special_achievement_ids_str = '1,2,3' if spl_achv_id == 0 else str(spl_achv_id)
+
+        special_achievers_by_id_cache_key = 'get_special_achievers_by_id_{0}{1}{2}'.format(special_achievement_ids_str, KEY_DELIM, sport_id)
+        special_achievers_by_id = shared_iron_cache.get(cache=CACHE_NAME, key=special_achievers_by_id_cache_key)
+        return special_achievers_by_id.value
+    except Exception as e:
+        special_achievers_by_id = db_get_special_achievers_by_id(special_achievement_ids_str, sport_id)
+        shared_iron_cache.put(cache=CACHE_NAME, key=special_achievers_by_id_cache_key, value=special_achievers_by_id)
+        return special_achievers_by_id
+
+
+def db_get_special_achievers_by_id(special_achievement_ids_str, sport_id):
+    try:
         cursor = mydb.cursor()
-        cursor.execute('CALL GetSpecialAchieversById("{0}", {1})'.format(specialAchievementIdsStr,sportId))
+        cursor.execute('CALL GetSpecialAchieversById("{0}", {1})'.format(special_achievement_ids_str,sport_id))
 
         special_achievers_dict = []
         for row in cursor.fetchall():
