@@ -3,12 +3,18 @@ __email__ = "calochoa@gmail.com"
 
 
 from flask import Blueprint, render_template, json, request
+from iron_cache import *
 import MySQLdb
 
 from bin.utils import Utils
 
 
 workouts_db_app = Blueprint('workouts_db_app', __name__, template_folder='templates')
+
+
+workouts_iron_cache = IronCache()
+CACHE_NAME = 'workouts_cache'
+KEY_DELIM = '[#]'
 
 
 # MySQL configurations
@@ -40,6 +46,17 @@ def get_exercises():
         if body_split_ids == 'all':
             body_split_ids = 'bs0001,bs0002,bs0003,bs0004'
 
+        exercises_cache_key = 'get_exercises_{0}{1}{2}'.format(exercise_levels, KEY_DELIM, body_split_ids)
+        exercises = workouts_iron_cache.get(cache=CACHE_NAME, key=exercises_cache_key)
+        return exercises.value
+    except Exception as e:
+        exercises = db_get_exercises(body_split_ids, exercise_levels)
+        workouts_iron_cache.put(cache=CACHE_NAME, key=exercises_cache_key, value=exercises)
+        return exercises
+
+
+def db_get_exercises(body_split_ids, exercise_levels):
+    try:
         cursor = mydb.cursor()
         if body_split_ids:
             cursor.execute('CALL GetExercises("{0}", "{1}")'.format(exercise_levels, body_split_ids))
@@ -75,6 +92,17 @@ def get_quickies():
         if body_split_ids == 'all':
             body_split_ids = 'bs0001,bs0002,bs0003,bs0004'
 
+        quickies_cache_key = 'get_quickies_{0}{1}{2}'.format(quickie_levels, KEY_DELIM, body_split_ids)
+        quickies = workouts_iron_cache.get(cache=CACHE_NAME, key=quickies_cache_key)
+        return quickies.value
+    except Exception as e:
+        quickies = db_get_quickies(quickie_levels, body_split_ids)
+        workouts_iron_cache.put(cache=CACHE_NAME, key=quickies_cache_key, value=quickies)
+        return quickies
+
+
+def db_get_quickies(quickie_levels, body_split_ids):
+    try:
         cursor = mydb.cursor()
         if body_split_ids:
             cursor.execute('CALL GetQuickies("{0}","{1}")'.format(quickie_levels, body_split_ids))
@@ -121,6 +149,17 @@ def get_quickie_workouts():
         if body_split_ids == 'all':
             body_split_ids = 'bs0001,bs0002,bs0003,bs0004'
 
+        quickie_workouts_cache_key = 'get_quickie_workouts_{0}{1}{2}'.format(workout_levels, KEY_DELIM, body_split_ids)
+        quickie_workouts = workouts_iron_cache.get(cache=CACHE_NAME, key=quickie_workouts_cache_key)
+        return quickie_workouts.value
+    except Exception as e:
+        quickie_workouts = db_get_quickie_workouts(workout_levels, body_split_ids)
+        workouts_iron_cache.put(cache=CACHE_NAME, key=quickie_workouts_cache_key, value=quickie_workouts)
+        return quickie_workouts
+
+
+def db_get_quickie_workouts(workout_levels, body_split_ids):
+    try:
         cursor = mydb.cursor()
         if body_split_ids:
             cursor.execute('CALL GetQuickieWorkouts("{0}", "{1}")'.format(workout_levels, body_split_ids))
@@ -182,6 +221,17 @@ def get_quickies_by_ids():
     try:
         quickie_ids = request.args.get('quickieIds', default=None, type=str)
 
+        quickies_by_ids_cache_key = 'get_quickies_by_ids_{0}'.format(quickie_ids)
+        quickies_by_ids = workouts_iron_cache.get(cache=CACHE_NAME, key=quickies_by_ids_cache_key)
+        return quickies_by_ids.value
+    except Exception as e:
+        quickies_by_ids = db_get_quickies_by_ids(quickie_ids)
+        workouts_iron_cache.put(cache=CACHE_NAME, key=quickies_by_ids_cache_key, value=quickies_by_ids)
+        return quickies_by_ids
+
+
+def db_get_quickies_by_ids(quickie_ids):
+    try:
         cursor = mydb.cursor()
         cursor.execute('CALL GetQuickiesById("{0}")'.format(quickie_ids))
 

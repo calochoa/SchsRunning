@@ -14,3 +14,5 @@ Werkzeug==0.12.2
 mysql-connector-python==8.0.15
 flask-blueprint==1.2.7
 mysqlclient==1.4.2.post1
+iron-core==1.2.0
+iron-cache==0.3.2
