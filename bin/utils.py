@@ -2,6 +2,9 @@ __author__ = "Christian Ochoa"
 __email__ = "calochoa@gmail.com"
 
 
+KEY_DELIM = '[#]'
+
+
 class Utils(object):
 
     def __init__(self):
@@ -89,4 +92,17 @@ class Utils(object):
             if seconds < 30:
                 time_str = str(seconds + 60)
         return time_str
+
+    @staticmethod
+    def get_cache_key_one(name, param_1):
+        return '{0}{1}'.format(name, param_1)
+
+    @staticmethod
+    def get_cache_key_two(name, param_1, param_2):
+        return '{0}{1}{2}{3}'.format(name, param_1, KEY_DELIM, param_2)
+
+    @staticmethod
+    def get_cache_key_three(name, param_1, param_2, param_3):
+        return '{0}{1}{2}{3}{4}{5}'.format(name, param_1, KEY_DELIM, param_2, KEY_DELIM, param_3)
+
 

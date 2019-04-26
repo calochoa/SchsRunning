@@ -3,6 +3,7 @@ __email__ = "calochoa@gmail.com"
 
 
 from flask import Blueprint, render_template, json, request
+from bin.cache import cache
 from iron_cache import *
 import MySQLdb
 
@@ -39,6 +40,14 @@ mydb = MySQLdb.connect(
 @shared_db_app.route('/getCoachesByYear',methods=['GET'])
 def get_coaches_by_year():
     try:
+        print (' + + + + ')
+        val = cache.get('foo')
+        print (val)
+        if not val:
+            cache.set('foo', 'barzz')
+            print (' woot ')
+        print (cache.get('foo'))
+        print (' + + + + ')
         year = request.args.get('year', default = 2017, type = int)
         coach_type_ids_str = request.args.get('coachTypeIds', default = '1,2', type = str)
 

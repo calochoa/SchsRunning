@@ -3,6 +3,7 @@ __email__ = "calochoa@gmail.com"
 
 
 from flask import Blueprint, render_template, json, request
+from bin.cache import cache as mc_cache
 from iron_cache import *
 import MySQLdb
 
@@ -12,9 +13,8 @@ from bin.utils import Utils
 workouts_db_app = Blueprint('workouts_db_app', __name__, template_folder='templates')
 
 
-workouts_iron_cache = IronCache()
-CACHE_NAME = 'workouts_cache'
-KEY_DELIM = '[#]'
+workouts_ic_cache = IronCache()
+IC_CACHE_NAME = 'workouts_cache'
 
 
 # MySQL configurations
@@ -45,17 +45,42 @@ def get_exercises():
             exercise_levels = '1,2,3,4,5,6'
         if body_split_ids == 'all':
             body_split_ids = 'bs0001,bs0002,bs0003,bs0004'
+        return __mc_get_exercises(exercise_levels, body_split_ids)
+    except Exception as e:
+        return render_template('error.html',error = str(e))
 
-        exercises_cache_key = 'get_exercises_{0}{1}{2}'.format(exercise_levels, KEY_DELIM, body_split_ids)
-        exercises = workouts_iron_cache.get(cache=CACHE_NAME, key=exercises_cache_key)
+
+def __mc_get_exercises(exercise_levels, body_split_ids):
+    # First, check MemCachier for exercises
+    try:
+        exercises_cache_key = __get_exercises_cache_key(exercise_levels, body_split_ids)
+        exercises = mc_cache.get(exercises_cache_key)
+        if not exercises:
+            exercises = __ic_get_exercises(exercise_levels, body_split_ids)
+            mc_cache.set(exercises_cache_key, exercises)
+        return exercises
+    except Exception as e:
+        return render_template('error.html',error = str(e))
+
+
+def __ic_get_exercises(exercise_levels, body_split_ids):
+    # Second, check Iron Cache for exercises
+    try:
+        exercises_cache_key = __get_exercises_cache_key(exercise_levels, body_split_ids)
+        exercises = workouts_ic_cache.get(cache=IC_CACHE_NAME, key=exercises_cache_key)
         return exercises.value
     except Exception as e:
-        exercises = db_get_exercises(body_split_ids, exercise_levels)
-        workouts_iron_cache.put(cache=CACHE_NAME, key=exercises_cache_key, value=exercises)
+        exercises = __db_get_exercises(exercise_levels, body_split_ids)
+        workouts_ic_cache.put(cache=IC_CACHE_NAME, key=exercises_cache_key, value=exercises)
         return exercises
 
 
-def db_get_exercises(body_split_ids, exercise_levels):
+def __get_exercises_cache_key(exercise_levels, body_split_ids):
+    return Utils.get_cache_key_two('get_exercises_', exercise_levels, body_split_ids)
+
+
+def __db_get_exercises(exercise_levels, body_split_ids):
+    # Third, get exercises from MySQL database
     try:
         cursor = mydb.cursor()
         if body_split_ids:
@@ -64,7 +89,6 @@ def db_get_exercises(body_split_ids, exercise_levels):
         else:
             cursor.execute('CALL GetAllExercises()')
             all_exercises = True
-
         exercises_dict_list = []
         for row in cursor.fetchall():
             exercises_dict_list.append({
@@ -76,7 +100,6 @@ def db_get_exercises(body_split_ids, exercise_levels):
                 'YouTubeId': str(row[5]),
                 'All': all_exercises
             })
-
         return json.dumps(exercises_dict_list)
     except Exception as e:
         return render_template('error.html',error = str(e))
@@ -91,17 +114,42 @@ def get_quickies():
             quickie_levels = '1,2,3,4,5'
         if body_split_ids == 'all':
             body_split_ids = 'bs0001,bs0002,bs0003,bs0004'
+        return __mc_get_quickies(quickie_levels, body_split_ids)
+    except Exception as e:
+        return render_template('error.html',error = str(e))
 
-        quickies_cache_key = 'get_quickies_{0}{1}{2}'.format(quickie_levels, KEY_DELIM, body_split_ids)
-        quickies = workouts_iron_cache.get(cache=CACHE_NAME, key=quickies_cache_key)
+
+def __mc_get_quickies(quickie_levels, body_split_ids):
+    # First, check MemCachier for quickies
+    try:
+        quickies_cache_key = __get_quickies_cache_key(quickie_levels, body_split_ids)
+        quickies = mc_cache.get(quickies_cache_key)
+        if not quickies:
+            quickies = __ic_get_quickies(quickie_levels, body_split_ids)
+            mc_cache.set(quickies_cache_key, quickies)
+        return quickies
+    except Exception as e:
+        return render_template('error.html',error = str(e))
+
+
+def __ic_get_quickies(quickie_levels, body_split_ids):
+    # Second, check Iron Cache for quickies
+    try:
+        quickies_cache_key = __get_quickies_cache_key(quickie_levels, body_split_ids)
+        quickies = workouts_ic_cache.get(cache=IC_CACHE_NAME, key=quickies_cache_key)
         return quickies.value
     except Exception as e:
-        quickies = db_get_quickies(quickie_levels, body_split_ids)
-        workouts_iron_cache.put(cache=CACHE_NAME, key=quickies_cache_key, value=quickies)
+        quickies = __db_get_quickies(quickie_levels, body_split_ids)
+        workouts_ic_cache.put(cache=IC_CACHE_NAME, key=quickies_cache_key, value=quickies)
         return quickies
 
 
-def db_get_quickies(quickie_levels, body_split_ids):
+def __get_quickies_cache_key(quickie_levels, body_split_ids):
+    return Utils.get_cache_key_two('get_quickies_', quickie_levels, body_split_ids)
+
+
+def __db_get_quickies(quickie_levels, body_split_ids):
+    # Third, get quickies from MySQL database
     try:
         cursor = mydb.cursor()
         if body_split_ids:
@@ -110,7 +158,6 @@ def db_get_quickies(quickie_levels, body_split_ids):
         else:
             cursor.execute('CALL GetAllQuickies()')
             all_quickies = True
-
         quickies_dict_list = []
         for row in cursor.fetchall():
             quickies_dict_list.append({
@@ -133,7 +180,6 @@ def db_get_quickies(quickie_levels, body_split_ids):
                 'YouTubeId4': str(row[16]),
                 'All': all_quickies
             })
-
         return json.dumps(quickies_dict_list)
     except Exception as e:
         return render_template('error.html',error = str(e))
@@ -148,17 +194,42 @@ def get_quickie_workouts():
             workout_levels = '1,2,3,4,5'
         if body_split_ids == 'all':
             body_split_ids = 'bs0001,bs0002,bs0003,bs0004'
+        return __mc_get_quickie_workouts(workout_levels, body_split_ids)
+    except Exception as e:
+        return render_template('error.html',error = str(e))
 
-        quickie_workouts_cache_key = 'get_quickie_workouts_{0}{1}{2}'.format(workout_levels, KEY_DELIM, body_split_ids)
-        quickie_workouts = workouts_iron_cache.get(cache=CACHE_NAME, key=quickie_workouts_cache_key)
+
+def __mc_get_quickie_workouts(workout_levels, body_split_ids):
+    # First, check MemCachier for quickie workouts
+    try:
+        quickie_workouts_cache_key = __get_quickie_workouts_cache_key(workout_levels, body_split_ids)
+        quickie_workouts = mc_cache.get(quickie_workouts_cache_key)
+        if not quickie_workouts:
+            quickie_workouts = __ic_get_quickie_workouts(workout_levels, body_split_ids)
+            mc_cache.set(quickie_workouts_cache_key, quickie_workouts)
+        return quickie_workouts
+    except Exception as e:
+        return render_template('error.html',error = str(e))
+
+
+def __ic_get_quickie_workouts(workout_levels, body_split_ids):
+    # Second, check Iron Cache for quickie workouts
+    try:
+        quickie_workouts_cache_key = __get_quickie_workouts_cache_key(workout_levels, body_split_ids)
+        quickie_workouts = workouts_ic_cache.get(cache=IC_CACHE_NAME, key=quickie_workouts_cache_key)
         return quickie_workouts.value
     except Exception as e:
-        quickie_workouts = db_get_quickie_workouts(workout_levels, body_split_ids)
-        workouts_iron_cache.put(cache=CACHE_NAME, key=quickie_workouts_cache_key, value=quickie_workouts)
+        quickie_workouts = __db_get_quickie_workouts(workout_levels, body_split_ids)
+        workouts_ic_cache.put(cache=IC_CACHE_NAME, key=quickie_workouts_cache_key, value=quickie_workouts)
         return quickie_workouts
 
 
-def db_get_quickie_workouts(workout_levels, body_split_ids):
+def __get_quickie_workouts_cache_key(workout_levels, body_split_ids):
+    return Utils.get_cache_key_two('get_quickie_workouts_', workout_levels, body_split_ids)
+
+
+def __db_get_quickie_workouts(workout_levels, body_split_ids):
+    # Third, get quickie workouts from MySQL database
     try:
         cursor = mydb.cursor()
         if body_split_ids:
@@ -167,7 +238,6 @@ def db_get_quickie_workouts(workout_levels, body_split_ids):
         else:
             cursor.execute('CALL GetAllQuickieWorkouts()')
             all_quickie_workouts = True
-
         quickies_dict = {}
         # so iterate over each row to populate the quickies dictionary
         for row in cursor.fetchall():
@@ -191,9 +261,7 @@ def db_get_quickie_workouts(workout_levels, body_split_ids):
                 'ExerciseName4': str(row[15]).title(),
                 'YouTubeId4': str(row[16]),
             }
-
         cursor.nextset()
-
         quickie_workouts_dict_list = []
         # iterate over the quickie workout results
         for row in cursor.fetchall():
@@ -210,7 +278,6 @@ def db_get_quickie_workouts(workout_levels, body_split_ids):
                 'Quickies': quickie_list,
                 'All': all_quickie_workouts
             })
-
         return json.dumps(quickie_workouts_dict_list)
     except Exception as e:
         return render_template('error.html',error = str(e))
@@ -220,21 +287,45 @@ def db_get_quickie_workouts(workout_levels, body_split_ids):
 def get_quickies_by_ids():
     try:
         quickie_ids = request.args.get('quickieIds', default=None, type=str)
+        return __mc_get_quickies_by_ids(quickie_ids)
+    except Exception as e:
+        return render_template('error.html',error = str(e))
 
-        quickies_by_ids_cache_key = 'get_quickies_by_ids_{0}'.format(quickie_ids)
-        quickies_by_ids = workouts_iron_cache.get(cache=CACHE_NAME, key=quickies_by_ids_cache_key)
+
+def __mc_get_quickies_by_ids(quickie_ids):
+    # First, check MemCachier for quickies by ids
+    try:
+        quickies_by_ids_cache_key = __get_quickies_by_ids_cache_key(quickie_ids)
+        quickies_by_ids = mc_cache.get(quickies_by_ids_cache_key)
+        if not quickies_by_ids:
+            quickies_by_ids = __ic_get_quickies_by_ids(quickie_ids)
+            mc_cache.set(quickies_by_ids_cache_key, quickies_by_ids)
+        return quickies_by_ids
+    except Exception as e:
+        return render_template('error.html',error = str(e))
+
+
+def __ic_get_quickies_by_ids(quickie_ids):
+    # Second, check Iron Cache for quickies by ids
+    try:
+        quickies_by_ids_cache_key = __get_quickies_by_ids_cache_key(quickie_ids)
+        quickies_by_ids = workouts_ic_cache.get(cache=IC_CACHE_NAME, key=quickies_by_ids_cache_key)
         return quickies_by_ids.value
     except Exception as e:
-        quickies_by_ids = db_get_quickies_by_ids(quickie_ids)
-        workouts_iron_cache.put(cache=CACHE_NAME, key=quickies_by_ids_cache_key, value=quickies_by_ids)
+        quickies_by_ids = __db_get_quickies_by_ids(quickie_ids)
+        workouts_ic_cache.put(cache=IC_CACHE_NAME, key=quickies_by_ids_cache_key, value=quickies_by_ids)
         return quickies_by_ids
 
 
-def db_get_quickies_by_ids(quickie_ids):
+def __get_quickies_by_ids_cache_key(quickie_ids):
+    return Utils.get_cache_key_one('get_quickies_by_ids_', quickie_ids)
+
+
+def __db_get_quickies_by_ids(quickie_ids):
+    # Third, get quickies by ids from MySQL database
     try:
         cursor = mydb.cursor()
         cursor.execute('CALL GetQuickiesById("{0}")'.format(quickie_ids))
-
         # populate the quickies dictionary
         quickies_dict = {}
         for row in cursor.fetchall():
@@ -258,12 +349,10 @@ def db_get_quickies_by_ids(quickie_ids):
                 'ExerciseName4': str(row[15]).title(),
                 'YouTubeId4': str(row[16]),
             }
-
         # create the list of quickies dictionary based on the input quickie ids
         quickies_dict_list = []
         for quickie_id in quickie_ids.split(','):
             quickies_dict_list.append(quickies_dict.get(quickie_id.strip()))
-
         return json.dumps(quickies_dict_list)
     except Exception as e:
         return render_template('error.html',error = str(e))
