@@ -16,5 +16,5 @@ flask-blueprint==1.2.7
 mysqlclient==1.4.2.post1
 iron-core==1.2.0
 iron-cache==0.3.2
-Flask-Caching==1.7.1
-pylibmc==1.6.0
+Flask-Caching==1.4.0
+pylibmc==1.5.2
