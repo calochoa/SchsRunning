@@ -35,7 +35,6 @@ from bin.apps.track.track_competitors_seo_app import track_competitors_seo_app
 from bin.apps.track.track_athletes_seo_app import track_athletes_seo_app
 from bin.apps.track.track_coaches_seo_app import track_coaches_seo_app
 from bin.apps.track.track_events_seo_app import track_events_seo_app
-from bin.apps.track.track_special_achievements_seo_app import track_special_achievements_seo_app
 
 # workout related apps
 from bin.apps.workouts.workouts_app import workouts_app
@@ -72,7 +71,6 @@ app.register_blueprint(track_competitors_seo_app)
 app.register_blueprint(track_athletes_seo_app)
 app.register_blueprint(track_coaches_seo_app)
 app.register_blueprint(track_events_seo_app)
-app.register_blueprint(track_special_achievements_seo_app)
 
 app.register_blueprint(workouts_app)
 app.register_blueprint(workouts_db_app)
