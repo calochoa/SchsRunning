@@ -47,6 +47,7 @@ def get_exercises():
             body_split_ids = 'bs0001,bs0002,bs0003,bs0004'
         return __mc_get_exercises(exercise_levels, body_split_ids)
     except Exception as e:
+        print (e)
         return render_template('error.html',error = str(e))
 
 
@@ -60,6 +61,7 @@ def __mc_get_exercises(exercise_levels, body_split_ids):
             mc_cache.set(exercises_cache_key, exercises)
         return exercises
     except Exception as e:
+        print (e)
         return render_template('error.html',error = str(e))
 
 
@@ -70,6 +72,7 @@ def __ic_get_exercises(exercise_levels, body_split_ids):
         exercises = workouts_ic_cache.get(cache=IC_CACHE_NAME, key=exercises_cache_key)
         return exercises.value
     except Exception as e:
+        print (e)
         exercises = __db_get_exercises(exercise_levels, body_split_ids)
         workouts_ic_cache.put(cache=IC_CACHE_NAME, key=exercises_cache_key, value=exercises)
         return exercises
@@ -102,6 +105,7 @@ def __db_get_exercises(exercise_levels, body_split_ids):
             })
         return json.dumps(exercises_dict_list)
     except Exception as e:
+        print (e)
         return render_template('error.html',error = str(e))
 
 
@@ -116,6 +120,7 @@ def get_quickies():
             body_split_ids = 'bs0001,bs0002,bs0003,bs0004'
         return __mc_get_quickies(quickie_levels, body_split_ids)
     except Exception as e:
+        print (e)
         return render_template('error.html',error = str(e))
 
 
@@ -129,6 +134,7 @@ def __mc_get_quickies(quickie_levels, body_split_ids):
             mc_cache.set(quickies_cache_key, quickies)
         return quickies
     except Exception as e:
+        print (e)
         return render_template('error.html',error = str(e))
 
 
@@ -139,6 +145,7 @@ def __ic_get_quickies(quickie_levels, body_split_ids):
         quickies = workouts_ic_cache.get(cache=IC_CACHE_NAME, key=quickies_cache_key)
         return quickies.value
     except Exception as e:
+        print (e)
         quickies = __db_get_quickies(quickie_levels, body_split_ids)
         workouts_ic_cache.put(cache=IC_CACHE_NAME, key=quickies_cache_key, value=quickies)
         return quickies
@@ -182,6 +189,7 @@ def __db_get_quickies(quickie_levels, body_split_ids):
             })
         return json.dumps(quickies_dict_list)
     except Exception as e:
+        print (e)
         return render_template('error.html',error = str(e))
 
 
@@ -196,6 +204,7 @@ def get_quickie_workouts():
             body_split_ids = 'bs0001,bs0002,bs0003,bs0004'
         return __mc_get_quickie_workouts(workout_levels, body_split_ids)
     except Exception as e:
+        print (e)
         return render_template('error.html',error = str(e))
 
 
@@ -209,6 +218,7 @@ def __mc_get_quickie_workouts(workout_levels, body_split_ids):
             mc_cache.set(quickie_workouts_cache_key, quickie_workouts)
         return quickie_workouts
     except Exception as e:
+        print (e)
         return render_template('error.html',error = str(e))
 
 
@@ -219,6 +229,7 @@ def __ic_get_quickie_workouts(workout_levels, body_split_ids):
         quickie_workouts = workouts_ic_cache.get(cache=IC_CACHE_NAME, key=quickie_workouts_cache_key)
         return quickie_workouts.value
     except Exception as e:
+        print (e)
         quickie_workouts = __db_get_quickie_workouts(workout_levels, body_split_ids)
         workouts_ic_cache.put(cache=IC_CACHE_NAME, key=quickie_workouts_cache_key, value=quickie_workouts)
         return quickie_workouts
@@ -280,6 +291,7 @@ def __db_get_quickie_workouts(workout_levels, body_split_ids):
             })
         return json.dumps(quickie_workouts_dict_list)
     except Exception as e:
+        print (e)
         return render_template('error.html',error = str(e))
 
 
@@ -289,6 +301,7 @@ def get_quickies_by_ids():
         quickie_ids = request.args.get('quickieIds', default=None, type=str)
         return __mc_get_quickies_by_ids(quickie_ids)
     except Exception as e:
+        print (e)
         return render_template('error.html',error = str(e))
 
 
@@ -302,6 +315,7 @@ def __mc_get_quickies_by_ids(quickie_ids):
             mc_cache.set(quickies_by_ids_cache_key, quickies_by_ids)
         return quickies_by_ids
     except Exception as e:
+        print (e)
         return render_template('error.html',error = str(e))
 
 
@@ -312,6 +326,7 @@ def __ic_get_quickies_by_ids(quickie_ids):
         quickies_by_ids = workouts_ic_cache.get(cache=IC_CACHE_NAME, key=quickies_by_ids_cache_key)
         return quickies_by_ids.value
     except Exception as e:
+        print (e)
         quickies_by_ids = __db_get_quickies_by_ids(quickie_ids)
         workouts_ic_cache.put(cache=IC_CACHE_NAME, key=quickies_by_ids_cache_key, value=quickies_by_ids)
         return quickies_by_ids
@@ -355,5 +370,6 @@ def __db_get_quickies_by_ids(quickie_ids):
             quickies_dict_list.append(quickies_dict.get(quickie_id.strip()))
         return json.dumps(quickies_dict_list)
     except Exception as e:
+        print (e)
         return render_template('error.html',error = str(e))
 
