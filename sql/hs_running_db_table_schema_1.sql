@@ -436,7 +436,7 @@ INSERT INTO `Event` (`eventId`, `event`, `eventSubTypeId`) VALUES
 	(25, "400m Relay", 4), (26, "1600m Relay", 4), (27, "440yd Relay", 4), (28, "Mile Relay", 4), (41, "800m Sprint Medley", 4), 
 	(29, "High Jump", 5), (30, "Long Jump", 5), (31, "Triple Jump", 5), (32, "Pole Vault", 5), 
 	(33, "Shot Put (4kg)", 6), (34, "Shot Put (10lb)", 6), (35, "Shot Put (12lb)", 6), (36, "Discus (1kg)", 6), (37, "Discus (1.6kg)", 6);
-select * from event;
+
 
 
 -- track and field
@@ -515,9 +515,6 @@ INSERT INTO `RaceResult` (`competitorId`, `eventId`, `time`, `raceTimeTypeId`, `
 ("1.9", 8, "00:05:18.80", "h", 2001, 4), ("1.9", 9, "00:11:43.23", "a", 2001, 4);
 
 
-
-INSERT INTO `RaceResult` (`competitorId`, `eventId`, `time`, `raceTimeTypeId`, `year`, `squadId`) VALUES ("1.10", 11, "00:04:55.3", "h", 2002, 2);
-delete from `RaceResult` where `competitorId`='1.10' and `eventid`=10;
 
 -- track and field
 CREATE TABLE `RelayResult` (
