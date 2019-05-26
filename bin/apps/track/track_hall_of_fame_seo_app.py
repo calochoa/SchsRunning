@@ -135,8 +135,12 @@ def track_boys_mile_relay():
 def track_girls_440yd_relay():
     return get_track_hof_relay_results(27, 3)
 
-@track_hall_of_fame_seo_app.route('/girls-1600m-relay/',methods=['GET'])
+@track_hall_of_fame_seo_app.route('/girls-400m-relay/',methods=['GET'])
 def track_girls_400m_relay():
+    return get_track_hof_relay_results(25, 3)
+
+@track_hall_of_fame_seo_app.route('/girls-1600m-relay/',methods=['GET'])
+def track_girls_1600m_relay():
     return get_track_hof_relay_results(26, 3)
 
 

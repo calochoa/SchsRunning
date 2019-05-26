@@ -861,7 +861,7 @@ SELECT  ANY_VALUE(`event`) AS `event`, ANY_VALUE(`eventId`) AS `eventId`,
     CONCAT(`eventId`, ":", `squadId`) AS `eventBySquad`, COUNT(`squadID`) AS `numResults`,
     ANY_VALUE(`eventSubType`) AS `eventSubType`, ANY_VALUE(`eventSubTypeId`) AS `eventSubTypeId`
 FROM `Event` NATURAL JOIN `RaceResult` NATURAL JOIN `Squad` NATURAL JOIN `EventSubType`
-WHERE `year`=`inputYear` AND `raceTimeTypeId` NOT IN ("c", "F")
+WHERE `year`=`inputYear` AND `raceTimeTypeId` NOT IN ("c")
 GROUP BY `eventBySquad`
 UNION
 SELECT  ANY_VALUE(`event`) AS `event`, ANY_VALUE(`eventId`) AS `eventId`, 
@@ -877,7 +877,7 @@ SELECT  ANY_VALUE(`event`) AS `event`, ANY_VALUE(`eventId`) AS `eventId`,
     CONCAT(`eventId`, ":", `squadId`) AS `eventBySquad`, COUNT(`squadID`) AS `numResults`,
     ANY_VALUE(`eventSubType`) AS `eventSubType`, ANY_VALUE(`eventSubTypeId`) AS `eventSubTypeId`
 FROM `Event` NATURAL JOIN `RelayResult` NATURAL JOIN `Squad` NATURAL JOIN `EventSubType`
-WHERE `year`=`inputYear` AND `raceTimeTypeId` NOT IN ("c", "F")
+WHERE `year`=`inputYear` AND `raceTimeTypeId` NOT IN ("c")
 GROUP BY `eventBySquad`
 ORDER BY `eventSubTypeId`, `eventId`, `squadId`;
 
