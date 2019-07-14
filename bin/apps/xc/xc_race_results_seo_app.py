@@ -34,6 +34,8 @@ def xcRaceResults(race_id, gender_id):
         return redirect('/santa-clara-high-cross-country/race-results/6th-annual-crystal-springs-alumni-race-2017/')
     elif race_id == 100006:
         return redirect('/santa-clara-high-cross-country/race-results/7th-annual-crystal-springs-alumni-race-2018/')
+    elif race_id == 100007:
+        return redirect('/santa-clara-high-cross-country/race-results/8th-annual-crystal-springs-alumni-race-2019/')
     elif gender_id == 2:
         return redirect('/santa-clara-high-cross-country/race-results/boys/{0}'.format(race_id))
     elif gender_id == 3:
@@ -76,5 +78,8 @@ def xc6thAnnualCrystalSpringsAlumniRace():
 def xc7thAnnualCrystalSpringsAlumniRace():
     return getXcRaceResultsData(100006)
 
+@xc_race_results_seo_app.route('/8th-annual-crystal-springs-alumni-race-2019/',methods=['GET'])
+def xc8thAnnualCrystalSpringsAlumniRace():
+    return getXcRaceResultsData(100007)
 
 
