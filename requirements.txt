@@ -10,7 +10,7 @@ jsondatabase==0.1.7
 jsonschema==2.6.0
 MarkupSafe==0.23
 PyMySQL==0.7.11
-Werkzeug==0.12.2
+Werkzeug==0.15.3
 mysql-connector-python==8.0.15
 flask-blueprint==1.2.7
 mysqlclient==1.4.2.post1
