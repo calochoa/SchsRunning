@@ -1,36 +1,8 @@
-DROP DATABASE IF EXISTS `quickies`;
-
--- CREATING DATABASE
-CREATE DATABASE IF NOT EXISTS `quickies`
-    DEFAULT CHARACTER SET utf8mb4
-    DEFAULT COLLATE utf8mb4_unicode_ci
-;
-
-
 USE `quickies`;
 
-DROP TABLE IF EXISTS `WorkoutOfTheDay`;
-DROP TABLE IF EXISTS `QuickieOfTheDay`;
-DROP TABLE IF EXISTS `OfTheDay`;
-DROP TABLE IF EXISTS `QuickieWorkouts`;
-DROP TABLE IF EXISTS `Quickies`;
-DROP TABLE IF EXISTS `QuickieTypes`;
-DROP TABLE IF EXISTS `Exercises`;
-DROP TABLE IF EXISTS `Videos`;
-DROP TABLE IF EXISTS `ExerciseTypes`;
-DROP TABLE IF EXISTS `BodySplits`;
 
 
-
-CREATE TABLE IF NOT EXISTS `BodySplits` (
-    `bsId` VARCHAR(6) UNIQUE NOT NULL,
-    `bsName` VARCHAR(255),
-    `bsDescription` VARCHAR(255),
-    `order` INT,
-    
-	PRIMARY KEY (`bsId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE utf8mb4_unicode_ci;
-
+-- Add `BodySplits` data
 INSERT INTO `BodySplits` (`bsId`, `bsName`, `bsDescription`, `order`) VALUES
     ('bs0000','All','One stop shop for all the quickies.',0),
     ('bs0001','Core','These quickies are intended to target your core and get you closer to attaining that 6 pack or toned tummy.',2),
@@ -40,15 +12,7 @@ INSERT INTO `BodySplits` (`bsId`, `bsName`, `bsDescription`, `order`) VALUES
 
 
 
-CREATE TABLE IF NOT EXISTS `ExerciseTypes` (
-    `etId` VARCHAR(6) UNIQUE NOT NULL,
-    `etName` VARCHAR(255),
-    `etDescription` VARCHAR(255),
-    `order` INT,
-    
-	PRIMARY KEY (`etId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE utf8mb4_unicode_ci;
-
+-- Add `ExerciseTypes` data
 INSERT INTO `ExerciseTypes` (`etId`, `etName`, `etDescription`, `order`) VALUES
     ('et0000','All','These exercises require you to use your entire bodyweight.',1),
     ('et0001','Bar','These exercises require you to use your entire bodyweight.',2),
@@ -56,32 +20,12 @@ INSERT INTO `ExerciseTypes` (`etId`, `etName`, `etDescription`, `order`) VALUES
 
 
 
-CREATE TABLE IF NOT EXISTS `Videos` (
-    `vId` VARCHAR(7) UNIQUE NOT NULL,
-    `youtubeId` VARCHAR(12) DEFAULT NULL,
-    
-	PRIMARY KEY (`vId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE utf8mb4_unicode_ci;
-
+-- Add `Videos` data
 INSERT INTO `Videos` (`vId`, `youtubeId`) VALUES ("v000001", "ek4YOOlVamk"), ("v000002", "m5rnCuzJqaE"), ("v000003", "s7f7alfiuU8"), ("v000004", "f29xFGVjKA8"), ("v000005", "mj25D73_TmA"), ("v000006", "gXsTuiUer48"), ("v000007", "P2FRHzgYbuo"), ("v000008", "d7pLCFa-omY"), ("v000009", "ogGX5PJ1gY8"), ("v000010", "TjxDtCzJQkg"), ("v000011", NULL), ("v000012", "JIfaAlksmTQ"), ("v000013", "XSGZon-Owjw"), ("v000014", "Dy8WNMPDj5Y"), ("v000015", "jixPu5GPhic"), ("v000016", "ujj6IuL3zOM"), ("v000017", "Jd2zRTtGNCk"), ("v000018", "7nHfRFiltcA"), ("v000019", "UdUT9SZIgB0"), ("v000020", "U73FFFpin8s"), ("v000021", "PO5yfLjUDbE"), ("v000022", "EJKnEMur0OA"), ("v000023", "ncg7iWv4VFY"), ("v000024", "7JsXmM2zKoc"), ("v000025", "f8wHShJMSmw"), ("v000026", "vQEneqVKCcc"), ("v000027", "vdXgfYot7Rc"), ("v000028", "iP-Om5uAYVo"), ("v000029", "Ab2usUky0WA"), ("v000030", "7H7t_idCDK8"), ("v000031", "4EttxHPj1dQ"), ("v000032", "ovVHOfT35eo"), ("v000033", "Odx8QeE634I"), ("v000034", "GZRj5HJqK-I"), ("v000035", "1K5DreFND0M"), ("v000036", "N0UVekBvpWA"), ("v000037", "B7XDCe5ayA8"), ("v000038", "p2frQGA7xaQ"), ("v000039", "1uVMRGEl4y4"), ("v000040", "e02t73peL8c"), ("v000041", "W9DKM3tjOkk"), ("v000042", "oAu-Xc-OKxo"), ("v000043", "mrWTxAXr3LA"), ("v000044", "5XSiNXX8vOw"), ("v000045", "GPlp3d2F4H8"), ("v000046", "i3gcPC0Tm0c"), ("v000047", "xYvGLOEyn_g"), ("v000048", "rDtBVY3DBNg"), ("v000049", NULL), ("v000050", "55fd5RV4JV4"), ("v000051", "mLm_H9SaXJ4"), ("v000052", "alLrecBkCvU"), ("v000053", "Exh-xo2Plbs"), ("v000054", "9cwskL0_-9Q"), ("v000055", "2WtR_OdkSV8"), ("v000056", "34dA6YPwjEQ"), ("v000057", "v0_dlmFvnL4"), ("v000058", "JUtwYOZQ9ms"), ("v000059", "4YedNMNlI80"), ("v000060", "2qM8IDT2e1Q"), ("v000061", "T3dJdB3exHI"), ("v000062", "XwOHycBa3uY"), ("v000063", "MCmLRa6ZDfA"), ("v000064", "BK0MNOfDal4"), ("v000065", NULL), ("v000066", NULL), ("v000067", NULL), ("v000068", NULL), ("v100001", NULL), ("v100002", NULL), ("v100003", NULL), ("v100004", NULL), ("v100005", NULL), ("v100006", NULL), ("v100007", NULL), ("v100008", NULL), ("v100009", NULL), ("v100010", NULL), ("v100011", NULL), ("v100012", NULL), ("v100013", NULL), ("v100014", NULL), ("v100015", NULL), ("v100016", NULL), ("v100017", NULL), ("v100018", NULL), ("v100019", NULL), ("v100020", NULL), ("v100021", NULL), ("v100022", NULL), ("v100023", NULL), ("v100024", NULL);
 
 
 
-
-CREATE TABLE IF NOT EXISTS `Exercises` (
-    `eId` VARCHAR(7) UNIQUE NOT NULL,
-    `eName` VARCHAR(255),
-    `eLevel` INT,
-    `vId` VARCHAR(7),
-    `bsId` VARCHAR(6),
-    `etId` VARCHAR(6),
-    
-	PRIMARY KEY (`eId`),
-    FOREIGN KEY (`vId`) REFERENCES `Videos` (`vId`),
-	FOREIGN KEY (`bsId`) REFERENCES `BodySplits` (`bsId`),
-	FOREIGN KEY (`etId`) REFERENCES `ExerciseTypes` (`etId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE utf8mb4_unicode_ci;
-
+-- Add `Exercises` data
 INSERT INTO `Exercises` (`eId`, `eName`, `eLevel`, `vId`, `bsId`, `etId`) VALUES
     ('e000001','front lever swings',6,'v000001','bs0001','et0001'),
     ('e000002','L sit pull-ups',5,'v000002','bs0004','et0001'),
@@ -178,15 +122,7 @@ INSERT INTO `Exercises` (`eId`, `eName`, `eLevel`, `vId`, `bsId`, `etId`) VALUES
 
 
 
-CREATE TABLE IF NOT EXISTS `QuickieTypes` (
-    `qtId` VARCHAR(6) UNIQUE NOT NULL,
-    `qtName` VARCHAR(255),
-    `qtDescription` VARCHAR(255),
-    `order` INT,
-    
-	PRIMARY KEY (`qtId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE utf8mb4_unicode_ci;
-
+-- Add `QuickieTypes` data
 INSERT INTO `QuickieTypes` (`qtId`, `qtName`, `qtDescription`, `order`) VALUES
     ('qt0001','Basic','Get in great shape by doing a combination of some or all of these quickies.',3),
     ('qt0002','Cardio','These quickies are the best way to get your feet moving and heart pumping.',4),
@@ -198,30 +134,7 @@ INSERT INTO `QuickieTypes` (`qtId`, `qtName`, `qtDescription`, `order`) VALUES
 
 
 
-CREATE TABLE IF NOT EXISTS `Quickies` (
-    `qId` VARCHAR(6) UNIQUE NOT NULL,
-    `qtId` VARCHAR(6),
-    `qDifficulty` INT,
-    `bsId` VARCHAR(6),
-    `qName` VARCHAR(255),
-    `reps1` INT,
-    `eId1` VARCHAR(7),
-    `reps2` INT,
-    `eId2` VARCHAR(7),
-    `reps3` INT,
-    `eId3` VARCHAR(7),
-    `reps4` INT,
-    `eId4` VARCHAR(7),
-    
-	PRIMARY KEY (`qId`),
-	FOREIGN KEY (`qtId`) REFERENCES `QuickieTypes` (`qtId`),
-	FOREIGN KEY (`bsId`) REFERENCES `BodySplits` (`bsId`),
-	FOREIGN KEY (`eId1`) REFERENCES `Exercises` (`eId`),
-	FOREIGN KEY (`eId2`) REFERENCES `Exercises` (`eId`),
-	FOREIGN KEY (`eId3`) REFERENCES `Exercises` (`eId`),
-	FOREIGN KEY (`eId4`) REFERENCES `Exercises` (`eId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE utf8mb4_unicode_ci;
-
+-- Add `Quickies` data
 INSERT INTO `Quickies` (`qId`, `qtId`, `qDifficulty`, `bsId`, `qName`, `reps1`, `eId1`, `reps2`, `eId2`, `reps3`, `eId3`, `reps4`, `eId4`) VALUES
     ('q00001','qt0003',1,'bs0001','Quick Core',10,'e000043',10,'e000021',10,'e000053',10,'e000028'),
     ('q00002','qt0003',1,'bs0001','Quick Pack',5,'e000054',10,'e000055',5,'e000053',10,'e000057'),
@@ -306,17 +219,7 @@ INSERT INTO `Quickies` (`qId`, `qtId`, `qDifficulty`, `bsId`, `qName`, `reps1`, 
 
 
 
-CREATE TABLE IF NOT EXISTS `QuickieWorkouts` (
-    `wId` VARCHAR(5),
-    `wName` VARCHAR(11),
-    `wDifficulty` INT,
-    `bsId` VARCHAR(6),
-    `qIds` VARCHAR(255),
-    
-	PRIMARY KEY (`wId`),
-	FOREIGN KEY (`bsId`) REFERENCES `BodySplits` (`bsId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE utf8mb4_unicode_ci;
-
+-- Add `QuickieWorkouts` data
 INSERT INTO `QuickieWorkouts` (`wId`, `wName`, `wDifficulty`,`bsId`, `qIds`) VALUES 
     ('w1001','Workout 101',1,'bs0004','q00006,q00004,q00003,q00011'), 
     ('w1002','Workout 102',1,'bs0003','q00011,q00007,q00006,q00009'), 
@@ -412,21 +315,7 @@ INSERT INTO `QuickieWorkouts` (`wId`, `wName`, `wDifficulty`,`bsId`, `qIds`) VAL
 
 
 
-/*
- * Will stop here because I don't know if I want to include these type of features online... save for mobile?
-*/
-
-
-
-CREATE TABLE IF NOT EXISTS `OfTheDay` (
-    `otdId` VARCHAR(7) UNIQUE NOT NULL,
-    `otdName` VARCHAR(255),
-    `otdAbbr` VARCHAR(15),
-    `order` INT,
-    
-	PRIMARY KEY (`otdId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
+-- Add `OfTheDay` data
 INSERT INTO `OfTheDay` VALUES
     ('otd0000','All','All',0),
     ('otd0001','Level 1','1',1),
@@ -437,42 +326,7 @@ INSERT INTO `OfTheDay` VALUES
 
 
 
-CREATE TABLE IF NOT EXISTS `QuickieOfTheDay` (
-    `otdId` VARCHAR(7) UNIQUE NOT NULL,
-    `qotd_0_0` VARCHAR(6),
-    `qotd_1_0` VARCHAR(6),
-    `qotd_2_0` VARCHAR(6),
-    `qotd_3_0` VARCHAR(6),
-    `qotd_4_0` VARCHAR(6),
-    `qotd_5_0` VARCHAR(6),
-    `qotd_6_0` VARCHAR(6),
-    `qotd_0_1` VARCHAR(6),
-    `qotd_1_1` VARCHAR(6),
-    `qotd_2_1` VARCHAR(6),
-    `qotd_3_1` VARCHAR(6),
-    `qotd_4_1` VARCHAR(6),
-    `qotd_5_1` VARCHAR(6),
-    `qotd_6_1` VARCHAR(6),
-    `order` INT,
-    
-	PRIMARY KEY (`otdId`),
-	FOREIGN KEY (`otdId`) REFERENCES `OfTheDay` (`otdId`),
-	FOREIGN KEY (`qotd_0_0`) REFERENCES `Quickies` (`qId`),
-	FOREIGN KEY (`qotd_1_0`) REFERENCES `Quickies` (`qId`),
-	FOREIGN KEY (`qotd_2_0`) REFERENCES `Quickies` (`qId`),
-	FOREIGN KEY (`qotd_3_0`) REFERENCES `Quickies` (`qId`),
-	FOREIGN KEY (`qotd_4_0`) REFERENCES `Quickies` (`qId`),
-	FOREIGN KEY (`qotd_5_0`) REFERENCES `Quickies` (`qId`),
-	FOREIGN KEY (`qotd_6_0`) REFERENCES `Quickies` (`qId`),
-	FOREIGN KEY (`qotd_0_1`) REFERENCES `Quickies` (`qId`),
-	FOREIGN KEY (`qotd_1_1`) REFERENCES `Quickies` (`qId`),
-	FOREIGN KEY (`qotd_2_1`) REFERENCES `Quickies` (`qId`),
-	FOREIGN KEY (`qotd_3_1`) REFERENCES `Quickies` (`qId`),
-	FOREIGN KEY (`qotd_4_1`) REFERENCES `Quickies` (`qId`),
-	FOREIGN KEY (`qotd_5_1`) REFERENCES `Quickies` (`qId`),
-	FOREIGN KEY (`qotd_6_1`) REFERENCES `Quickies` (`qId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
+-- Add `QuickieOfTheDay` data
 INSERT INTO `QuickieOfTheDay` VALUES
     ('otd0001','q03002','q00004','q00007','q00005','q00001','q00003','q00006','q03001','q00011','q00009','q00008','q00002','q00012','q00010',1),
     ('otd0002','q03003','q02002','q01017','q01003','q01002','q01001','q02011','q03009','q02010','q01014','q02001','q01009','q02012','q02013',2),
@@ -482,31 +336,14 @@ INSERT INTO `QuickieOfTheDay` VALUES
 
 
 
-CREATE TABLE IF NOT EXISTS `WorkoutOfTheDay` (
-    `otdId` VARCHAR(7) UNIQUE NOT NULL,
-    `wotd_0` VARCHAR(5),
-    `wotd_1` VARCHAR(5),
-    `wotd_2` VARCHAR(5),
-    `wotd_3` VARCHAR(5),
-    `wotd_4` VARCHAR(5),
-    `wotd_5` VARCHAR(5),
-    `wotd_6` VARCHAR(5),
-    `order` INT,
-    
-	PRIMARY KEY (`otdId`),
-	FOREIGN KEY (`otdId`) REFERENCES `OfTheDay` (`otdId`),
-	FOREIGN KEY (`wotd_0`) REFERENCES `Workouts` (`wId`),
-	FOREIGN KEY (`wotd_1`) REFERENCES `Workouts` (`wId`),
-	FOREIGN KEY (`wotd_2`) REFERENCES `Workouts` (`wId`),
-	FOREIGN KEY (`wotd_3`) REFERENCES `Workouts` (`wId`),
-	FOREIGN KEY (`wotd_4`) REFERENCES `Workouts` (`wId`),
-	FOREIGN KEY (`wotd_5`) REFERENCES `Workouts` (`wId`),
-	FOREIGN KEY (`wotd_6`) REFERENCES `Workouts` (`wId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
+-- Add `WorkoutOfTheDay` data
 INSERT INTO `WorkoutOfTheDay` VALUES
     ('otd0001','w1007','w1001','w1002','w1003','w1004','w1005','w1006',1),
     ('otd0002','w2007','w2001','w2002','w2003','w2004','w2005','w2006',2),
     ('otd0003','w3007','w3001','w3002','w3003','w3004','w3005','w3006',3),
     ('otd0004','w4007','w4001','w4002','w4003','w4004','w4005','w4006',4),
     ('otd0005','w5007','w5001','w5002','w5003','w5004','w5005','w5006',5);
+
+
+
+COMMIT;
