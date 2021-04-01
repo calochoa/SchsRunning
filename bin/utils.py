@@ -1,6 +1,10 @@
 __author__ = "Christian Ochoa"
 __email__ = "calochoa@gmail.com"
 
+import logging
+
+from bin.cache import cache as mc_cache
+
 
 KEY_DELIM = '[#]'
 
@@ -10,6 +14,25 @@ class Utils(object):
     def __init__(self):
         pass
 
+    @staticmethod
+    def cache_get(cache_key):
+        try:
+            # cache is disabled..
+            return None
+            #return mc_cache.get(cache_key)
+        except Exception as e:
+            logging.exception(e)
+            return None
+
+    @staticmethod
+    def cache_set(cache_key, cache_value):
+        try:
+            # cache is disabled..
+            pass
+            #mc_cache.set(cache_key, cache_value)
+        except Exception as e:
+            logging.exception(e)
+        
     @staticmethod
     def formatTime(time):
         time_str = str(time)[:9]
@@ -99,10 +122,12 @@ class Utils(object):
 
     @staticmethod
     def get_cache_key_two(name, param_1, param_2):
-        return '{0}{1}{2}{3}'.format(name, param_1, KEY_DELIM, param_2)
+        return '{0}{2}{1}{3}'.format(name, KEY_DELIM, param_1, param_2)
 
     @staticmethod
     def get_cache_key_three(name, param_1, param_2, param_3):
-        return '{0}{1}{2}{3}{4}{5}'.format(name, param_1, KEY_DELIM, param_2, KEY_DELIM, param_3)
+        return '{0}{2}{1}{3}{1}{4}'.format(name, KEY_DELIM, param_1, param_2, param_3)
 
-
+    @staticmethod
+    def get_cache_key_four(name, param_1, param_2, param_3, param_4):
+        return '{0}{2}{1}{3}{1}{4}{1}{5}'.format(name, KEY_DELIM, param_1, param_2, param_3, param_4)

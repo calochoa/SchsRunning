@@ -54,10 +54,11 @@
 				$.each(resultsObj,function(index, value){
 				    var resultStr = parseInt(value.Date) + ' Champion - ' + value.FirstName + ' ' + value.LastName;
 				    var timeStr = value.Time + ' (' + value.Pace + ')';
+				    var alumniStr = ' - ' + value.EndHsYear + ' Alumni';
 					results = $(div).clone();
 					$(results).find('a').attr('href', '/xcRunner?rId='+ value.RunnerId);
 					$(results).find('h4').text(resultStr);
-					$(results).find('p').text(timeStr);
+					$(results).find('p').text(timeStr + alumniStr);
 					$('.jumbotron').append(results);
 				});
 			},

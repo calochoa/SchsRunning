@@ -65,7 +65,7 @@
 					titleStr = raceStr + ': ' + value.CourseName + ', ' + value.CourseDistance + 'M' + (value.RaceCondition.localeCompare('unknown') ? ' *' + value.RaceCondition + '*' : '') + ' (' + value.Date + ')';
 				    var resultStr = value.Rank + '. ' + value.FirstName + ' ' + value.LastName + ' (' + value.Year + ')'
 					var runnerId = parseInt(value.CompetitorId)
-					var gradeStr = value.Grade == 0 ? (runnerId >= 100000 && runnerId < 1000000 ? 'Special Guest' : 'Alumni' ) : value.Grade + 'th grade'
+					var gradeStr = value.Grade == 0 ? (runnerId >= 100000 && runnerId < 1000000 ? 'Special Guest' : value.EndHsYear + ' Alumni' ) : value.Grade + 'th grade'
 				    var timeStr = value.Time + ' (' + value.Pace + ') - ' + gradeStr;
 					results = $(div).clone();
 					$(results).find('a').attr('href', '/xcCompetitor?cId='+ value.CompetitorId);
@@ -128,6 +128,8 @@
 			alumniRaceNo = '6th';
 		} else if (year == 2018) {
 			alumniRaceNo = '7th';
+		} else if (year == 2019) {
+			alumniRaceNo = '8th';
 		}
 		return alumniRaceNo + ' Annual';
 	}

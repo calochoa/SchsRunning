@@ -22,8 +22,10 @@ from bin.apps.xc.xc_race_results_seo_app import xc_race_results_seo_app
 from bin.apps.xc.xc_competitors_seo_app import xc_competitors_seo_app
 from bin.apps.xc.xc_alumni_seo_app import xc_alumni_seo_app
 
-# shared related apps
-from bin.apps.shared_db_app import shared_db_app
+# common related apps
+from bin.apps.common.common_coaches_db_app import common_coaches_db_app
+from bin.apps.common.common_awards_db_app import common_awards_db_app
+from bin.apps.common.common_special_achievers_db_app import common_special_achievers_db_app
 
 # track and field related apps
 from bin.apps.track.track_app import track_app
@@ -60,7 +62,9 @@ app.register_blueprint(xc_race_results_seo_app)
 app.register_blueprint(xc_competitors_seo_app)
 app.register_blueprint(xc_alumni_seo_app)
 
-app.register_blueprint(shared_db_app)
+app.register_blueprint(common_coaches_db_app)
+app.register_blueprint(common_awards_db_app)
+app.register_blueprint(common_special_achievers_db_app)
 
 app.register_blueprint(track_app)
 app.register_blueprint(track_db_app)

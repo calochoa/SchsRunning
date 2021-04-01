@@ -282,7 +282,7 @@ BEGIN
 SELECT @`rownum` := @`rownum` + 1 AS `myrank`, `t`.* 
 FROM (
 	SELECT `time`, `pace`, `grade`, `date`, `racename`, `coursename`, `coursedistance`, 
-		`racecondition`, `firstname`, `lastname`, `year`, `competitorid`
+		`racecondition`, `firstname`, `lastname`, `year`, `competitorid`, `endHsYear`
 	FROM `Result` NATURAL JOIN `Competitor` NATURAL JOIN `Athlete` NATURAL JOIN `Race` 
 		NATURAL JOIN `RaceName` NATURAL JOIN `RaceCondition` NATURAL JOIN `Course`
 	WHERE `raceid`=`inputRaceId` AND YEAR(`Race`.`date`)=`year`
@@ -368,6 +368,7 @@ DROP PROCEDURE IF EXISTS `GetCoachesByYear`;
 
 SET NAMES utf8mb4;
 SET collation_connection = 'utf8mb4_unicode_ci';
+SET sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));
 
 DELIMITER //
 CREATE PROCEDURE `GetCoachesByYear`(
@@ -423,6 +424,7 @@ DROP PROCEDURE IF EXISTS `GetCoachById`;
 
 SET NAMES utf8mb4;
 SET collation_connection = 'utf8mb4_unicode_ci';
+SET sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));
 
 DELIMITER //
 CREATE PROCEDURE `GetCoachById`(
@@ -572,7 +574,7 @@ BEGIN
 
 -- this part is necessary to distinguish between a competitor in xc vs track season:  AND YEAR(`Race`.`date`)=`year`
 SELECT `time`, `pace`, `grade`, `firstname`, `lastname`, `athleteid`, `date`, 
-	`racename`, `coursename`, `coursedistance`, `racecondition`, `raceid`
+	`racename`, `coursename`, `coursedistance`, `racecondition`, `raceid`, `endHsYear`
 FROM `Result` RIGHT JOIN (
 		SELECT MIN(`time`) `best_time` 
 		FROM `Result` NATURAL JOIN `Race` NATURAL JOIN `Competitor`
@@ -771,7 +773,7 @@ SELECT @`rownum` := @`rownum` + 1 AS `myrank`, `t`.*
 FROM (
 	SELECT DISTINCT `event`, `RelayResult`.`time`, `raceTimeTypeId`, `RelayResult`.`year`, 
         `C1`.`competitorId` AS `competitorId1`, CONCAT(`A1`.`firstName`, " ", `A1`.`lastName`) AS `fullName1`, `C1`.`grade` AS `grade1`,
-        `C2`.`competitorId` AS `competitorId`, CONCAT(`A2`.`firstName`, " ", `A2`.`lastName`) AS `fullName2`, `C2`.`grade` AS `grade2`,
+        `C2`.`competitorId` AS `competitorId2`, CONCAT(`A2`.`firstName`, " ", `A2`.`lastName`) AS `fullName2`, `C2`.`grade` AS `grade2`,
         `C3`.`competitorId` AS `competitorId3`, CONCAT(`A3`.`firstName`, " ", `A3`.`lastName`) AS `fullName3`, `C3`.`grade` AS `grade3`,
         `C4`.`competitorId` AS `competitorId4`, CONCAT(`A4`.`firstName`, " ", `A4`.`lastName`) AS `fullName4`, `C4`.`grade` AS `grade4`
 	FROM `RelayResult` NATURAL JOIN `Event` 

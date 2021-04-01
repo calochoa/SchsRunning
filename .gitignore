@@ -1,2 +1,9 @@
 .DS_Store
 .idea/
+static/Uploads/team/original/
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
