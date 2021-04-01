@@ -9,7 +9,7 @@ from bin.entities.common.special_achievements.special_achievers import SpecialAc
 
 class SpecialAchieversDAI(object):
 
-    def __init__(self, config_file='bin/conf/config.ini', section='mysql'):
+    def __init__(self, config_file='config/config.ini', section='mysql'):
         self.mysql = MySQLController(config_file=config_file, section=section)
 
     def get_special_achievers_by_id(self, special_achievement_ids_str, sport_id):

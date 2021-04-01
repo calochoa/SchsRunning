@@ -11,7 +11,7 @@ from bin.entities.track.event_squad import EventSquad
 
 class TrackDAI(object):
 
-    def __init__(self, config_file='bin/conf/config.ini', section='mysql'):
+    def __init__(self, config_file='config/config.ini', section='mysql'):
         self.mysql = MySQLController(config_file=config_file, section=section)
 
     def get_track_competitors_by_year(self, year):

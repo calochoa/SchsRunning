@@ -1,9 +1,11 @@
 __author__ = "https://www.mysqltutorial.org/python-connecting-mysql-databases/"
 
+import os
+
 from configparser import ConfigParser
 
 
-def read_db_config(filename='bin/conf/config.ini', section='mysql'):
+def read_db_config(filename='config/config.ini', section='mysql'):
     """ Read database configuration file and return a dictionary object
     :param filename: name of the configuration file
     :param section: section of database configuration
@@ -18,7 +20,7 @@ def read_db_config(filename='bin/conf/config.ini', section='mysql'):
     if parser.has_section(section):
         items = parser.items(section)
         for item in items:
-            db[item[0]] = item[1]
+            db[item[0]] = os.environ[item[1]]
     else:
         raise Exception('{0} not found in the {1} file'.format(section, filename))
 

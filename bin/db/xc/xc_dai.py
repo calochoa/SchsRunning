@@ -12,7 +12,7 @@ from bin.entities.xc.xc_race import XcRace
 
 class XcDAI(object):
 
-    def __init__(self, config_file='bin/conf/config.ini', section='mysql'):
+    def __init__(self, config_file='config/config.ini', section='mysql'):
         self.mysql = MySQLController(config_file=config_file, section=section)
 
     def get_course_info(self, course_id):

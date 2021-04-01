@@ -11,7 +11,7 @@ from bin.entities.workouts.quickie_workout import QuickieWorkout
 
 class WorkoutsDAI(object):
 
-    def __init__(self, config_file='bin/conf/config.ini', section='mysql workout'):
+    def __init__(self, config_file='config/config.ini', section='mysql workout'):
         self.mysql = MySQLController(config_file=config_file, section=section)
 
     def get_exercises(self, exercise_levels, body_split_ids):

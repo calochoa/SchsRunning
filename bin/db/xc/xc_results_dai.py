@@ -11,7 +11,7 @@ from bin.entities.xc.xc_competitor_result import XcCompetitorResult
 
 class XcResultsDAI(object):
 
-    def __init__(self, config_file='bin/conf/config.ini', section='mysql'):
+    def __init__(self, config_file='config/config.ini', section='mysql'):
         self.mysql = MySQLController(config_file=config_file, section=section)
 
     def get_xc_top_individual(self, course_id, gender_id, limit):

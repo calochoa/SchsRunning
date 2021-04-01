@@ -9,7 +9,7 @@ from bin.entities.common.awards.award import Award
 
 class AwardsDAI(object):
 
-    def __init__(self, config_file='bin/conf/config.ini', section='mysql'):
+    def __init__(self, config_file='config/config.ini', section='mysql'):
         self.mysql = MySQLController(config_file=config_file, section=section)
 
     def get_awards_by_year(self, year, sport_id):

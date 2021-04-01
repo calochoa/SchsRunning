@@ -9,7 +9,7 @@ from bin.db.common.python_mysql_dbconfig import read_db_config
 
 class MySQLController(object):
 
-    def __init__(self, config_file='bin/conf/config.ini', section='mysql'):
+    def __init__(self, config_file='config/config.ini', section='mysql'):
         self.db_config = read_db_config(filename=config_file, section=section)
 
     def get_connection(self):

@@ -15,7 +15,7 @@ from bin.entities.track.athlete_result_metadata import AthleteResultMetadata
 
 class TrackResultsDAI(object):
 
-    def __init__(self, config_file='bin/conf/config.ini', section='mysql'):
+    def __init__(self, config_file='config/config.ini', section='mysql'):
         self.mysql = MySQLController(config_file=config_file, section=section)
 
     def get_track_hof_race_results(self, event_id, gender_id, limit=40):
