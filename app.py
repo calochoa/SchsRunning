@@ -129,8 +129,8 @@ def relatedSites():
 
 @app.errorhandler(404)
 def page_not_found(error):
-    return render_template('error.html', error = str(error))
-
+	if (not request.url.endswith('jpeg')):
+		return render_template('error.html', error = str(error))
 
 @app.errorhandler(500)
 def internal_error(error):
