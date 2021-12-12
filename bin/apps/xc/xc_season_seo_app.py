@@ -18,6 +18,10 @@ def dropdown_menu():
 def xcSeasonDNE(year=None):
     return render_template('error.html', error='No data for {0} season'.format(year))
 
+@xc_season_seo_app.route('/2021',methods=['GET'])
+def xcSeason2021():
+    return render_template('xc/season/season.html', yr=2021)
+
 @xc_season_seo_app.route('/2019',methods=['GET'])
 def xcSeason2019():
     return render_template('xc/season/season.html', yr=2019)
